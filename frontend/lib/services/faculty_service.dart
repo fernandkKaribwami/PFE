@@ -48,7 +48,7 @@ class FacultyService {
       }
       return [];
     } catch (e) {
-      debugPrint('Get faculty posts error: $e');
+      //debugPrint('Get faculty posts error: $e');
       return [];
     }
   }

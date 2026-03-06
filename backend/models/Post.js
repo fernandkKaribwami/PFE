@@ -18,4 +18,5 @@ const PostSchema = new Schema({
   faculty: { type: Schema.Types.ObjectId, ref: 'Faculty' },
   group: { type: Schema.Types.ObjectId, ref: 'Group' }
 },{ timestamps: true });
+PostSchema.index({ createdAt: -1 });
 module.exports = mongoose.model('Post', PostSchema);

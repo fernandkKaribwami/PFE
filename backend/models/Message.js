@@ -5,4 +5,5 @@ const MessageSchema = new Schema({
   to: { type: Schema.Types.ObjectId, ref: 'User' },
   text: String
 },{ timestamps: true });
+MessageSchema.index({ participants: 1 });
 module.exports = mongoose.model('Message', MessageSchema);
