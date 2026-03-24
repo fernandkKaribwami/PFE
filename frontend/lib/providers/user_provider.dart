@@ -1,52 +1,141 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/user_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../main.dart';
 
-final userServiceProvider = Provider((ref) => UserService());
+class UserProvider with ChangeNotifier {
+  Map<String, dynamic>? _currentUser;
+  bool _isLoading = false;
+  String? _error;
 
-// Provider pour les données d'un utilisateur spécifique
-final userProvider =
-    FutureProvider.family<Map<String, dynamic>?, String>((ref, userId) async {
-  final userService = ref.watch(userServiceProvider);
-  return userService.getUser(userId);
-});
+  Map<String, dynamic>? get currentUser => _currentUser;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-// État pour le profil de l'utilisateur courant
-class ProfileState {
-  final Map<String, dynamic>? userData;
-  final bool isLoading;
-  final String? error;
-  final List<String> followers;
-  final List<String> following;
+  Future<void> loadUserProfile(String token) async {
+    if (_isLoading) return;
 
-  ProfileState({
-    this.userData,
-    this.isLoading = false,
-    this.error,
-    this.followers = const [],
-    this.following = const [],
-  });
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
 
-  ProfileState copyWith({
-    Map<String, dynamic>? userData,
-    bool? isLoading,
-    String? error,
-    List<String>? followers,
-    List<String>? following,
-  }) {
-    return ProfileState(
-      userData: userData ?? this.userData,
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      followers: followers ?? this.followers,
-      following: following ?? this.following,
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('$API_URL/api/users/profile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _currentUser = data;
+        _error = null;
+      } else {
+        final errorData = jsonDecode(response.body);
+        _error = errorData['message'] ?? 'Failed to load profile';
+      }
+    } catch (e) {
+      _error = 'Network error: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateProfile(String token, Map<String, dynamic> updates) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final response = await http.put(
+        Uri.parse('$API_URL/api/users/profile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(updates),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _currentUser = data;
+        _error = null;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        final errorData = jsonDecode(response.body);
+        _error = errorData['message'] ?? 'Failed to update profile';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = 'Network error: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> followUser(String userId, String token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$API_URL/api/users/follow/$userId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Update local user data if needed
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error following user: $e');
+      return false;
+    }
+  }
+
+  Future<bool> unfollowUser(String userId, String token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$API_URL/api/users/unfollow/$userId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Update local user data if needed
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error unfollowing user: $e');
+      return false;
+    }
+  }
+
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _currentUser = null;
+    _error = null;
+    notifyListeners();
   }
 }
-
-// Provider pour la gestion du profil utilisateur
-final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, ProfileState>(
-  (ref) => CurrentUserNotifier(ref.watch(userServiceProvider)),
-);
 
 class CurrentUserNotifier extends StateNotifier<ProfileState> {
   final UserService _userService;

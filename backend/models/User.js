@@ -1,26 +1,33 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const UserSchema = new Schema({
-  nom: String,
-  prenom: String,
-  email: { type: String, unique: true },
-  passwordHash: String,
+const bcrypt = require('bcryptjs');
+
+const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   role: { type: String, enum: ['student', 'teacher', 'admin'], default: 'student' },
-  faculty: { type: Schema.Types.ObjectId, ref: 'Faculty' },
-  filiere: String,
-  niveau: String,
+  avatar: { type: String, default: '' },
   bio: { type: String, default: '' },
-  avatarUrl: { type: String, default: null },
+  faculty: { type: mongoose.Schema.Types.ObjectId, ref: 'Faculty' },
+  level: { type: String, enum: ['L1', 'L2', 'L3', 'M1', 'M2', 'Doctorat'], default: 'L1' },
   interests: [String],
-  isVerified: { type: Boolean, default: false },
-  verificationCode: { type: String, default: null },
-  resetPasswordToken: { type: String, default: null },
-  resetPasswordExpires: { type: Date, default: null },
-  followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  blocked: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  followersCount: { type: Number, default: 0 },
-  followingCount: { type: Number, default: 0 },
-  postsCount: { type: Number, default: 0 }
-},{ timestamps: true });
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  blocked: { type: Boolean, default: false },
+  emailVerified: { type: Boolean, default: false },
+  verificationCode: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
+}, { timestamps: true });
+
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+UserSchema.methods.comparePassword = function(candidate) {
+  return bcrypt.compare(candidate, this.password);
+};
+
 module.exports = mongoose.model('User', UserSchema);

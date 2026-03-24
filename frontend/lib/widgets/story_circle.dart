@@ -1,53 +1,60 @@
 import 'package:flutter/material.dart';
-import '../theme/app_spacing.dart';
 import '../theme/app_colors.dart';
-import 'base_widgets.dart';
 
-/// StoryCircle avec indicateur de vue (vu/pas vu)
-class StoryCircle extends StatefulWidget {
-  final String userId;
-  final String userName;
-  final String? avatarUrl;
-  final bool isViewed;
-  final VoidCallback? onTap;
-  final List<Color>? gradientColors;
-
-  const StoryCircle({
-    super.key,
-    required this.userId,
-    required this.userName,
-    this.avatarUrl,
-    this.isViewed = false,
-    this.onTap,
-    this.gradientColors,
-  });
+class StoryCircle extends StatelessWidget {
+  const StoryCircle({super.key});
 
   @override
-  State<StoryCircle> createState() => _StoryCircleState();
-}
-
-class _StoryCircleState extends State<StoryCircle>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-
-    _scaleAnimation = Tween<double>(begin: 1, end: 0.85).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary.withOpacity(0.7),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(2),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: Icon(
+                Icons.add,
+                color: AppColors.primary,
+                size: 24,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Votre story',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+}
   }
 
   void _onTapDown(TapDownDetails details) {

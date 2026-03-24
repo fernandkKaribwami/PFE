@@ -1,35 +1,119 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:io' show File;
-import 'screens/feed_screen.dart';
-import 'screens/create_post_screen.dart';
-import 'screens/verify_email_screen.dart';
+import 'providers/auth_provider.dart';
+import 'providers/feed_provider.dart';
+import 'providers/theme_provider.dart';
+import 'providers/user_provider.dart';
+import 'providers/notification_provider.dart';
+import 'screens/splash_screen.dart';
+import 'screens/auth_screen.dart';
+import 'screens/main_navigation_screen.dart';
+import 'theme/app_colors.dart';
 
 // Configuration API
-// ignore: constant_identifier_names
 const String API_URL = 'http://localhost:5000';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Set system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'USMBA Social',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF003366),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => FeedProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'USMBA Social',
+            debugShowCheckedModeBanner: false,
+            theme: themeProvider.lightTheme,
+            darkTheme: themeProvider.darkTheme,
+            themeMode: themeProvider.themeMode,
+            home: const AppInitializer(),
+            routes: {
+              '/auth': (context) => const AuthScreen(),
+              '/main': (context) => const MainNavigationScreen(),
+            },
+          );
+        },
       ),
-      home: const SplashScreen(),
     );
+  }
+}
+
+class AppInitializer extends StatefulWidget {
+  const AppInitializer({super.key});
+
+  @override
+  State<AppInitializer> createState() => _AppInitializerState();
+}
+
+class _AppInitializerState extends State<AppInitializer> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userId = prefs.getString('userId');
+
+    if (token != null && userId != null) {
+      // Validate token and navigate to main screen
+      if (mounted) {
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        final isValid = await authProvider.validateToken(token);
+
+        if (isValid && mounted) {
+          Navigator.pushReplacementNamed(context, '/main');
+        } else {
+          // Token invalid, go to auth
+          await prefs.clear();
+          Navigator.pushReplacementNamed(context, '/auth');
+        }
+      }
+    } else {
+      // No token, go to auth
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/auth');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const SplashScreen();
   }
 }
 

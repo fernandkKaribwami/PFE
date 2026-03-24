@@ -1,53 +1,60 @@
 import 'package:flutter/material.dart';
-import '../services/chat_service.dart';
-import '../services/user_service.dart';
+import '../theme/app_colors.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
-
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  final ChatService _chatService = ChatService();
-
-  List<dynamic> conversations = [];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadConversations();
-  }
-
-  Future<void> _loadConversations() async {
-    final convs = await _chatService.getConversations();
-    if (mounted) {
-      setState(() {
-        conversations = convs;
-        isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messages'),
-        backgroundColor: const Color(0xFF003366),
-        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : conversations.isEmpty
-          ? const Center(child: Text('Aucune conversation'))
-          : ListView.builder(
-              itemCount: conversations.length,
-              itemBuilder: (context, index) {
-                final conv = conversations[index];
-                return ListTile(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.chat_bubble_outline,
+              size: 80,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Aucun message',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Vos conversations apparaîtront ici',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO: Navigate to new chat
+        },
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.message),
+      ),
+    );
+  }
+}
                   title: Text(conv['_id'] ?? 'Utilisateur'),
                   subtitle: Text(conv['lastMessage'] ?? ''),
                   onTap: () {

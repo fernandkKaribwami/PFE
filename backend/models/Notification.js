@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const NotificationSchema = new Schema({
-  recipient: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  sender: { type: Schema.Types.ObjectId, ref: 'User' },
-  type: { type: String, enum: ['like', 'comment', 'follow', 'message', 'group_invite', 'event_invite', 'announcement', 'admin'], required: true },
-  relatedPost: { type: Schema.Types.ObjectId, ref: 'Post' },
-  relatedComment: { type: Schema.Types.ObjectId, ref: 'Comment' },
-  relatedGroup: { type: Schema.Types.ObjectId, ref: 'Group' },
-  relatedEvent: { type: Schema.Types.ObjectId, ref: 'Event' },
-  message: String,
-  isRead: { type: Boolean, default: false },
-  link: String
+const NotificationSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  type: { type: String, enum: ['like', 'comment', 'follow', 'group_invite', 'event_reminder', 'faculty_announcement'] },
+  referenceId: mongoose.Schema.Types.ObjectId,
+  content: String,
+  read: { type: Boolean, default: false }
 }, { timestamps: true });
+
+module.exports = mongoose.model('Notification', NotificationSchema);
 
 module.exports = mongoose.model('Notification', NotificationSchema);

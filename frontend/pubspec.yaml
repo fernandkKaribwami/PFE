@@ -33,21 +33,23 @@ dependencies:
 
   # Core
   cupertino_icons: ^1.0.8
-  
-  # HTTP & State Management
+
+  # HTTP & Networking
   http: ^1.6.0
   socket_io_client: ^3.1.4
-  
+
   # Storage & Preferences
   shared_preferences: ^2.5.4
-  
-  # State Management (Riverpod - more modern than Provider)
-  flutter_riverpod: ^2.4.0
-  riverpod_annotation: ^2.3.0
-  
+
+  # State Management
+  provider: ^6.1.1
+
   # UI & Media
   image_picker: ^1.2.1
   video_player: ^2.10.1
+
+  # Animations & Effects
+  shimmer: ^3.0.0
   cached_network_image: ^3.4.1
   photo_view: ^0.14.0
   

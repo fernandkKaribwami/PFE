@@ -54,7 +54,5 @@ class AppColors {
   static const Color darkSurface = Color(0xFF1E1E1E);
   static const Color darkOnSurface = Color(0xFFEEEEEE);
 
-  // Transparences
-  static const Color transparentBlack = Color(0x00000000);
-  static const Color transparentBlackLight = Color(0x0F000000);
-}
+  // Primary color (used in theme)
+  static const Color primary = primaryBlue;

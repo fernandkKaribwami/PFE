@@ -1,6 +1,208 @@
-# 🎓 USMBA Social Network - Plateforme Universitaire
+# 🎓 USMBA Social Network - Application Instagram-like Moderne
 
-Un réseau social **100% dédié à l'université Sidi Mohamed Ben Abdellah (USMBA)** combisant Flutter, Node.js, Express, MongoDB et WebSockets.
+Un réseau social moderne et intuitif dédié à l'université Sidi Mohamed Ben Abdellah (USMBA), développé avec Flutter et Node.js.
+
+## ✨ Fonctionnalités Principales
+
+### 🔐 Authentification Sécurisée
+- ✅ Inscription avec avatar personnalisé
+- ✅ Connexion sécurisée avec JWT
+- ✅ Validation d'email en temps réel
+- ✅ Gestion des rôles utilisateurs
+
+### 📱 Interface Utilisateur Moderne
+- ✅ Design Material Design 3
+- ✅ Navigation par onglets (Instagram-like)
+- ✅ Animations fluides et transitions
+- ✅ Mode sombre/clair
+- ✅ Interface responsive
+
+### 🏠 Fil d'Actualité
+- ✅ Feed infini avec pagination
+- ✅ Stories en haut du feed
+- ✅ Posts avec images et vidéos
+- ✅ Likes et commentaires en temps réel
+- ✅ Pull-to-refresh
+
+### 👤 Profils Utilisateur
+- ✅ Profils complets avec statistiques
+- ✅ Modification de profil
+- ✅ Système de followers/following
+- ✅ Grille de posts
+
+### 🔍 Recherche
+- ✅ Recherche globale d'utilisateurs
+- ✅ Recherche de posts et groupes
+- ✅ Résultats en temps réel
+
+### 📝 Création de Contenu
+- ✅ Créer des posts avec texte
+- ✅ Upload d'images depuis galerie/appareil photo
+- ✅ Support vidéo (bientôt)
+- ✅ Paramètres de confidentialité
+
+### 💬 Messagerie (Base)
+- ✅ Interface de chat préparée
+- ✅ WebSocket pour temps réel
+
+## 🏗️ Architecture Technique
+
+### Backend (Node.js + Express + MongoDB)
+```
+✅ Serveur Express sécurisé avec middlewares
+✅ Authentification JWT robuste
+✅ Base de données MongoDB avec Mongoose
+✅ API RESTful complète
+✅ WebSocket pour temps réel
+✅ Gestion d'uploads de fichiers
+✅ Validation et sanitisation des données
+✅ Rate limiting et sécurité
+```
+
+### Frontend (Flutter + Provider)
+```
+✅ Architecture Provider pour state management
+✅ UI moderne avec Material Design 3
+✅ Navigation par bottom tabs
+✅ Animations et transitions fluides
+✅ Gestion d'état réactive
+✅ Cache d'images optimisé
+✅ Interface responsive
+```
+
+## 🚀 Démarrage Rapide
+
+### Option 1: Script Automatique (Recommandé)
+
+**Windows:**
+```bash
+# Double-cliquez sur start.bat ou exécutez:
+./start.bat
+```
+
+**Linux/Mac:**
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+### Option 2: Démarrage Manuel
+
+**1. Backend:**
+```bash
+cd backend
+npm install
+node server.js
+```
+
+**2. Frontend (dans un nouveau terminal):**
+```bash
+cd frontend
+flutter pub get
+flutter run -d chrome  # ou flutter run -d <device-id>
+```
+
+### 3. Configuration
+
+Le fichier `.env` contient :
+```
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production_2026
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/usmba_social
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+```
+
+## 📱 Utilisation
+
+1. **Inscription**: Créez un compte avec email @usmba.ac.ma
+2. **Connexion**: Utilisez vos identifiants
+3. **Navigation**: Utilisez la barre de navigation du bas
+4. **Posts**: Créez du contenu depuis l'onglet central
+5. **Interaction**: Likez et commentez les posts
+
+## 🔧 Scripts Disponibles
+
+### Backend
+```bash
+npm install          # Installer dépendances
+node server.js       # Démarrer serveur
+node seed.js         # Seeder les facultés
+```
+
+### Frontend
+```bash
+flutter pub get      # Installer dépendances
+flutter run          # Lancer l'app
+flutter build apk    # Build Android
+```
+
+## 📊 État du Projet
+
+### ✅ Implémenté
+- [x] Architecture backend sécurisée
+- [x] Authentification complète
+- [x] UI moderne Flutter
+- [x] Navigation par onglets
+- [x] Feed avec pagination
+- [x] Création de posts
+- [x] Profils utilisateur
+- [x] Recherche
+- [x] Animations et transitions
+
+### 🚧 En Développement
+- [ ] Messagerie temps réel complète
+- [ ] Notifications push
+- [ ] Stories Instagram-like
+- [ ] Groupes et événements
+- [ ] Mode hors ligne
+
+### 📋 À Venir
+- [ ] Marketplace étudiant
+- [ ] Covoiturage
+- [ ] Notes de cours
+- [ ] Système de badges
+
+## 🛡️ Sécurité
+
+- ✅ JWT avec expiration
+- ✅ Hashage des mots de passe (bcrypt)
+- ✅ Validation des entrées
+- ✅ Rate limiting
+- ✅ CORS configuré
+- ✅ Sanitisation des données
+- ✅ Gestion des erreurs
+
+## 🎨 Design System
+
+- **Couleurs**: Palette USMBA (bleu principal)
+- **Typographie**: Material Design 3
+- **Composants**: Widgets réutilisables
+- **Animations**: Transitions fluides
+- **Responsive**: Adapté mobile/desktop
+
+## 📈 Performance
+
+- ✅ Lazy loading des images
+- ✅ Pagination efficace
+- ✅ Cache optimisé
+- ✅ State management réactif
+- ✅ Animations 60fps
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créez une branche feature
+3. Committez vos changements
+4. Push et créez une PR
+
+## 📝 License
+
+Projet universitaire - USMBA 2026
+
+---
+
+Développé avec ❤️ pour la communauté USMBA
 
 ## ✨ Fonctionnalités Implémentées
 

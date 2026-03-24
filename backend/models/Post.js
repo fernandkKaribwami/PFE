@@ -1,22 +1,16 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const PostSchema = new Schema({
-  author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  text: String,
-  mediaUrl: String,
-  mediaType: String,
+
+const PostSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  content: { type: String, required: true },
+  media: [{ type: String }], // URLs
   hashtags: [String],
-  mentions: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  commentsCount: { type: Number, default: 0 },
-  likesCount: { type: Number, default: 0 },
-  savesCount: { type: Number, default: 0 },
-  sharesCount: { type: Number, default: 0 },
-  isPublic: { type: Boolean, default: true },
-  isPinned: { type: Boolean, default: false },
-  scheduledFor: Date,
-  faculty: { type: Schema.Types.ObjectId, ref: 'Faculty' },
-  group: { type: Schema.Types.ObjectId, ref: 'Group' }
-},{ timestamps: true });
-PostSchema.index({ createdAt: -1 });
+  mentions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' }, // if in group
+  faculty: { type: mongoose.Schema.Types.ObjectId, ref: 'Faculty' }, // if in faculty feed
+  isReported: { type: Boolean, default: false }
+}, { timestamps: true });
+
 module.exports = mongoose.model('Post', PostSchema);

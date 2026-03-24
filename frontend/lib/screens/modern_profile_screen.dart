@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../providers/user_provider.dart';
-import '../providers/feed_provider.dart';
-import '../widgets/base_widgets.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_typography.dart';
-import '../utils/extensions.dart';
-import '../utils/notification_utils.dart';
 
-/// Écran Profil Moderne avec Riverpod
-/// Démontre:
-/// - Chargement de données avec FutureProvider
-/// - Gestion du suivre/ne pas suivre
-/// - Affichage des posts de l'utilisateur
-/// - Animations fluides
-class ProfileScreen extends ConsumerStatefulWidget {
-  final String? userId;
-
-  const ProfileScreen({super.key, this.userId});
+class ModernProfileScreen extends StatefulWidget {
+  const ModernProfileScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  State<ModernProfileScreen> createState() => _ModernProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen>
-    with SingleTickerProviderStateMixin {
+class _ModernProfileScreenState extends State<ModernProfileScreen>
+    with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -34,20 +20,259 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
 
-    // Charger le profil utilisateur
-    if (widget.userId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref
-            .read(currentUserProvider.notifier)
-            .loadUserProfile(widget.userId!);
-      });
-    }
+    // Load user profile
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      if (authProvider.token != null) {
+        userProvider.loadUserProfile(authProvider.token!);
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
+          if (userProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final user = userProvider.currentUser;
+
+          return DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    expandedHeight: 300,
+                    floating: false,
+                    pinned: true,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: _buildProfileHeader(user),
+                    ),
+                    bottom: TabBar(
+                      controller: _tabController,
+                      tabs: const [
+                        Tab(icon: Icon(Icons.grid_on), text: 'Posts'),
+                        Tab(icon: Icon(Icons.bookmark_border), text: 'Sauvegardé'),
+                        Tab(icon: Icon(Icons.person_add), text: 'Abonnements'),
+                      ],
+                      indicatorColor: AppColors.primary,
+                      labelColor: AppColors.primary,
+                      unselectedLabelColor: Colors.grey,
+                    ),
+                  ),
+                ];
+              },
+              body: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildPostsTab(),
+                  _buildSavedTab(),
+                  _buildFollowingTab(),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader(Map<String, dynamic>? user) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.primary.withOpacity(0.8),
+            AppColors.primary.withOpacity(0.4),
+            Colors.white,
+          ],
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Profile Picture
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.white,
+              backgroundImage: user?['avatar'] != null
+                  ? NetworkImage(user!['avatar'])
+                  : null,
+              child: user?['avatar'] == null
+                  ? Text(
+                      user?['name']?.substring(0, 1).toUpperCase() ?? 'U',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    )
+                  : null,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Name
+            Text(
+              user?['name'] ?? 'Utilisateur',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            // Faculty
+            Text(
+              user?['faculty'] ?? 'Faculté non spécifiée',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white.withOpacity(0.9),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Stats
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildStat('Posts', '12'),
+                _buildStat('Abonnés', '156'),
+                _buildStat('Abonnements', '89'),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Bio
+            if (user?['bio'] != null) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  user!['bio'],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 16),
+
+            // Action Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // TODO: Edit profile
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text('Modifier profil'),
+                ),
+                const SizedBox(width: 12),
+                OutlinedButton(
+                  onPressed: () {
+                    // TODO: Settings
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.white),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Icon(Icons.settings),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStat(String label, String value) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withOpacity(0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPostsTab() {
+    return GridView.builder(
+      padding: const EdgeInsets.all(1),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 1,
+      ),
+      itemCount: 12, // Mock data
+      itemBuilder: (context, index) {
+        return Container(
+          color: Colors.grey[300],
+          child: const Icon(Icons.image, color: Colors.white),
+        );
+      },
+    );
+  }
+
+  Widget _buildSavedTab() {
+    return const Center(
+      child: Text('Posts sauvegardés'),
+    );
+  }
+
+  Widget _buildFollowingTab() {
+    return const Center(
+      child: Text('Abonnements'),
+    );
+  }
+}
   }
 
   @override
