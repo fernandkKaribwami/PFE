@@ -1,5 +1,5 @@
 /// GUIDE D'INTÉGRATION COMPLÈTE - FLUTTER MODERN ARCHITECTURE
-/// 
+///
 /// Ce fichier montre comment intégrer tous les composants créés :
 /// - Design System (Couleurs, Typography, Spacing)
 /// - Gestion d'état avec Riverpod
