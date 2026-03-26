@@ -26,6 +26,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   // State
   bool _isLogin = true;
+  String _selectedRole = 'student';
   XFile? _avatarFile;
   final ImagePicker _picker = ImagePicker();
 
@@ -92,6 +93,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         email: _emailController.text.trim(),
         password: _passwordController.text,
         faculty: _facultyController.text,
+        role: _selectedRole,
         bio: _bioController.text.isNotEmpty ? _bioController.text : null,
         avatarPath: _avatarFile?.path,
       );
@@ -197,10 +199,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     height: _isLogin ? 300 : 500,
                     child: TabBarView(
                       controller: _tabController,
-                      children: [
-                        _buildLoginForm(),
-                        _buildRegisterForm(),
-                      ],
+                      children: [_buildLoginForm(), _buildRegisterForm()],
                     ),
                   ),
 
@@ -211,6 +210,23 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     onPressed: _submit,
                     isLoading: authProvider.isLoading,
                     text: _isLogin ? 'Se connecter' : 'S\'inscrire',
+                  ),
+
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final success = await authProvider.loginWithGoogle();
+                      if (success && mounted) {
+                        Navigator.pushReplacementNamed(context, '/main');
+                      }
+                    },
+                    icon: const Icon(Icons.login, color: Colors.black87),
+                    label: const Text('Se connecter avec Google'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      side: const BorderSide(color: Colors.grey),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
 
                   // Error Message
@@ -366,16 +382,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         const SizedBox(height: 16),
 
         DropdownButtonFormField<String>(
-          value: _facultyController.text.isNotEmpty ? _facultyController.text : null,
+          value: _facultyController.text.isNotEmpty
+              ? _facultyController.text
+              : null,
           decoration: const InputDecoration(
             labelText: 'Faculté / École / Institut',
             prefixIcon: Icon(Icons.school),
           ),
           items: _faculties.map((faculty) {
-            return DropdownMenuItem(
-              value: faculty,
-              child: Text(faculty),
-            );
+            return DropdownMenuItem(value: faculty, child: Text(faculty));
           }).toList(),
           onChanged: (value) {
             _facultyController.text = value ?? '';
@@ -383,6 +398,31 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Faculté requise';
+            }
+            return null;
+          },
+        ),
+
+        const SizedBox(height: 16),
+
+        DropdownButtonFormField<String>(
+          value: _selectedRole,
+          decoration: const InputDecoration(
+            labelText: 'Rôle',
+            prefixIcon: Icon(Icons.person_outline),
+          ),
+          items: const [
+            DropdownMenuItem(value: 'student', child: Text('Étudiant')),
+            DropdownMenuItem(value: 'teacher', child: Text('Professeur')),
+          ],
+          onChanged: (value) {
+            setState(() {
+              _selectedRole = value ?? 'student';
+            });
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Rôle requis';
             }
             return null;
           },

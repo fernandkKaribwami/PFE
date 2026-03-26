@@ -10,6 +10,7 @@ import 'providers/notification_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
+import 'screens/admin_dashboard_screen.dart';
 import 'theme/app_colors.dart';
 
 // Configuration API
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
             routes: {
               '/auth': (context) => const AuthScreen(),
               '/main': (context) => const MainNavigationScreen(),
+              '/admin': (context) => const AdminDashboardScreen(),
             },
           );
         },
@@ -200,239 +202,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
 
-  @override
-  State<AuthScreen> createState() => _AuthScreenState();
-}
-
-class _AuthScreenState extends State<AuthScreen> {
-  bool isLogin = true;
-  final nomCtrl = TextEditingController();
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
-  final bioCtrl = TextEditingController();
-  String? selectedFaculty;
-  bool isLoading = false;
-  XFile? avatarFile;
-  final ImagePicker picker = ImagePicker();
-
-  final faculties = [
-    'Faculté des Sciences',
-    'Faculté des Lettres',
-    'École Nationale d\'Ingénieurs',
-    'Ecole Supérieure de Technologie',
-    'Institut d\'Études Islamiques',
-    'Faculté de Médecine',
-    'Faculté de Droit',
-    'Faculté des Sciences Juridiques, Économiques et Sociales',
-    'École Supérieure d\'Ingénieries',
-  ];
-
-  @override
-  void dispose() {
-    nomCtrl.dispose();
-    emailCtrl.dispose();
-    passCtrl.dispose();
-    bioCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> pickAvatar() async {
-    final f = await picker.pickImage(source: ImageSource.gallery);
-    if (f != null) {
-      setState(() => avatarFile = f);
-    }
-  }
-
-  Future<void> submit() async {
-    // Validation
-    if (emailCtrl.text.isEmpty || passCtrl.text.isEmpty) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email et mot de passe requis')),
-      );
-      return;
-    }
-
-    if (!isLogin) {
-      if (nomCtrl.text.isEmpty || selectedFaculty == null) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Tous les champs sont requis')),
-        );
-        return;
-      }
-    }
-
-    setState(() => isLoading = true);
-
-    try {
-      if (isLogin) {
-        // LOGIN
-        final res = await http
-            .post(
-              Uri.parse('$API_URL/login'),
-              headers: {'Content-Type': 'application/json'},
-              body: jsonEncode({
-                'email': emailCtrl.text,
-                'password': passCtrl.text,
-              }),
-            )
-            .timeout(const Duration(seconds: 10));
-
-        if (!mounted) return;
-        setState(() => isLoading = false);
-
-        if (res.statusCode == 200) {
-          final data = jsonDecode(res.body);
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', data['token']);
-          await prefs.setString('userId', data['user']['id']);
-
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => FeedScreen(token: data['token'])),
-          );
-        } else {
-          try {
-            final error = jsonDecode(res.body);
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erreur: ${error['message']}')),
-            );
-          } catch (e) {
-            if (!mounted) return;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Erreur ${res.statusCode}')));
-          }
-        }
-      } else {
-        // REGISTER with multipart
-        final req = http.MultipartRequest(
-          'POST',
-          Uri.parse('$API_URL/register'),
-        );
-
-        req.fields['nom'] = nomCtrl.text;
-        req.fields['email'] = emailCtrl.text;
-        req.fields['password'] = passCtrl.text;
-        req.fields['faculty'] = selectedFaculty!;
-        req.fields['bio'] = bioCtrl.text;
-
-        if (avatarFile != null) {
-          try {
-            req.files.add(
-              await http.MultipartFile.fromPath('avatar', avatarFile!.path),
-            );
-          } catch (e) {
-            debugPrint('Avatar upload error: $e');
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Erreur upload avatar')),
-            );
-            setState(() => isLoading = false);
-            return;
-          }
-        }
-
-        final streamedResponse = await req.send().timeout(
-          const Duration(seconds: 30),
-          onTimeout: () {
-            throw Exception('Timeout - serveur non accessible');
-          },
-        );
-
-        final res = await http.Response.fromStream(streamedResponse);
-
-        if (!mounted) return;
-        setState(() => isLoading = false);
-
-        if (res.statusCode == 201) {
-          final data = jsonDecode(res.body);
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', data['token']);
-          await prefs.setString('userId', data['user']['id']);
-
-          if (!mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Inscription réussie!')));
-
-          if (!mounted) return;
-          // Navigate to verification screen; backend returns a verificationCode for testing
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => VerifyEmailScreen(
-                email: emailCtrl.text,
-                serverCode: data['verificationCode'],
-              ),
-            ),
-          );
-        } else {
-          try {
-            final error = jsonDecode(res.body);
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erreur: ${error['message']}')),
-            );
-          } catch (e) {
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erreur ${res.statusCode}: ${res.body}')),
-            );
-          }
-        }
-      }
-    } on http.ClientException catch (e) {
-      if (!mounted) return;
-      setState(() => isLoading = false);
-      debugPrint('ClientException: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur connexion: Vérifiez que le serveur tourne sur $API_URL',
-          ),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => isLoading = false);
-      debugPrint('Error: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(isLogin ? 'Connexion' : 'Inscription')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (!isLogin) ...[
-                // Avatar picker
-                Center(
-                  child: GestureDetector(
-                    onTap: pickAvatar,
-                    child: Stack(
-                      children: [
                         CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: avatarFile != null
+                          radius = 60,
+                          backgroundColor = Colors.grey[300],
+                          backgroundImage = avatarFile != null
                               ? FileImage(File(avatarFile!.path))
                               : null,
-                          child: avatarFile == null
+                          child = avatarFile == null
                               ? Icon(
                                   Icons.camera_alt,
                                   size: 40,
@@ -441,9 +218,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               : null,
                         ),
                         Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
+                          bottom = 0,
+                          right = 0,
+                          child = Container(
                             padding: const EdgeInsets.all(8),
                             decoration: const BoxDecoration(
                               color: Color(0xFF003366),
@@ -460,11 +237,11 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height = 20),
                 // Nom
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TextField(
+                  padding = const EdgeInsets.only(bottom: 12),
+                  child = TextField(
                     controller: nomCtrl,
                     decoration: const InputDecoration(
                       labelText: 'Nom complet',
@@ -475,8 +252,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 // Faculty
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: DropdownButtonFormField<String>(
+                  padding = const EdgeInsets.only(bottom: 12),
+                  child = DropdownButtonFormField<String>(
                     initialValue: selectedFaculty,
                     items: faculties
                         .map((f) => DropdownMenuItem(value: f, child: Text(f)))
@@ -491,8 +268,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 // Bio
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TextField(
+                  padding = const EdgeInsets.only(bottom: 12),
+                  child = TextField(
                     controller: bioCtrl,
                     maxLines: 3,
                     decoration: const InputDecoration(
@@ -506,8 +283,8 @@ class _AuthScreenState extends State<AuthScreen> {
               ],
               // Email
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: TextField(
+                padding = const EdgeInsets.only(bottom: 12),
+                child = TextField(
                   controller: emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
@@ -519,8 +296,8 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               // Password
               Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: TextField(
+                padding = const EdgeInsets.only(bottom: 20),
+                child = TextField(
                   controller: passCtrl,
                   obscureText: true,
                   decoration: const InputDecoration(
@@ -532,13 +309,13 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               // Submit Button
               ElevatedButton(
-                onPressed: isLoading ? null : submit,
-                style: ElevatedButton.styleFrom(
+                onPressed = isLoading ? null : submit,
+                style = ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   backgroundColor: const Color(0xFF003366),
                   disabledBackgroundColor: Colors.grey,
                 ),
-                child: isLoading
+                child = isLoading
                     ? const SizedBox(
                         height: 20,
                         width: 20,
@@ -555,10 +332,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height = 12),
               // Toggle Login/Register
               TextButton(
-                onPressed: () {
+                onPressed = () {
                   setState(() => isLogin = !isLogin);
                   nomCtrl.clear();
                   emailCtrl.clear();
@@ -567,7 +344,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   selectedFaculty = null;
                   avatarFile = null;
                 },
-                child: Text(
+                child = Text(
                   isLogin ? 'Créer un compte' : 'Déjà inscrit ?',
                   style: const TextStyle(
                     fontSize: 16,

@@ -36,7 +36,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-      final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+      final notificationProvider = Provider.of<NotificationProvider>(
+        context,
+        listen: false,
+      );
 
       // Load initial data
       feedProvider.loadFeed(authProvider.token!);
@@ -66,7 +69,29 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final isAdmin = authProvider.role == 'admin';
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('USMBA Social'),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.admin_panel_settings),
+              tooltip: 'Dashboard Admin',
+              onPressed: () => Navigator.pushNamed(context, '/admin'),
+            ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Déconnexion',
+            onPressed: () async {
+              await authProvider.logout();
+              Navigator.pushReplacementNamed(context, '/auth');
+            },
+          ),
+        ],
+      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,

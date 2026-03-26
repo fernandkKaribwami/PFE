@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ class AuthProvider with ChangeNotifier {
   String? get token => _token;
   Map<String, dynamic>? get user => _user;
   String? get error => _error;
+  String get role => _user?['role']?.toString() ?? 'student';
   bool get isAuthenticated => _token != null && _user != null;
 
   Future<bool> validateToken(String token) async {
@@ -47,13 +49,17 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      if (!email.endsWith('@usmba.ac.ma')) {
+        _error = 'Email doit être un email universitaire @usmba.ac.ma';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
       final response = await http.post(
         Uri.parse('$API_URL/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
       if (response.statusCode == 200) {
@@ -85,6 +91,7 @@ class AuthProvider with ChangeNotifier {
     required String email,
     required String password,
     required String faculty,
+    required String role,
     String? bio,
     String? avatarPath,
   }) async {
@@ -98,14 +105,24 @@ class AuthProvider with ChangeNotifier {
         Uri.parse('$API_URL/api/auth/register'),
       );
 
-      request.fields['nom'] = name;
+      if (!email.endsWith('@usmba.ac.ma')) {
+        _error = 'Email doit être un email universitaire @usmba.ac.ma';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      request.fields['name'] = name;
       request.fields['email'] = email;
       request.fields['password'] = password;
       request.fields['faculty'] = faculty;
+      request.fields['role'] = role;
       if (bio != null) request.fields['bio'] = bio;
 
       if (avatarPath != null) {
-        request.files.add(await http.MultipartFile.fromPath('avatar', avatarPath));
+        request.files.add(
+          await http.MultipartFile.fromPath('avatar', avatarPath),
+        );
       }
 
       final streamedResponse = await request.send();
@@ -135,15 +152,68 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> loginWithGoogle() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final googleUser = await GoogleSignIn(scopes: ['email']).signIn();
+      if (googleUser == null) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final email = googleUser.email;
+      if (!email.endsWith('@usmba.ac.ma')) {
+        _error = 'L’email doit être @usmba.ac.ma';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final response = await http.post(
+        Uri.parse('$API_URL/api/auth/google'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': googleUser.displayName ?? googleUser.email.split('@')[0],
+          'email': email,
+          'avatar': googleUser.photoUrl ?? '',
+          'role': 'student',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _token = data['token'];
+        _user = data['user'];
+        await _saveToken(_token!);
+        await _saveUserId(_user!['id']);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        final errorData = jsonDecode(response.body);
+        _error = errorData['msg'] ?? 'Google login failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = 'Google Login error: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> verifyEmail(String email, String code) async {
     try {
       final response = await http.post(
         Uri.parse('$API_URL/api/auth/verify-email'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'verificationCode': code,
-        }),
+        body: jsonEncode({'email': email, 'verificationCode': code}),
       );
 
       return response.statusCode == 200;
@@ -166,7 +236,11 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> resetPassword(String email, String code, String newPassword) async {
+  Future<bool> resetPassword(
+    String email,
+    String code,
+    String newPassword,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('$API_URL/api/auth/reset-password'),

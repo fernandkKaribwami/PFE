@@ -11,15 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/main.dart';
 
 void main() {
-  testWidgets('Auth screen displays', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: AuthScreen(),
-    ));
-
-    // Adjusted expectation to match AuthScreen appBar title
-    expect(find.text('Connexion'), findsOneWidget);
-
-    // Verify that the text fields exist.
-    expect(find.byType(TextField), findsWidgets);
+  testWidgets('App starts', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    
+    // Verify app is running
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

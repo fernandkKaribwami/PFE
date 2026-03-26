@@ -52,6 +52,38 @@ router.post('/login', async (req, res) => {
   });
 });
 
+// Google OAuth simulation endpoint
+router.post('/google', async (req, res) => {
+  try {
+    const { name, email, avatar, role } = req.body;
+    if (!email || !email.endsWith('@usmba.ac.ma')) {
+      return res.status(400).json({ msg: 'Email universitaire @usmba.ac.ma requis' });
+    }
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({
+        name: name || email.split('@')[0],
+        email,
+        password: crypto.randomBytes(20).toString('hex'),
+        role: role || 'student',
+        avatar: avatar || '',
+        emailVerified: true,
+      });
+      await user.save();
+    }
+
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar } });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
 // Request password reset
 router.post('/request-password-reset', async (req, res) => {
   const { email } = req.body;
