@@ -19,26 +19,18 @@ class AuthService {
     String? avatarPath,
   }) async {
     try {
-      final fields = {
-        'nom': nom,
-        'prenom': prenom,
+      final response = await _api.post('/auth/register', {
+        'name': '$nom $prenom',
         'email': email,
         'password': password,
         'faculty': faculty,
-        'filiere': filiere,
-        'niveau': niveau,
+        'role': 'student',
+        'level': niveau,
         'bio': bio,
-      };
+      });
 
-      final response = await _api.postMultipart(
-        '/register',
-        fields,
-        'avatar',
-        avatarPath ?? '',
-      );
-
-      if (response.statusCode == 201) {
-        final data = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', data['token']);
         await prefs.setString('userId', data['user']['id']);

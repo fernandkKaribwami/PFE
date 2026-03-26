@@ -35,25 +35,21 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: AppColors.lightBackground,
     canvasColor: AppColors.lightBackground,
-    
+
     // AppBar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.primaryBlue,
       foregroundColor: Colors.white,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: AppTypography.headlineSmall.copyWith(
-        color: Colors.white,
-      ),
+      titleTextStyle: AppTypography.headlineSmall.copyWith(color: Colors.white),
     ),
 
     // Card Theme
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.lightSurface,
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
     // Bottom Navigation Theme
@@ -71,9 +67,7 @@ class AppTheme {
         backgroundColor: AppColors.primaryBlue,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
       ),
     ),
@@ -81,9 +75,7 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primaryBlue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
 
@@ -94,31 +86,19 @@ class AppTheme {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.greyLight300,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.greyLight300, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.greyLight300,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.greyLight300, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.primaryBlue,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.error,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.error, width: 1),
       ),
       labelStyle: AppTypography.labelMedium.copyWith(
         color: AppColors.greyLight700,
@@ -186,7 +166,7 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
+    colorScheme: ColorScheme.dark(
       primary: AppColors.primaryBlueLight,
       onPrimary: AppColors.darkSurface,
       primaryContainer: AppColors.primaryBlue,
@@ -220,21 +200,16 @@ class AppTheme {
       foregroundColor: Colors.white,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: AppTypography.headlineSmall.copyWith(
-        color: Colors.white,
-      ),
+      titleTextStyle: AppTypography.headlineSmall.copyWith(color: Colors.white),
     ),
 
     // Card Theme
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.darkSurface,
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(
-          color: AppColors.greyDark200,
-          width: 1,
-        ),
+        side: const BorderSide(color: AppColors.greyDark200, width: 1),
       ),
     ),
 
@@ -253,9 +228,7 @@ class AppTheme {
         backgroundColor: AppColors.primaryBlueLight,
         foregroundColor: AppColors.darkSurface,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
       ),
     ),
@@ -263,9 +236,7 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primaryBlueLight,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
 
@@ -276,17 +247,11 @@ class AppTheme {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.greyDark300,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.greyDark300, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.greyDark300,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.greyDark300, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
@@ -297,10 +262,7 @@ class AppTheme {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-          color: AppColors.error,
-          width: 1,
-        ),
+        borderSide: const BorderSide(color: AppColors.error, width: 1),
       ),
       labelStyle: AppTypography.labelMedium.copyWith(
         color: AppColors.greyDark700,
@@ -343,15 +305,11 @@ class AppTheme {
       titleSmall: AppTypography.titleSmall.copyWith(
         color: AppColors.greyDark900,
       ),
-      bodyLarge: AppTypography.bodyLarge.copyWith(
-        color: AppColors.greyDark800,
-      ),
+      bodyLarge: AppTypography.bodyLarge.copyWith(color: AppColors.greyDark800),
       bodyMedium: AppTypography.bodyMedium.copyWith(
         color: AppColors.greyDark700,
       ),
-      bodySmall: AppTypography.bodySmall.copyWith(
-        color: AppColors.greyDark600,
-      ),
+      bodySmall: AppTypography.bodySmall.copyWith(color: AppColors.greyDark600),
       labelLarge: AppTypography.labelLarge.copyWith(
         color: AppColors.greyDark900,
       ),

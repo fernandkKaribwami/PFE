@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/post_service.dart';
 import '../services/auth_service.dart';
-import 'create_post_screen.dart';
+import 'create_post_screen.dart' hide Padding, TextButton;
 import 'profile_screen.dart';
 import 'chat_screen.dart';
 
@@ -130,18 +130,11 @@ class _FeedScreenState extends State<FeedScreen> {
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => CreatePostScreen(
-              onPostCreated: () {
-                setState(() {
-                  currentPage = 1;
-                  _loadPosts();
-                });
-              },
-            ),
-          ),
+          MaterialPageRoute(builder: (_) => const CreatePostScreen()),
         ).then((_) {
           setState(() => selectedIndex = 0);
+          currentPage = 1;
+          _loadPosts();
         });
         break;
       case 3:

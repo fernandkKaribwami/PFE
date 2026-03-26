@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../providers/auth_provider.dart';
+import '../services/faculty_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/loading_button.dart';
 
@@ -30,17 +31,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   XFile? _avatarFile;
   final ImagePicker _picker = ImagePicker();
 
-  final List<String> _faculties = [
-    'Faculté des Sciences',
-    'Faculté des Lettres',
-    'École Nationale d\'Ingénieurs',
-    'École Supérieure de Technologie',
-    'Institut d\'Études Islamiques',
-    'Faculté de Médecine',
-    'Faculté de Droit',
-    'Faculté des Sciences Juridiques, Économiques et Sociales',
-    'École Supérieure d\'Ingénieries',
-  ];
+  final FacultyService _facultyService = FacultyService();
+  List<dynamic> _faculties = [];
+  String? _selectedFacultyId;
+  String? _facultiesError;
+  bool _isLoadingFaculties = true;
 
   @override
   void initState() {
@@ -51,6 +46,37 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _isLogin = _tabController.index == 0;
       });
     });
+    _loadFaculties();
+  }
+
+  Future<void> _loadFaculties() async {
+    setState(() {
+      _isLoadingFaculties = true;
+      _facultiesError = null;
+    });
+
+    try {
+      final faculties = await _facultyService.getFaculties();
+      if (mounted) {
+        setState(() {
+          _faculties = faculties;
+          _isLoadingFaculties = false;
+          if (_faculties.isEmpty) {
+            _facultiesError =
+                'Aucune faculté disponible. Vérifiez votre connexion.';
+          } else if (_selectedFacultyId == null) {
+            _selectedFacultyId = _faculties.first['_id']?.toString();
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingFaculties = false;
+          _facultiesError = 'Erreur lors du chargement des facultés: $e';
+        });
+      }
+    }
   }
 
   @override
@@ -92,7 +118,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
-        faculty: _facultyController.text,
+        faculty: _selectedFacultyId ?? '',
         role: _selectedRole,
         bio: _bioController.text.isNotEmpty ? _bioController.text : null,
         avatarPath: _avatarFile?.path,
@@ -213,19 +239,32 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   ),
 
                   const SizedBox(height: 12),
-                  OutlinedButton.icon(
+                  OutlinedButton(
                     onPressed: () async {
                       final success = await authProvider.loginWithGoogle();
                       if (success && mounted) {
                         Navigator.pushReplacementNamed(context, '/main');
                       }
                     },
-                    icon: const Icon(Icons.login, color: Colors.black87),
-                    label: const Text('Se connecter avec Google'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.black87,
                       side: const BorderSide(color: Colors.grey),
                       padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.login, color: Colors.black87),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            'Se connecter avec Google',
+                            softWrap: true,
+                            style: const TextStyle(color: Colors.black87),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -381,21 +420,87 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         const SizedBox(height: 16),
 
+        // Faculty Loading Error Message
+        if (_facultiesError != null) ...[
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.red[50],
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.red[200]!),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.red[700], size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    _facultiesError!,
+                    style: TextStyle(color: Colors.red[700], fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: _isLoadingFaculties ? null : _loadFaculties,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_isLoadingFaculties)
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  else
+                    const Icon(Icons.refresh),
+                  const SizedBox(width: 8),
+                  Text(_isLoadingFaculties ? 'Chargement...' : 'Réessayer'),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+
         DropdownButtonFormField<String>(
-          value: _facultyController.text.isNotEmpty
-              ? _facultyController.text
-              : null,
+          value: _selectedFacultyId,
           decoration: const InputDecoration(
             labelText: 'Faculté / École / Institut',
             prefixIcon: Icon(Icons.school),
           ),
-          items: _faculties.map((faculty) {
-            return DropdownMenuItem(value: faculty, child: Text(faculty));
-          }).toList(),
+          items: _faculties.isNotEmpty
+              ? _faculties.map((faculty) {
+                  final id = faculty['_id']?.toString();
+                  final name =
+                      faculty['name']?.toString() ?? 'Faculté inconnue';
+                  return DropdownMenuItem(value: id, child: Text(name));
+                }).toList()
+              : [
+                  const DropdownMenuItem(
+                    value: null,
+                    child: Text('Chargement des facultés...'),
+                  ),
+                ],
           onChanged: (value) {
-            _facultyController.text = value ?? '';
+            if (value != null) {
+              setState(() {
+                _selectedFacultyId = value;
+                _facultyController.text = value;
+              });
+            }
           },
           validator: (value) {
+            if (_facultiesError != null) {
+              return 'Merci de recharger les facultés';
+            }
+            if (_faculties.isEmpty) {
+              return 'Chargement des facultés en cours...';
+            }
             if (value == null || value.isEmpty) {
               return 'Faculté requise';
             }

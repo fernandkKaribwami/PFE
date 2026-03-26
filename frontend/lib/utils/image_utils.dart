@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 /// Utilitaires pour les images avec caching automatique
 class ImageUtils {
@@ -24,14 +25,12 @@ class ImageUtils {
       maxWidthDiskCache: 1024,
       memCacheHeight: (height?.toInt() ?? 200),
       memCacheWidth: (width?.toInt() ?? 200),
-      cacheManager: CacheManager.getInstance(),
+      cacheManager: DefaultCacheManager(),
       placeholder: (context, url) =>
           placeholder ??
           Container(
             color: Colors.grey[200],
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: const Center(child: CircularProgressIndicator()),
           ),
       errorWidget: (context, url, error) =>
           errorWidget ??
@@ -56,11 +55,9 @@ class ImageUtils {
       cacheKey: '${imageUrl}_thumb_$size',
       memCacheHeight: size.toInt(),
       memCacheWidth: size.toInt(),
-      cacheManager: CacheManager.getInstance(),
-      placeholder: (context, url) => Container(
-        color: Colors.grey[200],
-        child: const SizedBox.expand(),
-      ),
+      cacheManager: DefaultCacheManager(),
+      placeholder: (context, url) =>
+          Container(color: Colors.grey[200], child: const SizedBox.expand()),
       errorWidget: (context, url, error) => Container(
         color: Colors.grey[200],
         child: const Icon(Icons.broken_image_outlined),
@@ -78,24 +75,6 @@ class ImageUtils {
   }
 }
 
-/// Cache Manager personnalisé
-class CacheManager {
-  static late CachedNetworkImageProvider _instance;
-
-  static CachedNetworkImageProvider getInstance() {
-    try {
-      // Retourner le default cache manager de cached_network_image
-      return cachedNetworkImageProvider;
-    } catch (e) {
-      // Fallback au provider standard
-      return cachedNetworkImageProvider;
-    }
-  }
-}
-
-// Dummy provider pour l'exemple
-const cachedNetworkImageProvider = CachedNetworkImageProvider('');
-
 /// Gestion de la mémoire pour les images
 class ImageMemoryManager {
   /// Vider le cache des images
@@ -106,7 +85,8 @@ class ImageMemoryManager {
 
   /// Obtenir la taille du cache
   static String getCacheSummary() {
-    final summary = imageCache.statusForKey(NetworkAssetImage(''));
-    return 'Cache Status: $summary';
+    return 'Cache Status: ${imageCache.currentSize}';
   }
 }
+
+class NetworkAssetImage {}

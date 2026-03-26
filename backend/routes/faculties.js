@@ -11,11 +11,18 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
+    console.log('📚 GET /api/faculties - Fetching all faculties...');
     const faculties = await Faculty.find().sort({ name: 1 });
+    console.log(`✓ Found ${faculties.length} faculties`);
     res.json(faculties);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error('❌ Error fetching faculties:', err.message);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du chargement des facultés',
+      error: err.message,
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    });
   }
 });
 
@@ -26,15 +33,19 @@ router.get('/:id', async (req, res) => {
   try {
     const faculty = await Faculty.findById(req.params.id);
     if (!faculty) {
-      return res.status(404).json({ msg: 'Faculty not found' });
+      return res.status(404).json({ message: 'Faculty not found' });
     }
     res.json(faculty);
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Faculty not found' });
+      return res.status(404).json({ message: 'Faculty not found' });
     }
-    res.status(500).send('Server Error');
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du chargement de la faculté',
+      error: err.message
+    });
   }
 });
 
@@ -45,7 +56,7 @@ router.get('/:id/posts', auth, async (req, res) => {
   try {
     const faculty = await Faculty.findById(req.params.id);
     if (!faculty) {
-      return res.status(404).json({ msg: 'Faculty not found' });
+      return res.status(404).json({ message: 'Faculty not found' });
     }
 
     // Find users from this faculty
@@ -62,7 +73,11 @@ router.get('/:id/posts', auth, async (req, res) => {
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du chargement des posts de la faculté',
+      error: err.message
+    });
   }
 });
 
@@ -73,7 +88,7 @@ router.get('/:id/members', auth, async (req, res) => {
   try {
     const faculty = await Faculty.findById(req.params.id);
     if (!faculty) {
-      return res.status(404).json({ msg: 'Faculty not found' });
+      return res.status(404).json({ message: 'Faculty not found' });
     }
 
     const members = await User.find({ faculty: req.params.id })
@@ -87,7 +102,11 @@ router.get('/:id/members', auth, async (req, res) => {
     });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du chargement des membres de la faculté',
+      error: err.message
+    });
   }
 });
 

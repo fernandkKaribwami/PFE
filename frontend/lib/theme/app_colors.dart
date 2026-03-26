@@ -56,3 +56,4 @@ class AppColors {
 
   // Primary color (used in theme)
   static const Color primary = primaryBlue;
+}

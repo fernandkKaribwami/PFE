@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String apiBaseUrl = 'https://api.example.com';
+// Keep this in sync with backend and main.dart `API_URL`.
+const String apiBaseUrl = 'http://localhost:5000/api';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();

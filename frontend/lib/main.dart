@@ -13,8 +13,15 @@ import 'screens/main_navigation_screen.dart';
 import 'screens/admin_dashboard_screen.dart';
 import 'theme/app_colors.dart';
 
+import 'package:flutter/foundation.dart';
+
 // Configuration API
-const String API_URL = 'http://localhost:5000';
+// - Web : localhost
+// - Android emulator : 10.0.2.2
+// - iOS simulator : localhost
+const String API_URL = kIsWeb
+    ? 'http://localhost:5000'
+    : 'http://10.0.2.2:5000';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -197,164 +204,6 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-
-                        CircleAvatar(
-                          radius = 60,
-                          backgroundColor = Colors.grey[300],
-                          backgroundImage = avatarFile != null
-                              ? FileImage(File(avatarFile!.path))
-                              : null,
-                          child = avatarFile == null
-                              ? Icon(
-                                  Icons.camera_alt,
-                                  size: 40,
-                                  color: Colors.grey[700],
-                                )
-                              : null,
-                        ),
-                        Positioned(
-                          bottom = 0,
-                          right = 0,
-                          child = Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF003366),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height = 20),
-                // Nom
-                Padding(
-                  padding = const EdgeInsets.only(bottom: 12),
-                  child = TextField(
-                    controller: nomCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'Nom complet',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                  ),
-                ),
-                // Faculty
-                Padding(
-                  padding = const EdgeInsets.only(bottom: 12),
-                  child = DropdownButtonFormField<String>(
-                    initialValue: selectedFaculty,
-                    items: faculties
-                        .map((f) => DropdownMenuItem(value: f, child: Text(f)))
-                        .toList(),
-                    onChanged: (v) => setState(() => selectedFaculty = v),
-                    decoration: const InputDecoration(
-                      labelText: 'Faculté / École / Institut',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.school),
-                    ),
-                  ),
-                ),
-                // Bio
-                Padding(
-                  padding = const EdgeInsets.only(bottom: 12),
-                  child = TextField(
-                    controller: bioCtrl,
-                    maxLines: 3,
-                    decoration: const InputDecoration(
-                      labelText: 'Bio (optionnel)',
-                      hintText: 'Écrivez quelque chose sur vous...',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.info),
-                    ),
-                  ),
-                ),
-              ],
-              // Email
-              Padding(
-                padding = const EdgeInsets.only(bottom: 12),
-                child = TextField(
-                  controller: emailCtrl,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email @usmba.ac.ma',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                ),
-              ),
-              // Password
-              Padding(
-                padding = const EdgeInsets.only(bottom: 20),
-                child = TextField(
-                  controller: passCtrl,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Mot de passe',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                ),
-              ),
-              // Submit Button
-              ElevatedButton(
-                onPressed = isLoading ? null : submit,
-                style = ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  backgroundColor: const Color(0xFF003366),
-                  disabledBackgroundColor: Colors.grey,
-                ),
-                child = isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
-                        ),
-                      )
-                    : Text(
-                        isLogin ? 'Se connecter' : 'S\'inscrire',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-              ),
-              SizedBox(height = 12),
-              // Toggle Login/Register
-              TextButton(
-                onPressed = () {
-                  setState(() => isLogin = !isLogin);
-                  nomCtrl.clear();
-                  emailCtrl.clear();
-                  passCtrl.clear();
-                  bioCtrl.clear();
-                  selectedFaculty = null;
-                  avatarFile = null;
-                },
-                child = Text(
-                  isLogin ? 'Créer un compte' : 'Déjà inscrit ?',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF003366),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

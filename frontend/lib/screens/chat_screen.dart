@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../services/chat_service.dart';
+import '../services/user_service.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -9,22 +11,13 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messages'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              size: 80,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.chat_bubble_outline, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'Aucun message',
@@ -37,10 +30,7 @@ class ChatScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Vos conversations apparaîtront ici',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -52,22 +42,6 @@ class ChatScreen extends StatelessWidget {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.message),
       ),
-    );
-  }
-}
-                  title: Text(conv['_id'] ?? 'Utilisateur'),
-                  subtitle: Text(conv['lastMessage'] ?? ''),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ChatDetailScreen(userId: conv['_id']),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
     );
   }
 }

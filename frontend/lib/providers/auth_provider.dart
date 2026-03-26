@@ -79,7 +79,11 @@ class AuthProvider with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _error = 'Network error: $e';
+      final baseError =
+          'Échec de connexion au serveur. Vérifiez que le backend est démarré à $API_URL et que votre réseau autorise la connexion.';
+      _error = e.toString().contains('SocketException')
+          ? '$baseError (Erreur réseau)'
+          : baseError;
       _isLoading = false;
       notifyListeners();
       return false;
@@ -100,11 +104,6 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$API_URL/api/auth/register'),
-      );
-
       if (!email.endsWith('@usmba.ac.ma')) {
         _error = 'Email doit être un email universitaire @usmba.ac.ma';
         _isLoading = false;
@@ -112,34 +111,48 @@ class AuthProvider with ChangeNotifier {
         return false;
       }
 
-      request.fields['name'] = name;
-      request.fields['email'] = email;
-      request.fields['password'] = password;
-      request.fields['faculty'] = faculty;
-      request.fields['role'] = role;
-      if (bio != null) request.fields['bio'] = bio;
+      final response = await http.post(
+        Uri.parse('$API_URL/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+          'password': password,
+          'faculty': faculty,
+          'role': role,
+          'level': 'L1',
+          'bio': bio ?? '',
+        }),
+      );
 
-      if (avatarPath != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath('avatar', avatarPath),
-        );
-      }
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         _token = data['token'];
         _user = data['user'];
-        await _saveToken(_token!);
-        await _saveUserId(_user!['id']);
+        if (_token != null && _user != null) {
+          await _saveToken(_token!);
+          await _saveUserId(_user!['id']);
+          _isLoading = false;
+          notifyListeners();
+          return true;
+        }
+
+        _error = 'Registration succeeded but server did not return token/user';
         _isLoading = false;
         notifyListeners();
-        return true;
+        return false;
       } else {
-        final errorData = jsonDecode(response.body);
-        _error = errorData['message'] ?? 'Registration failed';
+        try {
+          final errorData = jsonDecode(response.body);
+          _error =
+              errorData['message'] ??
+              errorData['error'] ??
+              errorData['msg'] ??
+              'Registration failed';
+        } catch (_) {
+          _error =
+              'Registration failed: ${response.statusCode} ${response.reasonPhrase ?? ''}';
+        }
         _isLoading = false;
         notifyListeners();
         return false;

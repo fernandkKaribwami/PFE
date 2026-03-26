@@ -28,11 +28,25 @@ const app = express();
 const server = http.createServer(app);
 
 // Socket.IO configuration with CORS
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:3000",
+  // Flutter web default dev server origin
+  "http://localhost:59077",
+  "http://127.0.0.1:59077",
+  "http://localhost:53731", // in case default flutter port changes
+];
+
 const io = socketio(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Origin non autorisé par CORS'));
+      }
+    },
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: true,
   },
   transports: ['websocket', 'polling']
 });
@@ -55,8 +69,10 @@ app.use('/api/', limiter);
 // API rate limiting for auth routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 auth requests per windowMs
+  max: 20, // limit each IP to 20 auth requests per windowMs in dev (adjust for prod)
   message: 'Too many authentication attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
@@ -66,7 +82,13 @@ app.use(compression());
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin non autorisé par CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 }));

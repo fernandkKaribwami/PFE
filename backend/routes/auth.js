@@ -1,25 +1,82 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Faculty = require('../models/Faculty');
 const crypto = require('crypto');
 
 // Register
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role, faculty, level } = req.body;
+
+    if (!name || !email || !password || !faculty) {
+      return res.status(400).json({ message: 'name, email, password and faculty are required' });
+    }
+
     let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+    if (user) return res.status(400).json({ message: 'User already exists' });
+
+    let facultyId = null;
+    if (faculty) {
+      if (mongoose.isValidObjectId(faculty)) {
+        facultyId = faculty;
+      } else {
+        // try exact, case-insensitive, fuzzy match
+        let facultyDoc = await Faculty.findOne({ name: faculty });
+        if (!facultyDoc) {
+          facultyDoc = await Faculty.findOne({ name: { $regex: new RegExp(`^${faculty.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } });
+        }
+        if (!facultyDoc) {
+          facultyDoc = await Faculty.findOne({ name: { $regex: faculty, $options: 'i' } });
+        }
+
+        if (facultyDoc) {
+          facultyId = facultyDoc._id;
+        } else {
+          return res.status(400).json({ message: `Faculté invalide : ${faculty}. Envoyez l'ID de la faculté ou un nom exact.` });
+        }
+      }
+    }
 
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    user = new User({ name, email, password, role, faculty, level, verificationCode });
+    user = new User({
+      name,
+      email,
+      password,
+      role,
+      faculty: facultyId,
+      level,
+      verificationCode,
+      emailVerified: false,
+    });
+
     await user.save();
 
-    // In production, send email with code
-    res.json({ msg: 'User created. Please verify email.', code: verificationCode });
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+      if (err) {
+        console.error('JWT signing failed:', err);
+        return res.status(500).json({ message: 'Token generation failed', error: err.message });
+      }
+
+      return res.status(201).json({
+        message: 'User created. Please verify email.',
+        code: verificationCode,
+        token,
+        user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar },
+      });
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Registration error:', err);
+
+    if (err.name === 'ValidationError') {
+      const message = Object.values(err.errors).map(val => val.message).join(', ');
+      return res.status(400).json({ message });
+    }
+
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
@@ -47,7 +104,10 @@ router.post('/login', async (req, res) => {
 
   const payload = { user: { id: user.id, role: user.role } };
   jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
-    if (err) throw err;
+    if (err) {
+      console.error('JWT sign error on login:', err);
+      return res.status(500).json({ message: 'Token generation failed', error: err.message });
+    }
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar } });
   });
 });
