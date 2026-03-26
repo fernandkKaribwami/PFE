@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../main.dart' show apiUrl;
 import 'feed_screen.dart';
-
-// ignore: constant_identifier_names
-const String API_URL = 'http://localhost:5000';
 
 class VerifyEmailScreen extends StatefulWidget {
   final String email;
@@ -39,7 +37,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     try {
       final res = await http
           .post(
-            Uri.parse('$API_URL/auth/verify-email'),
+            Uri.parse('$apiUrl/auth/verify-email'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'email': widget.email, 'code': codeCtrl.text}),
           )

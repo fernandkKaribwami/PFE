@@ -19,6 +19,7 @@ dependencies:
   connectivity_plus: ^4.0.2
   shared_preferences: ^2.2.0
   cached_network_image: ^3.2.3
+  flutter_cache_manager: ^3.3.1
   image_picker: ^1.0.4
   video_player: ^2.7.2
   google_sign_in: ^6.1.5

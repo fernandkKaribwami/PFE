@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'dart:convert';
 import '../providers/auth_provider.dart';
-import '../services/faculty_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/loading_button.dart';
+import '../main.dart' show apiUrl;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -22,20 +24,18 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _facultyController = TextEditingController();
   final _bioController = TextEditingController();
 
   // State
   bool _isLogin = true;
   String _selectedRole = 'student';
+  String? _selectedFaculty;
   XFile? _avatarFile;
   final ImagePicker _picker = ImagePicker();
 
-  final FacultyService _facultyService = FacultyService();
+  // Faculty loading
   List<dynamic> _faculties = [];
-  String? _selectedFacultyId;
-  String? _facultiesError;
-  bool _isLoadingFaculties = true;
+  bool _isLoadingFaculties = false;
 
   @override
   void initState() {
@@ -44,36 +44,41 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _tabController.addListener(() {
       setState(() {
         _isLogin = _tabController.index == 0;
+        // Load faculties when switching to Register tab
+        if (!_isLogin && _faculties.isEmpty) {
+          _loadFaculties();
+        }
       });
     });
-    _loadFaculties();
   }
 
   Future<void> _loadFaculties() async {
+    if (_isLoadingFaculties) return;
+
     setState(() {
       _isLoadingFaculties = true;
-      _facultiesError = null;
     });
 
     try {
-      final faculties = await _facultyService.getFaculties();
-      if (mounted) {
+      final response = await http
+          .get(Uri.parse('$apiUrl/api/faculties'))
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
         setState(() {
-          _faculties = faculties;
+          _faculties = data is List ? data : [];
           _isLoadingFaculties = false;
-          if (_faculties.isEmpty) {
-            _facultiesError =
-                'Aucune faculté disponible. Vérifiez votre connexion.';
-          } else if (_selectedFacultyId == null) {
-            _selectedFacultyId = _faculties.first['_id']?.toString();
-          }
+        });
+      } else {
+        setState(() {
+          _isLoadingFaculties = false;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _isLoadingFaculties = false;
-          _facultiesError = 'Erreur lors du chargement des facultés: $e';
         });
       }
     }
@@ -85,7 +90,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _facultyController.dispose();
     _bioController.dispose();
     super.dispose();
   }
@@ -118,7 +122,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
-        faculty: _selectedFacultyId ?? '',
+        faculty: _selectedFaculty ?? '',
         role: _selectedRole,
         bio: _bioController.text.isNotEmpty ? _bioController.text : null,
         avatarPath: _avatarFile?.path,
@@ -220,14 +224,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
                   const SizedBox(height: 32),
 
-                  // Tab Bar View
-                  SizedBox(
-                    height: _isLogin ? 300 : 500,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [_buildLoginForm(), _buildRegisterForm()],
-                    ),
-                  ),
+                  // Tab Bar View - Dynamic height
+                  _isLogin
+                      ? SizedBox(
+                          height: 250,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [_buildLoginForm(), _buildRegisterForm()],
+                          ),
+                        )
+                      : SizedBox(
+                          height: 600,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [_buildLoginForm(), _buildRegisterForm()],
+                          ),
+                        ),
 
                   const SizedBox(height: 24),
 
@@ -420,93 +432,43 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         const SizedBox(height: 16),
 
-        // Faculty Loading Error Message
-        if (_facultiesError != null) ...[
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.red[50],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.red[200]!),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.error_outline, color: Colors.red[700], size: 20),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    _facultiesError!,
-                    style: TextStyle(color: Colors.red[700], fontSize: 12),
-                  ),
+        // Faculty - From Backend
+        _isLoadingFaculties
+            ? const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: CircularProgressIndicator(),
+              )
+            : DropdownButtonFormField<String>(
+                value: _selectedFaculty,
+                decoration: const InputDecoration(
+                  labelText: 'Faculté / École / Institut',
+                  prefixIcon: Icon(Icons.school),
+                  helperText: 'Sélectionnez votre faculté',
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: _isLoadingFaculties ? null : _loadFaculties,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_isLoadingFaculties)
-                    const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  else
-                    const Icon(Icons.refresh),
-                  const SizedBox(width: 8),
-                  Text(_isLoadingFaculties ? 'Chargement...' : 'Réessayer'),
-                ],
+                items: _faculties.isNotEmpty
+                    ? _faculties.map((faculty) {
+                        final id = faculty['_id']?.toString() ?? '';
+                        final name =
+                            faculty['name']?.toString() ?? 'Faculté inconnue';
+                        return DropdownMenuItem(value: id, child: Text(name));
+                      }).toList()
+                    : [
+                        const DropdownMenuItem(
+                          value: null,
+                          child: Text('Aucune faculté disponible'),
+                        ),
+                      ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedFaculty = value;
+                    });
+                  }
+                },
+                validator: (value) {
+                  return null;
+                },
               ),
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
-
-        DropdownButtonFormField<String>(
-          value: _selectedFacultyId,
-          decoration: const InputDecoration(
-            labelText: 'Faculté / École / Institut',
-            prefixIcon: Icon(Icons.school),
-          ),
-          items: _faculties.isNotEmpty
-              ? _faculties.map((faculty) {
-                  final id = faculty['_id']?.toString();
-                  final name =
-                      faculty['name']?.toString() ?? 'Faculté inconnue';
-                  return DropdownMenuItem(value: id, child: Text(name));
-                }).toList()
-              : [
-                  const DropdownMenuItem(
-                    value: null,
-                    child: Text('Chargement des facultés...'),
-                  ),
-                ],
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                _selectedFacultyId = value;
-                _facultyController.text = value;
-              });
-            }
-          },
-          validator: (value) {
-            if (_facultiesError != null) {
-              return 'Merci de recharger les facultés';
-            }
-            if (_faculties.isEmpty) {
-              return 'Chargement des facultés en cours...';
-            }
-            if (value == null || value.isEmpty) {
-              return 'Faculté requise';
-            }
-            return null;
-          },
-        ),
 
         const SizedBox(height: 16),
 

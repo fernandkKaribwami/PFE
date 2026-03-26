@@ -87,7 +87,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             tooltip: 'Déconnexion',
             onPressed: () async {
               await authProvider.logout();
-              Navigator.pushReplacementNamed(context, '/auth');
+              if (mounted) {
+                Navigator.pushReplacementNamed(context, '/auth');
+              }
             },
           ),
         ],

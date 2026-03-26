@@ -93,6 +93,15 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
+// Configuration CORS pour autoriser les requêtes du frontend
+const corsOptions = {
+  origin: ['http://localhost:62204'], // Ajouter l'origine du frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

@@ -14,7 +14,19 @@ router.get('/', async (req, res) => {
     console.log('📚 GET /api/faculties - Fetching all faculties...');
     const faculties = await Faculty.find().sort({ name: 1 });
     console.log(`✓ Found ${faculties.length} faculties`);
-    res.json(faculties);
+    
+    // Count members for each faculty
+    const facultiesWithCounts = await Promise.all(
+      faculties.map(async (faculty) => {
+        const memberCount = await User.countDocuments({ faculty: faculty._id });
+        return {
+          ...faculty.toObject(),
+          membersCount: memberCount
+        };
+      })
+    );
+    
+    res.json(facultiesWithCounts);
   } catch (err) {
     console.error('❌ Error fetching faculties:', err.message);
     res.status(500).json({
@@ -122,18 +134,41 @@ router.post('/', auth, async (req, res) => {
 
     const { name, description, location, image } = req.body;
 
+    // Validate required fields
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ message: 'Le nom de la faculté est requis' });
+    }
+
+    // Generate slug from name
+    const slug = name
+      .toLowerCase()
+      .trim()
+      .replace(/[àâ]/g, 'a')
+      .replace(/[éèê]/g, 'e')
+      .replace(/[ôo]/g, 'o')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
     const faculty = new Faculty({
-      name,
-      description,
-      location,
-      image
+      name: name.trim(),
+      slug,
+      description: description || '',
+      location: location || '',
+      image: image || ''
     });
 
     await faculty.save();
-    res.json(faculty);
+    res.status(201).json(faculty);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    if (err.code === 11000) {
+      return res.status(400).json({ message: 'Cette faculté existe déjà' });
+    }
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la création de la faculté',
+      error: err.message
+    });
   }
 });
 
@@ -147,20 +182,48 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(403).json({ msg: 'Access denied. Admin only.' });
     }
 
+    const { name, description, location, image } = req.body;
+    const updateData = {};
+
+    // Update fields if provided
+    if (name && name.trim() !== '') {
+      updateData.name = name.trim();
+      // Generate new slug if name is changed
+      updateData.slug = name
+        .toLowerCase()
+        .trim()
+        .replace(/[àâ]/g, 'a')
+        .replace(/[éèê]/g, 'e')
+        .replace(/[ôo]/g, 'o')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    if (description !== undefined) updateData.description = description;
+    if (location !== undefined) updateData.location = location;
+    if (image !== undefined) updateData.image = image;
+
     const faculty = await Faculty.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
     if (!faculty) {
-      return res.status(404).json({ msg: 'Faculty not found' });
+      return res.status(404).json({ msg: 'Faculté non trouvée' });
     }
 
     res.json(faculty);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    if (err.code === 11000) {
+      return res.status(400).json({ message: 'Cette faculté existe déjà' });
+    }
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la mise à jour de la faculté',
+      error: err.message
+    });
   }
 });
 

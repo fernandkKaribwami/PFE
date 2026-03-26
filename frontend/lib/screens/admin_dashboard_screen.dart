@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../providers/auth_provider.dart';
-import '../main.dart';
+import '../main.dart' show apiUrl;
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -44,7 +44,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     try {
       final statsResp = await http.get(
-        Uri.parse('$API_URL/api/admin/dashboard'),
+        Uri.parse('$apiUrl/api/admin/dashboard'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       _stats = jsonDecode(statsResp.body);
 
       final usersResp = await http.get(
-        Uri.parse('$API_URL/api/admin/users'),
+        Uri.parse('$apiUrl/api/admin/users'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

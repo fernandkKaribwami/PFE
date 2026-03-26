@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../main.dart';
+import '../main.dart' show apiUrl;
 
 class NotificationProvider with ChangeNotifier {
   List<dynamic> _notifications = [];
@@ -23,7 +23,7 @@ class NotificationProvider with ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse('$API_URL/api/notifications'),
+        Uri.parse('$apiUrl/api/notifications'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ class NotificationProvider with ChangeNotifier {
   Future<void> markAsRead(String notificationId, String token) async {
     try {
       final response = await http.put(
-        Uri.parse('$API_URL/api/notifications/$notificationId/read'),
+        Uri.parse('$apiUrl/api/notifications/$notificationId/read'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ class NotificationProvider with ChangeNotifier {
   Future<void> markAllAsRead(String token) async {
     try {
       final response = await http.put(
-        Uri.parse('$API_URL/api/notifications/mark-all-read'),
+        Uri.parse('$apiUrl/api/notifications/mark-all-read'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

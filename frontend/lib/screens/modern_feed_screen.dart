@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/feed_provider.dart';
+import '../providers/faculty_provider.dart';
 import '../widgets/post_card.dart';
 import '../widgets/story_circle.dart';
 import '../widgets/loading_shimmer.dart';
+import '../widgets/faculty_selector.dart';
 import '../theme/app_colors.dart';
 
 class ModernFeedScreen extends StatefulWidget {
@@ -26,11 +28,19 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
     super.initState();
     _scrollController.addListener(_onScroll);
 
-    // Load feed if not already loaded
+    // Load feed and faculties if not already loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final facultyProvider = Provider.of<FacultyProvider>(
+        context,
+        listen: false,
+      );
 
+      // Load faculties
+      facultyProvider.loadFaculties();
+
+      // Load initial feed
       if (feedProvider.posts.isEmpty && authProvider.token != null) {
         feedProvider.loadFeed(authProvider.token!);
       }
@@ -49,17 +59,22 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
 
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      if (!feedProvider.isLoadingMore && feedProvider.hasMore && authProvider.token != null) {
+      if (!feedProvider.isLoadingMore &&
+          feedProvider.hasMore &&
+          authProvider.token != null) {
         feedProvider.loadMorePosts(authProvider.token!);
       }
     }
   }
 
-  Future<void> _onRefresh() async {
+  Future<void> _onRefresh(FacultyProvider facultyProvider) async {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    await feedProvider.refreshFeed(authProvider.token!);
+    await feedProvider.refreshFeed(
+      authProvider.token!,
+      facultyId: facultyProvider.selectedFacultyId,
+    );
   }
 
   @override
@@ -70,10 +85,7 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
       appBar: AppBar(
         title: const Text(
           'USMBA Social',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         actions: [
           IconButton(
@@ -93,8 +105,8 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
       ),
-      body: Consumer<FeedProvider>(
-        builder: (context, feedProvider, child) {
+      body: Consumer2<FeedProvider, FacultyProvider>(
+        builder: (context, feedProvider, facultyProvider, child) {
           if (feedProvider.isLoading && feedProvider.posts.isEmpty) {
             return const LoadingShimmer();
           }
@@ -104,16 +116,30 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
           }
 
           return RefreshIndicator(
-            onRefresh: _onRefresh,
+            onRefresh: () => _onRefresh(facultyProvider),
             color: AppColors.primary,
             child: CustomScrollView(
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
-                // Stories Section
+                // Faculty Selector
                 SliverToBoxAdapter(
-                  child: _buildStoriesSection(),
+                  child: FacultySelector(
+                    onFacultyChanged: (facultyId) {
+                      final authProvider = Provider.of<AuthProvider>(
+                        context,
+                        listen: false,
+                      );
+                      feedProvider.loadFeed(
+                        authProvider.token!,
+                        facultyId: facultyId,
+                      );
+                    },
+                  ),
                 ),
+
+                // Stories Section
+                SliverToBoxAdapter(child: _buildStoriesSection()),
 
                 // Posts Section
                 SliverList(
@@ -139,7 +165,9 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
                         onShare: () => _handleShare(post['_id']),
                       );
                     },
-                    childCount: feedProvider.posts.length + (feedProvider.isLoadingMore ? 1 : 0),
+                    childCount:
+                        feedProvider.posts.length +
+                        (feedProvider.isLoadingMore ? 1 : 0),
                   ),
                 ),
               ],
@@ -161,9 +189,7 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: StoryCircle(
-              userName: 'User ${index + 1}',
-            ),
+            child: StoryCircle(userName: 'User ${index + 1}'),
           );
         },
       ),
@@ -194,7 +220,10 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              final authProvider = Provider.of<AuthProvider>(context, listen: false);
+              final authProvider = Provider.of<AuthProvider>(
+                context,
+                listen: false,
+              );
               feedProvider.loadFeed(authProvider.token!);
             },
             child: const Text('Réessayer'),
@@ -220,8 +249,8 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
 
   void _handleShare(String postId) {
     // TODO: Implement share functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Partage du post $postId')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Partage du post $postId')));
   }
 }

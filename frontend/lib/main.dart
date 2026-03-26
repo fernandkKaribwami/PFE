@@ -7,6 +7,7 @@ import 'providers/feed_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/notification_provider.dart';
+import 'providers/faculty_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
@@ -19,9 +20,7 @@ import 'package:flutter/foundation.dart';
 // - Web : localhost
 // - Android emulator : 10.0.2.2
 // - iOS simulator : localhost
-const String API_URL = kIsWeb
-    ? 'http://localhost:5000'
-    : 'http://10.0.2.2:5000';
+const String apiUrl = kIsWeb ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +56,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => FacultyProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
@@ -109,7 +109,9 @@ class _AppInitializerState extends State<AppInitializer> {
         } else {
           // Token invalid, go to auth
           await prefs.clear();
-          Navigator.pushReplacementNamed(context, '/auth');
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, '/auth');
+          }
         }
       }
     } else {

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../main.dart';
+import '../main.dart' show apiUrl;
 
 class UserProvider with ChangeNotifier {
   Map<String, dynamic>? _currentUser;
@@ -21,7 +21,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse('$API_URL/api/users/profile'),
+        Uri.parse('$apiUrl/api/users/profile'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       final response = await http.put(
-        Uri.parse('$API_URL/api/users/profile'),
+        Uri.parse('$apiUrl/api/users/profile'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ class UserProvider with ChangeNotifier {
   Future<bool> followUser(String userId, String token) async {
     try {
       final response = await http.post(
-        Uri.parse('$API_URL/api/users/follow/$userId'),
+        Uri.parse('$apiUrl/api/users/follow/$userId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ class UserProvider with ChangeNotifier {
   Future<bool> unfollowUser(String userId, String token) async {
     try {
       final response = await http.post(
-        Uri.parse('$API_URL/api/users/unfollow/$userId'),
+        Uri.parse('$apiUrl/api/users/unfollow/$userId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

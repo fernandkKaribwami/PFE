@@ -21,7 +21,7 @@ class AuthProvider with ChangeNotifier {
   Future<bool> validateToken(String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$API_URL/api/users/profile'),
+        Uri.parse('$apiUrl/api/users/profile'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ class AuthProvider with ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/login'),
+        Uri.parse('$apiUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
       );
@@ -80,7 +80,7 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (e) {
       final baseError =
-          'Échec de connexion au serveur. Vérifiez que le backend est démarré à $API_URL et que votre réseau autorise la connexion.';
+          'Échec de connexion au serveur. Vérifiez que le backend est démarré à $apiUrl et que votre réseau autorise la connexion.';
       _error = e.toString().contains('SocketException')
           ? '$baseError (Erreur réseau)'
           : baseError;
@@ -112,7 +112,7 @@ class AuthProvider with ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/register'),
+        Uri.parse('$apiUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': name,
@@ -187,7 +187,7 @@ class AuthProvider with ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/google'),
+        Uri.parse('$apiUrl/api/auth/google'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': googleUser.displayName ?? googleUser.email.split('@')[0],
@@ -224,7 +224,7 @@ class AuthProvider with ChangeNotifier {
   Future<bool> verifyEmail(String email, String code) async {
     try {
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/verify-email'),
+        Uri.parse('$apiUrl/api/auth/verify-email'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'verificationCode': code}),
       );
@@ -238,7 +238,7 @@ class AuthProvider with ChangeNotifier {
   Future<bool> requestPasswordReset(String email) async {
     try {
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/request-password-reset'),
+        Uri.parse('$apiUrl/api/auth/request-password-reset'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
@@ -256,7 +256,7 @@ class AuthProvider with ChangeNotifier {
   ) async {
     try {
       final response = await http.post(
-        Uri.parse('$API_URL/api/auth/reset-password'),
+        Uri.parse('$apiUrl/api/auth/reset-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
