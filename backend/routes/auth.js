@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Faculty = require('../models/Faculty');
 const crypto = require('crypto');
+const Notification = require('../models/Notification');
+const bcrypt = require('bcrypt');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -12,7 +14,7 @@ router.post('/register', async (req, res) => {
     const { name, email, password, role, faculty, level } = req.body;
 
     if (!name || !email || !password || !faculty) {
-      return res.status(400).json({ message: 'name, email, password and faculty are required' });
+      return res.status(400).json({ message: 'name, email, password, and faculty are required' });
     }
 
     let user = await User.findOne({ email });
@@ -23,28 +25,22 @@ router.post('/register', async (req, res) => {
       if (mongoose.isValidObjectId(faculty)) {
         facultyId = faculty;
       } else {
-        // try exact, case-insensitive, fuzzy match
-        let facultyDoc = await Faculty.findOne({ name: faculty });
-        if (!facultyDoc) {
-          facultyDoc = await Faculty.findOne({ name: { $regex: new RegExp(`^${faculty.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } });
-        }
-        if (!facultyDoc) {
-          facultyDoc = await Faculty.findOne({ name: { $regex: faculty, $options: 'i' } });
-        }
-
+        const facultyDoc = await Faculty.findOne({ name: { $regex: new RegExp(faculty, 'i') } });
         if (facultyDoc) {
           facultyId = facultyDoc._id;
         } else {
-          return res.status(400).json({ message: `Faculté invalide : ${faculty}. Envoyez l'ID de la faculté ou un nom exact.` });
+          return res.status(400).json({ message: `Invalid faculty: ${faculty}. Please provide a valid faculty name or ID.` });
         }
       }
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     user = new User({
       name,
       email,
-      password,
+      password: hashedPassword,
       role,
       faculty: facultyId,
       level,
@@ -55,28 +51,29 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     const payload = { user: { id: user.id, role: user.role } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
-      if (err) {
-        console.error('JWT signing failed:', err);
-        return res.status(500).json({ message: 'Token generation failed', error: err.message });
-      }
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-      return res.status(201).json({
-        message: 'User created. Please verify email.',
-        code: verificationCode,
-        token,
-        user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar },
-      });
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        faculty: user.faculty,
+        level: user.level,
+      },
     });
   } catch (err) {
-    console.error('Registration error:', err);
-
-    if (err.name === 'ValidationError') {
-      const message = Object.values(err.errors).map(val => val.message).join(', ');
-      return res.status(400).json({ message });
-    }
-
-    return res.status(500).json({ message: 'Server error', error: err.message });
+    console.error('❌ Error during registration:', err.message);
+    res.status(500).json({
+      success: false,
+      message: 'Registration failed',
+      error: err.message,
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    });
   }
 });
 
@@ -93,23 +90,34 @@ router.post('/verify-email', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
-  if (!user.emailVerified) return res.status(400).json({ msg: 'Please verify your email first' });
-  if (user.blocked) return res.status(403).json({ msg: 'Account blocked' });
+  const { email, username, password } = req.body;
+  const identifier = email || username; // Accept both email and username
 
-  const isMatch = await user.comparePassword(password);
-  if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+  try {
+    const user = await User.findOne({ $or: [{ email: identifier }, { name: identifier }] });
+    if (!user) return res.status(400).json({ msg: 'Invalid email/username or password' });
+    if (!user.emailVerified) return res.status(400).json({ msg: 'Please verify your email first' });
+    if (user.blocked) return res.status(403).json({ msg: 'Account blocked' });
 
-  const payload = { user: { id: user.id, role: user.role } };
-  jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
-    if (err) {
-      console.error('JWT sign error on login:', err);
-      return res.status(500).json({ message: 'Token generation failed', error: err.message });
-    }
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar } });
-  });
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid email/username or password' });
+
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+      if (err) {
+        console.error('JWT signing failed:', err);
+        return res.status(500).json({ message: 'Token generation failed', error: err.message });
+      }
+
+      res.json({
+        token,
+        user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar },
+      });
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
 });
 
 // Google OAuth simulation endpoint
@@ -167,6 +175,44 @@ router.post('/reset-password', async (req, res) => {
   user.resetPasswordExpires = undefined;
   await user.save();
   res.json({ msg: 'Password reset successful' });
+});
+
+// Follow a user
+router.post('/follow/:id', async (req, res) => {
+  try {
+    const targetUserId = req.params.id;
+    const currentUser = req.user;
+
+    if (currentUser.id === targetUserId) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (targetUser.followers.includes(currentUser.id)) {
+      return res.status(400).json({ error: 'You are already following this user' });
+    }
+
+    targetUser.followers.push(currentUser.id);
+    currentUser.following.push(targetUserId);
+
+    await targetUser.save();
+    await currentUser.save();
+
+    const notification = new Notification({
+      user: targetUserId,
+      type: 'follow',
+      message: `${currentUser.name} started following you`,
+    });
+    await notification.save();
+
+    res.status(200).json({ message: 'Followed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to follow user' });
+  }
 });
 
 module.exports = router;

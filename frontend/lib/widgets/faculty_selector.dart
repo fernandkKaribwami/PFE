@@ -58,7 +58,7 @@ class FacultySelector extends StatelessWidget {
                           size: 18,
                         ),
                         const SizedBox(width: 12),
-                        Expanded(
+                        Flexible(
                           child: Text(
                             faculty['name']?.toString() ?? 'Faculté inconnue',
                             overflow: TextOverflow.ellipsis,

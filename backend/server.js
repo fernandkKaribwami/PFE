@@ -31,9 +31,9 @@ const server = http.createServer(app);
 const allowedOrigins = [
   process.env.CLIENT_URL || "http://localhost:3000",
   // Flutter web default dev server origin
-  "http://localhost:59077",
-  "http://127.0.0.1:59077",
-  "http://localhost:53731", // in case default flutter port changes
+  'http://localhost:59077',
+  'http://127.0.0.1:59077',
+  'http://localhost:53731', // in case default flutter port changes
 ];
 
 const io = socketio(server, {
@@ -49,6 +49,23 @@ const io = socketio(server, {
     credentials: true,
   },
   transports: ['websocket', 'polling']
+});
+
+// Real-time events
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('sendMessage', ({ sender, receiver, text }) => {
+    io.to(receiver).emit('receiveMessage', { sender, text });
+  });
+
+  socket.on('followUser', ({ follower, followed }) => {
+    io.to(followed).emit('followNotification', { follower });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 });
 
 // Security middleware
@@ -236,29 +253,44 @@ const connectDB = async () => {
 connectDB();
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    mongoose.connection.close(false, () => {
+  server.close(async () => {
+    try {
+      await mongoose.connection.close();
       console.log('MongoDB connection closed');
       process.exit(0);
-    });
+    } catch (err) {
+      console.error('Error closing MongoDB connection:', err);
+      process.exit(1);
+    }
   });
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('SIGINT received, shutting down gracefully');
-  server.close(() => {
-    mongoose.connection.close(false, () => {
+  server.close(async () => {
+    try {
+      await mongoose.connection.close();
       console.log('MongoDB connection closed');
       process.exit(0);
-    });
+    } catch (err) {
+      console.error('Error closing MongoDB connection:', err);
+      process.exit(1);
+    }
   });
 });
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📱 Client URL: ${process.env.CLIENT_URL || 'http://localhost:3000'}`);
-  console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+  console.log(`Server running on port ${PORT}`);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is in use. Trying another port...`);
+    server.listen(0, () => {
+      console.log(`Server running on random available port ${server.address().port}`);
+    });
+  } else {
+    throw err;
+  }
 });

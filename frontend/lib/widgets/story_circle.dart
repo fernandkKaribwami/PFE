@@ -32,15 +32,14 @@ class StoryCircle extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   isViewed ? Colors.grey : AppColors.primary,
-                  isViewed ? Colors.grey[400]! : AppColors.primary.withOpacity(0.7),
+                  isViewed
+                      ? Colors.grey[400]!
+                      : AppColors.primary.withOpacity(0.7),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
+              border: Border.all(color: Colors.white, width: 2),
             ),
             child: Container(
               margin: const EdgeInsets.all(2),
@@ -79,8 +78,7 @@ class StoryCircle extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          SizedBox(
-            width: 70,
+          Flexible(
             child: Text(
               userName,
               maxLines: 1,

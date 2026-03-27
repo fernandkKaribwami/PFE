@@ -1,13 +1,23 @@
 const express = require('express');
-const router = express.Router();
+const multer = require('multer');
 const auth = require('../middleware/auth');
 const Post = require('../models/Post');
-const Comment = require('../models/Comment');
-const Notification = require('../models/Notification');
-const User = require('../models/User');
+const router = express.Router();
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 // Create post
-router.post('/', auth, async (req, res) => {
+router.post('/', upload.single('image'), auth, async (req, res) => {
   try {
     const { content, media, hashtags, mentions, group, faculty } = req.body;
     const post = new Post({
