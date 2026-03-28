@@ -1,160 +1,368 @@
 const express = require('express');
-const multer = require('multer');
+
 const auth = require('../middleware/auth');
+const Comment = require('../models/Comment');
+const Notification = require('../models/Notification');
 const Post = require('../models/Post');
+const Report = require('../models/Report');
+const Save = require('../models/Save');
+const User = require('../models/User');
+const { createHttpError } = require('../utils/httpError');
+const { createAndEmitNotification, emitNotification } = require('../utils/notifications');
+const { getRequestBody } = require('../utils/request');
+const { createUpload } = require('../utils/uploads');
+const {
+  serializeComment,
+  serializePost,
+} = require('../utils/serializers');
+
 const router = express.Router();
+const upload = createUpload({ prefix: 'post', fileSize: 25 * 1024 * 1024 });
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+const postPopulateConfig = [
+  {
+    path: 'user',
+    select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+    populate: { path: 'faculty', select: 'name slug image location' },
   },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+  {
+    path: 'mentions',
+    select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+    populate: { path: 'faculty', select: 'name slug image location' },
   },
-});
+  {
+    path: 'faculty',
+    select: 'name slug image location',
+  },
+  {
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: {
+      path: 'user',
+      select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+      populate: { path: 'faculty', select: 'name slug image location' },
+    },
+  },
+];
 
-const upload = multer({ storage });
+const normalizePostMedia = (req, media) => {
+  const mediaItems = [];
 
-// Create post
-router.post('/', upload.single('image'), auth, async (req, res) => {
-  try {
-    const { content, media, hashtags, mentions, group, faculty } = req.body;
-    const post = new Post({
-      user: req.user.id,
-      content,
-      media,
-      hashtags,
-      mentions,
-      group,
-      faculty
-    });
-    await post.save();
-    res.json(post);
-  } catch (err) {
-    res.status(500).send('Server error');
+  if (Array.isArray(media)) {
+    mediaItems.push(...media.filter(Boolean));
+  } else if (media) {
+    mediaItems.push(media);
   }
-});
 
-// Get feed (paginated)
-router.get('/', auth, async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 10;
-  try {
-    const user = await User.findById(req.user.id);
-    const following = user.following;
-    const posts = await Post.find({ user: { $in: [...following, req.user.id] } })
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .populate('user', 'name avatar')
-      .populate('comments');
-    res.json(posts);
-  } catch (err) {
-    res.status(500).send('Server error');
+  if (req.file) {
+    mediaItems.unshift(`/uploads/${req.file.filename}`);
   }
-});
 
-// Like/Unlike post
-router.post('/:id/like', auth, async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ msg: 'Post not found' });
-    const index = post.likes.indexOf(req.user.id);
-    if (index === -1) {
-      post.likes.push(req.user.id);
-      await post.save();
-      // Create notification if not self-like
-      if (post.user.toString() !== req.user.id) {
-        const notification = new Notification({
-          user: post.user,
-          type: 'like',
-          referenceId: post._id,
-          content: `Someone liked your post`
-        });
-        await notification.save();
-      }
-      res.json({ msg: 'Liked' });
-    } else {
-      post.likes.splice(index, 1);
-      await post.save();
-      res.json({ msg: 'Unliked' });
-    }
-  } catch (err) {
-    res.status(500).send('Server error');
+  return Array.from(new Set(mediaItems));
+};
+
+const loadSerializedPost = async (postId, currentUserId) => {
+  const post = await Post.findById(postId).populate(postPopulateConfig);
+  if (!post) {
+    throw createHttpError(404, 'Post introuvable', 'POST_NOT_FOUND');
   }
-});
 
-// Comment on post
-router.post('/:id/comment', auth, async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ msg: 'Post not found' });
-    const comment = new Comment({
-      user: req.user.id,
-      post: req.params.id,
-      content: req.body.content
-    });
-    await comment.save();
-    post.comments.push(comment._id);
-    await post.save();
-    // Notification
-    if (post.user.toString() !== req.user.id) {
-      const notification = new Notification({
-        user: post.user,
-        type: 'comment',
+  return serializePost(post, currentUserId);
+};
+
+router.post('/', auth, upload.single('image'), async (req, res) => {
+  const body = getRequestBody(req);
+  const { content, text, media, hashtags, mentions, group, faculty } = body;
+  const normalizedContent = content || text || '';
+  const normalizedMedia = normalizePostMedia(req, media);
+
+  if (!normalizedContent.trim() && normalizedMedia.length === 0) {
+    throw createHttpError(
+      400,
+      'Le post doit contenir du texte ou un media',
+      'EMPTY_POST'
+    );
+  }
+
+  const post = await Post.create({
+    user: req.user.id,
+    content: normalizedContent.trim(),
+    media: normalizedMedia,
+    hashtags: Array.isArray(hashtags)
+      ? hashtags
+      : typeof hashtags === 'string' && hashtags.length
+        ? hashtags.split(',').map((item) => item.trim()).filter(Boolean)
+        : [],
+    mentions: Array.isArray(mentions)
+      ? mentions
+      : typeof mentions === 'string' && mentions.length
+        ? mentions.split(',').map((item) => item.trim()).filter(Boolean)
+        : [],
+    group,
+    faculty,
+  });
+
+  const serializedPost = await loadSerializedPost(post._id, req.user.id);
+
+  const author = await User.findById(req.user.id).select('name followers');
+  const followerIds = Array.isArray(author?.followers)
+    ? author.followers
+        .map((followerId) => followerId.toString())
+        .filter((followerId) => followerId !== req.user.id.toString())
+    : [];
+
+  if (followerIds.length > 0) {
+    const notifications = await Notification.insertMany(
+      followerIds.map((followerId) => ({
+        user: followerId,
+        type: 'post',
         referenceId: post._id,
-        content: `Someone commented on your post`
+        content: `${author?.name || 'Un utilisateur'} a publie un nouveau post`,
+      }))
+    );
+
+    notifications.forEach((notification) => {
+      emitNotification(req.app, notification);
+    });
+  }
+
+  res.status(201).json({
+    success: true,
+    message: 'Post cree avec succes',
+    post: serializedPost,
+  });
+});
+
+router.get('/', auth, async (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+
+  const currentUser = await User.findById(req.user.id).select('following');
+  if (!currentUser) {
+    throw createHttpError(404, 'Utilisateur introuvable', 'USER_NOT_FOUND');
+  }
+
+  let filter = {
+    user: { $in: [...currentUser.following, req.user.id] },
+  };
+
+  if (req.query.faculty) {
+    filter = {
+      $or: [{ faculty: req.query.faculty }, { user: req.user.id }],
+    };
+  }
+
+  const totalPosts = await Post.countDocuments(filter);
+  const posts = await Post.find(filter)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .populate(postPopulateConfig)
+    .lean();
+
+  res.json({
+    success: true,
+    posts: posts.map((post) => serializePost(post, req.user.id)),
+    pagination: {
+      page,
+      limit,
+      total: totalPosts,
+      hasMore: page * limit < totalPosts,
+    },
+  });
+});
+
+router.get('/user/:userId', auth, async (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const filter = { user: req.params.userId };
+
+  const totalPosts = await Post.countDocuments(filter);
+  const posts = await Post.find(filter)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .populate(postPopulateConfig)
+    .lean();
+
+  res.json({
+    success: true,
+    posts: posts.map((post) => serializePost(post, req.user.id)),
+    pagination: {
+      page,
+      limit,
+      total: totalPosts,
+      hasMore: page * limit < totalPosts,
+    },
+  });
+});
+
+router.post('/:id/like', auth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    throw createHttpError(404, 'Post introuvable', 'POST_NOT_FOUND');
+  }
+
+  const currentIndex = post.likes.findIndex(
+    (id) => id.toString() === req.user.id.toString()
+  );
+
+  let notification = null;
+
+  if (currentIndex === -1) {
+    post.likes.push(req.user.id);
+    await post.save();
+
+    if (post.user.toString() !== req.user.id.toString()) {
+      const currentUser = await User.findById(req.user.id).select('name');
+      notification = await createAndEmitNotification(req.app, {
+        user: post.user,
+        type: 'like',
+        referenceId: post._id,
+        content: `${currentUser?.name || 'Quelqu un'} a aime votre post`,
       });
-      await notification.save();
     }
-    res.json(comment);
-  } catch (err) {
-    res.status(500).send('Server error');
-  }
-});
-
-// Get comments for a post
-router.get('/:id/comments', auth, async (req, res) => {
-  try {
-    const comments = await Comment.find({ post: req.params.id }).populate('user', 'name avatar');
-    res.json(comments);
-  } catch (err) {
-    res.status(500).send('Server error');
-  }
-});
-
-// Save post
-router.post('/:id/save', auth, async (req, res) => {
-  const Save = require('../models/Save');
-  const existing = await Save.findOne({ user: req.user.id, post: req.params.id });
-  if (existing) {
-    await existing.deleteOne();
-    res.json({ msg: 'Unsaved' });
   } else {
-    const save = new Save({ user: req.user.id, post: req.params.id });
-    await save.save();
-    res.json({ msg: 'Saved' });
+    post.likes.splice(currentIndex, 1);
+    await post.save();
   }
+
+  const serializedPost = await loadSerializedPost(post._id, req.user.id);
+
+  res.json({
+    success: true,
+    message: currentIndex === -1 ? 'Post aime' : 'Like retire',
+    post: serializedPost,
+    ...(notification ? { notification } : {}),
+  });
 });
 
-// Report post
+router.post('/:id/comment', auth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    throw createHttpError(404, 'Post introuvable', 'POST_NOT_FOUND');
+  }
+
+  const body = getRequestBody(req);
+  const content = body.content || body.text;
+  if (!content) {
+    throw createHttpError(400, 'Commentaire requis', 'COMMENT_REQUIRED');
+  }
+
+  const comment = await Comment.create({
+    user: req.user.id,
+    post: req.params.id,
+    content,
+  });
+
+  post.comments.push(comment._id);
+  await post.save();
+
+  let notification = null;
+  if (post.user.toString() !== req.user.id.toString()) {
+    const currentUser = await User.findById(req.user.id).select('name');
+    notification = await createAndEmitNotification(req.app, {
+      user: post.user,
+      type: 'comment',
+      referenceId: post._id,
+      content: `${currentUser?.name || 'Quelqu un'} a commente votre post`,
+    });
+  }
+
+  const populatedComment = await Comment.findById(comment._id)
+    .populate({
+      path: 'user',
+      select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+      populate: { path: 'faculty', select: 'name slug image location' },
+    })
+    .lean();
+
+  res.status(201).json({
+    success: true,
+    message: 'Commentaire ajoute',
+    comment: serializeComment(populatedComment),
+    ...(notification ? { notification } : {}),
+  });
+});
+
+router.get('/:id/comments', auth, async (req, res) => {
+  const comments = await Comment.find({ post: req.params.id })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: 'user',
+      select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+      populate: { path: 'faculty', select: 'name slug image location' },
+    })
+    .lean();
+
+  res.json({
+    success: true,
+    comments: comments.map((comment) => serializeComment(comment)),
+  });
+});
+
+router.post('/:id/save', auth, async (req, res) => {
+  const existingSave = await Save.findOne({
+    user: req.user.id,
+    post: req.params.id,
+  });
+
+  if (existingSave) {
+    await existingSave.deleteOne();
+    res.json({
+      success: true,
+      message: 'Post retire des sauvegardes',
+    });
+    return;
+  }
+
+  await Save.create({ user: req.user.id, post: req.params.id });
+  res.json({
+    success: true,
+    message: 'Post sauvegarde',
+  });
+});
+
 router.post('/:id/report', auth, async (req, res) => {
-  const Report = require('../models/Report');
-  const report = new Report({ user: req.user.id, post: req.params.id, reason: req.body.reason });
-  await report.save();
-  res.json({ msg: 'Reported' });
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    throw createHttpError(404, 'Post introuvable', 'POST_NOT_FOUND');
+  }
+
+  const body = getRequestBody(req);
+  const report = await Report.create({
+    user: post.user,
+    post: req.params.id,
+    reportedBy: req.user.id,
+    reason: body.reason,
+    description: body.description || '',
+  });
+
+  res.status(201).json({
+    success: true,
+    message: 'Post signale',
+    report: {
+      _id: report._id.toString(),
+      status: report.status,
+    },
+  });
 });
 
-// Delete post (author or admin)
 router.delete('/:id', auth, async (req, res) => {
   const post = await Post.findById(req.params.id);
-  if (!post) return res.status(404).json({ msg: 'Post not found' });
-  if (post.user.toString() !== req.user.id && req.user.role !== 'admin') {
-    return res.status(403).json({ msg: 'Not authorized' });
+  if (!post) {
+    throw createHttpError(404, 'Post introuvable', 'POST_NOT_FOUND');
   }
+
+  if (post.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    throw createHttpError(403, 'Action non autorisee', 'FORBIDDEN');
+  }
+
   await post.deleteOne();
-  res.json({ msg: 'Post deleted' });
+  res.json({
+    success: true,
+    message: 'Post supprime',
+  });
 });
 
 module.exports = router;

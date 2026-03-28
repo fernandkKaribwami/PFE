@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+
 import 'api_service.dart';
 
 class PostService {
@@ -39,17 +41,18 @@ class PostService {
     }
   }
 
-  Future<bool> createPost({
+  Future<Map<String, dynamic>?> createPost({
     required String text,
     required bool isPublic,
     String? filePath,
+    Uint8List? fileBytes,
+    String? fileName,
     String? faculty,
     String? group,
   }) async {
     try {
       final fields = {
-        'text': text,
-        'isPublic': isPublic.toString(),
+        'content': text,
         if (faculty case != null) 'faculty': faculty,
         if (group case != null) 'group': group,
       };
@@ -57,14 +60,22 @@ class PostService {
       final response = await _api.postMultipart(
         '/posts',
         fields,
-        'media',
+        'image',
         filePath ?? '',
+        fileBytes: fileBytes,
+        fileName: fileName,
       );
 
-      return response.statusCode == 201;
+      if (response.statusCode == 201) {
+        final body = await response.stream.bytesToString();
+        final data = jsonDecode(body);
+        return data['post'];
+      }
+
+      return null;
     } catch (e) {
-      print('Create post error: $e');
-      return false;
+      debugPrint('Create post error: $e');
+      return null;
     }
   }
 
@@ -78,10 +89,24 @@ class PostService {
     }
   }
 
+  Future<Map<String, dynamic>?> toggleLikePost(String postId) async {
+    try {
+      final response = await _api.post('/posts/$postId/like', {});
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['post'] as Map<String, dynamic>?;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Toggle like post error: $e');
+      return null;
+    }
+  }
+
   Future<bool> commentPost(String postId, String text) async {
     try {
       final response = await _api.post('/posts/$postId/comment', {
-        'text': text,
+        'content': text,
       });
       return response.statusCode == 201;
     } catch (e) {
@@ -130,7 +155,7 @@ class PostService {
         'reason': reason,
         'description': description,
       });
-      return response.statusCode == 200;
+      return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       debugPrint('Report post error: $e');
       return false;

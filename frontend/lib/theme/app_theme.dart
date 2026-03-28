@@ -23,11 +23,9 @@ class AppTheme {
       onError: Colors.white,
       errorContainer: AppColors.error,
       onErrorContainer: Colors.white,
-      background: AppColors.lightBackground,
-      onBackground: AppColors.greyLight900,
       surface: AppColors.lightSurface,
       onSurface: AppColors.greyLight900,
-      surfaceVariant: AppColors.greyLight100,
+      surfaceContainerHighest: AppColors.greyLight100,
       onSurfaceVariant: AppColors.greyLight700,
       outline: AppColors.greyLight400,
       shadow: Colors.black12,
@@ -53,7 +51,7 @@ class AppTheme {
     ),
 
     // Bottom Navigation Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.lightSurface,
       selectedItemColor: AppColors.primaryBlue,
       unselectedItemColor: AppColors.greyLight500,
@@ -181,11 +179,9 @@ class AppTheme {
       onError: AppColors.darkSurface,
       errorContainer: AppColors.error,
       onErrorContainer: Colors.white,
-      background: AppColors.darkBackground,
-      onBackground: AppColors.greyDark900,
       surface: AppColors.darkSurface,
       onSurface: AppColors.greyDark900,
-      surfaceVariant: AppColors.greyDark200,
+      surfaceContainerHighest: AppColors.greyDark200,
       onSurfaceVariant: AppColors.greyDark800,
       outline: AppColors.greyDark600,
       shadow: Colors.black54,
@@ -214,7 +210,7 @@ class AppTheme {
     ),
 
     // Bottom Navigation Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.darkSurface,
       selectedItemColor: AppColors.primaryBlueLight,
       unselectedItemColor: AppColors.greyDark600,

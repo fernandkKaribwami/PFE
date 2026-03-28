@@ -59,7 +59,9 @@ extension DecorationExtension on Widget {
           boxShadow: elevation > 0
               ? [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1 * (elevation / 10)),
+                    color: Colors.black.withValues(
+                      alpha: 0.1 * (elevation / 10),
+                    ),
                     blurRadius: elevation,
                     offset: Offset(0, elevation / 2),
                   ),
@@ -87,10 +89,14 @@ extension ResponsiveExtension on BuildContext {
 
 /// Extension pour les couleurs
 extension ColorExtension on Color {
-  Color get lighter => withOpacity(0.5);
-  Color get darker => withOpacity(0.8);
-  Color withAlpha(int alphaValue) =>
-      Color.fromARGB(alphaValue, red, green, blue);
+  Color get lighter => withValues(alpha: 0.5);
+  Color get darker => withValues(alpha: 0.8);
+  Color withAlpha(int alphaValue) => Color.fromARGB(
+    alphaValue,
+    (r * 255.0).round() & 0xff,
+    (g * 255.0).round() & 0xff,
+    (b * 255.0).round() & 0xff,
+  );
 }
 
 /// Extension pour les styles de texte

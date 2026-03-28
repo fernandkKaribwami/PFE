@@ -32,8 +32,8 @@ class FacultySelector extends StatelessWidget {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: facultyProvider.selectedFacultyId,
-                hint: Row(
-                  children: const [
+                hint: const Row(
+                  children: [
                     Icon(Icons.school, color: AppColors.primary, size: 20),
                     SizedBox(width: 12),
                     Expanded(

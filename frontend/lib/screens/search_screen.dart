@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../services/search_service.dart';
 import '../theme/app_colors.dart';
+import 'modern_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,6 +13,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final SearchService _searchService = SearchService();
+
   String _searchQuery = '';
   List<Map<String, dynamic>> _searchResults = [];
   bool _isLoading = false;
@@ -20,42 +25,91 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  void _performSearch(String query) {
+  Future<void> _performSearch(String query) async {
     setState(() {
       _searchQuery = query;
       _isLoading = true;
     });
 
-    // Simulate search
-    Future.delayed(const Duration(milliseconds: 500), () {
+    final result = await _searchService.search(query);
+
+    final users = (result['users'] as List? ?? []).map<Map<String, dynamic>>(
+      (item) => {
+        'type': 'user',
+        'id': item['_id']?.toString(),
+        'name': item['name'] ?? 'Utilisateur',
+        'subtitle': item['faculty']?['name'] ?? item['email'] ?? '',
+        'avatar': item['avatar'],
+      },
+    );
+    final posts = (result['posts'] as List? ?? []).map<Map<String, dynamic>>(
+      (item) => {
+        'type': 'post',
+        'id': item['_id']?.toString(),
+        'userId': item['user']?['_id']?.toString(),
+        'name': item['content'] ?? 'Post',
+        'subtitle': 'Par ${item['user']?['name'] ?? 'Utilisateur'}',
+        'avatar': item['user']?['avatar'],
+      },
+    );
+    final groups = (result['groups'] as List? ?? []).map<Map<String, dynamic>>(
+      (item) => {
+        'type': 'group',
+        'id': item['_id']?.toString(),
+        'name': item['name'] ?? 'Groupe',
+        'subtitle': item['description'] ?? '',
+        'avatar': item['avatar'],
+      },
+    );
+    final faculties =
+        (result['faculties'] as List? ?? []).map<Map<String, dynamic>>(
+      (item) => {
+        'type': 'faculty',
+        'id': item['_id']?.toString(),
+        'name': item['name'] ?? 'Faculte',
+        'subtitle': item['location'] ?? '',
+        'avatar': item['image'],
+      },
+    );
+
+    if (mounted) {
       setState(() {
+        _searchResults = [...users, ...posts, ...groups, ...faculties];
         _isLoading = false;
-        // Mock search results
-        _searchResults = [
-          {
-            'type': 'user',
-            'name': 'John Doe',
-            'subtitle': 'Faculté des Sciences',
-            'avatar': null,
-          },
-          {
-            'type': 'post',
-            'name': 'Comment créer une app Flutter',
-            'subtitle': 'Par Jane Smith',
-            'avatar': null,
-          },
-          {
-            'type': 'group',
-            'name': 'Club Informatique',
-            'subtitle': '15 membres',
-            'avatar': null,
-          },
-        ].where((item) =>
-            item['name'].toString().toLowerCase().contains(query.toLowerCase()) ||
-            item['subtitle'].toString().toLowerCase().contains(query.toLowerCase())
-        ).toList();
       });
-    });
+    }
+  }
+
+  void _openUserProfile(String? userId) {
+    if (userId == null || userId.isEmpty) {
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ModernProfileScreen(userId: userId),
+      ),
+    );
+  }
+
+  void _handleSearchResultTap(Map<String, dynamic> result) {
+    switch (result['type']) {
+      case 'user':
+        _openUserProfile(result['id']?.toString());
+        return;
+      case 'post':
+        _openUserProfile(result['userId']?.toString());
+        return;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Navigation non disponible pour ${result['type']} pour le moment',
+            ),
+          ),
+        );
+    }
   }
 
   @override
@@ -103,11 +157,7 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.search,
-            size: 80,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.search, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'Rechercher dans USMBA Social',
@@ -120,10 +170,7 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(height: 8),
           Text(
             'Utilisateurs, publications, groupes...',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),
@@ -132,9 +179,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchResults() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_searchResults.isEmpty) {
@@ -142,14 +187,10 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.search_off,
-              size: 80,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'Aucun résultat trouvé',
+              'Aucun resultat trouve',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey[600],
@@ -169,8 +210,9 @@ class _SearchScreenState extends State<SearchScreen> {
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
+            onTap: () => _handleSearchResultTap(result),
             leading: CircleAvatar(
-              backgroundColor: AppColors.primary.withOpacity(0.1),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
               child: Icon(
                 _getIconForType(result['type']),
                 color: AppColors.primary,
@@ -180,13 +222,8 @@ class _SearchScreenState extends State<SearchScreen> {
               result['name'],
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
-            subtitle: Text(result['subtitle']),
-            onTap: () {
-              // Navigate to detail page based on type
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Ouverture de ${result['name']}')),
-              );
-            },
+            subtitle: Text(result['subtitle'] ?? ''),
+            trailing: const Icon(Icons.chevron_right),
           ),
         );
       },
@@ -201,6 +238,8 @@ class _SearchScreenState extends State<SearchScreen> {
         return Icons.article;
       case 'group':
         return Icons.group;
+      case 'faculty':
+        return Icons.school;
       default:
         return Icons.search;
     }

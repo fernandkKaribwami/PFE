@@ -1,9 +1,11 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
 import '../providers/auth_provider.dart';
 import '../providers/feed_provider.dart';
+import '../services/post_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/loading_button.dart';
 
@@ -17,8 +19,11 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _textController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  final PostService _postService = PostService();
 
   XFile? _selectedMedia;
+  Uint8List? _selectedMediaBytes;
+  bool _isVideoSelected = false;
   bool _isPublic = true;
   bool _isLoading = false;
 
@@ -29,19 +34,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source);
+    final image = await _picker.pickImage(source: source);
     if (image != null) {
+      final bytes = await image.readAsBytes();
       setState(() {
         _selectedMedia = image;
+        _selectedMediaBytes = bytes;
+        _isVideoSelected = false;
       });
     }
   }
 
   Future<void> _pickVideo(ImageSource source) async {
-    final XFile? video = await _picker.pickVideo(source: source);
+    final video = await _picker.pickVideo(source: source);
     if (video != null) {
       setState(() {
         _selectedMedia = video;
+        _selectedMediaBytes = null;
+        _isVideoSelected = true;
       });
     }
   }
@@ -49,13 +59,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void _removeMedia() {
     setState(() {
       _selectedMedia = null;
+      _selectedMediaBytes = null;
+      _isVideoSelected = false;
     });
   }
 
   Future<void> _createPost() async {
     if (_textController.text.trim().isEmpty && _selectedMedia == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ajoutez du texte ou un média')),
+        const SnackBar(content: Text('Ajoutez du texte ou un media')),
       );
       return;
     }
@@ -63,35 +75,29 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Here you would typically call an API to create the post
-      // For now, we'll simulate it and add to the feed
-      final newPost = {
-        '_id': DateTime.now().millisecondsSinceEpoch.toString(),
-        'author': {
-          'name': 'Current User', // This should come from auth provider
-          'avatar': null,
-        },
-        'content': _textController.text.trim(),
-        'media': _selectedMedia?.path,
-        'mediaType': _selectedMedia != null
-            ? (_selectedMedia!.path.endsWith('.mp4') ? 'video' : 'image')
-            : null,
-        'createdAt': DateTime.now().toIso8601String(),
-        'likesCount': 0,
-        'commentsCount': 0,
-        'isLiked': false,
-        'isPublic': _isPublic,
-      };
-
-      // Add to feed
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-      feedProvider.addNewPost(newPost);
+
+      final createdPost = await _postService.createPost(
+        text: _textController.text.trim(),
+        isPublic: _isPublic,
+        filePath: _selectedMedia?.path,
+        fileBytes: _selectedMediaBytes,
+        fileName: _selectedMedia?.name,
+        faculty: authProvider.user?['faculty']?['_id']?.toString(),
+      );
+
+      if (createdPost == null) {
+        throw Exception('Creation du post impossible');
+      }
+
+      await feedProvider.addNewPost(createdPost);
 
       if (mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Post créé avec succès!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post cree avec succes!')),
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -110,7 +116,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Créer un post'),
+        title: const Text('Creer un post'),
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _createPost,
@@ -129,35 +135,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Text Input
             TextField(
               controller: _textController,
               maxLines: 8,
               maxLength: 500,
               decoration: const InputDecoration(
-                hintText: 'Quoi de neuf à l\'USMBA ?',
+                hintText: 'Quoi de neuf a l USMBA ?',
                 border: InputBorder.none,
                 counterText: '',
               ),
               style: const TextStyle(fontSize: 16),
             ),
-
-            // Media Preview
             if (_selectedMedia != null) ...[
               const SizedBox(height: 16),
               Stack(
                 children: [
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: FileImage(File(_selectedMedia!.path)),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  _buildMediaPreview(),
                   Positioned(
                     top: 8,
                     right: 8,
@@ -173,10 +166,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ],
               ),
             ],
-
             const SizedBox(height: 16),
-
-            // Media Buttons
             Row(
               children: [
                 Expanded(
@@ -184,11 +174,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     onPressed: () => _pickImage(ImageSource.gallery),
                     icon: const Icon(Icons.photo),
                     label: const Text('Photo'),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -196,33 +181,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   child: OutlinedButton.icon(
                     onPressed: () => _pickImage(ImageSource.camera),
                     icon: const Icon(Icons.camera_alt),
-                    label: const Text('Caméra'),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
+                    label: const Text('Camera'),
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 8),
-
             OutlinedButton.icon(
               onPressed: () => _pickVideo(ImageSource.gallery),
               icon: const Icon(Icons.video_file),
-              label: const Text('Vidéo'),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+              label: const Text('Video'),
             ),
-
             const SizedBox(height: 24),
-
-            // Privacy Toggle
             SwitchListTile(
               title: const Text('Post public'),
               subtitle: Text(
@@ -236,16 +206,74 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 setState(() => _isPublic = value);
               },
             ),
-
             const SizedBox(height: 24),
-
-            // Create Button
             LoadingButton(
               onPressed: _createPost,
               isLoading: _isLoading,
               text: 'Publier',
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMediaPreview() {
+    if (_selectedMedia == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (_isVideoSelected) {
+      return Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.black12,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.video_file, size: 48, color: Colors.black54),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                _selectedMedia!.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_selectedMediaBytes != null) {
+      return Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: MemoryImage(_selectedMediaBytes!),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      height: 200,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.black12,
+      ),
+      child: Center(
+        child: Text(
+          kIsWeb ? 'Apercu indisponible' : _selectedMedia!.name,
         ),
       ),
     );

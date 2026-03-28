@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment and secrets
+.env
+backend/.env
+frontend/.env
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+~$*.docx
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
+.history/
+
+# Caches
+.cache/
+**/.cache/
+coverage/
+**/coverage/
+
+# Backend generated files
+backend/uploads/
+
+# Flutter / Dart generated files
+frontend/.dart_tool/
+frontend/build/
+frontend/.flutter-plugins-dependencies
+
+# Platform-specific generated local files
+frontend/android/local.properties

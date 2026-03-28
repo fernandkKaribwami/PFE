@@ -37,7 +37,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     try {
       final res = await http
           .post(
-            Uri.parse('$apiUrl/auth/verify-email'),
+            Uri.parse('$apiUrl/api/auth/verify-email'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'email': widget.email, 'code': codeCtrl.text}),
           )

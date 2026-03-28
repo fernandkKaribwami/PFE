@@ -1,253 +1,182 @@
 const express = require('express');
-const Faculty = require('../models/Faculty');
-const User = require('../models/User');
-const Post = require('../models/Post');
+
 const auth = require('../middleware/auth');
+const Faculty = require('../models/Faculty');
+const Post = require('../models/Post');
+const User = require('../models/User');
+const { createHttpError } = require('../utils/httpError');
+const { serializeFaculty, serializePost, serializeUserSummary } = require('../utils/serializers');
 
 const router = express.Router();
 
-// @route   GET /api/faculties
-// @desc    Get all faculties
-// @access  Public
 router.get('/', async (req, res) => {
-  try {
-    console.log('📚 GET /api/faculties - Fetching all faculties...');
-    const faculties = await Faculty.find().sort({ name: 1 });
-    console.log(`✓ Found ${faculties.length} faculties`);
-    
-    // Count members for each faculty
-    const facultiesWithCounts = await Promise.all(
-      faculties.map(async (faculty) => {
-        const memberCount = await User.countDocuments({ faculty: faculty._id });
-        return {
-          ...faculty.toObject(),
-          membersCount: memberCount
-        };
-      })
-    );
-    
-    res.json(facultiesWithCounts);
-  } catch (err) {
-    console.error('❌ Error fetching faculties:', err.message);
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors du chargement des facultés',
-      error: err.message,
-      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-    });
-  }
+  const faculties = await Faculty.find().sort({ name: 1 }).lean();
+
+  const facultyIds = faculties.map((faculty) => faculty._id);
+  const usersPerFaculty = await User.aggregate([
+    { $match: { faculty: { $in: facultyIds } } },
+    { $group: { _id: '$faculty', count: { $sum: 1 } } },
+  ]);
+
+  const counts = usersPerFaculty.reduce((acc, entry) => {
+    acc[entry._id.toString()] = entry.count;
+    return acc;
+  }, {});
+
+  res.json(
+    faculties.map((faculty) => ({
+      ...serializeFaculty(faculty),
+      membersCount: counts[faculty._id.toString()] || 0,
+    }))
+  );
 });
 
-// @route   GET /api/faculties/:id
-// @desc    Get faculty by ID
-// @access  Public
 router.get('/:id', async (req, res) => {
-  try {
-    const faculty = await Faculty.findById(req.params.id);
-    if (!faculty) {
-      return res.status(404).json({ message: 'Faculty not found' });
-    }
-    res.json(faculty);
-  } catch (err) {
-    console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ message: 'Faculty not found' });
-    }
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors du chargement de la faculté',
-      error: err.message
-    });
+  const faculty = await Faculty.findById(req.params.id).lean();
+  if (!faculty) {
+    throw createHttpError(404, 'Faculte introuvable', 'FACULTY_NOT_FOUND');
   }
+
+  res.json({
+    success: true,
+    faculty: serializeFaculty(faculty),
+  });
 });
 
-// @route   GET /api/faculties/:id/posts
-// @desc    Get posts from faculty members
-// @access  Private
 router.get('/:id/posts', auth, async (req, res) => {
-  try {
-    const faculty = await Faculty.findById(req.params.id);
-    if (!faculty) {
-      return res.status(404).json({ message: 'Faculty not found' });
-    }
+  const faculty = await Faculty.findById(req.params.id).lean();
+  if (!faculty) {
+    throw createHttpError(404, 'Faculte introuvable', 'FACULTY_NOT_FOUND');
+  }
 
-    // Find users from this faculty
-    const facultyUsers = await User.find({ faculty: req.params.id }).select('_id');
-
-    // Get posts from these users
-    const posts = await Post.find({
-      author: { $in: facultyUsers.map(user => user._id) }
+  const posts = await Post.find({ faculty: req.params.id })
+    .populate({
+      path: 'user',
+      select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+      populate: { path: 'faculty', select: 'name slug image location' },
     })
-    .populate('author', 'name avatar faculty')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: 'name email role avatar bio faculty level interests blocked createdAt updatedAt',
+        populate: { path: 'faculty', select: 'name slug image location' },
+      },
+    })
     .sort({ createdAt: -1 })
-    .limit(50);
+    .limit(50)
+    .lean();
 
-    res.json(posts);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors du chargement des posts de la faculté',
-      error: err.message
-    });
-  }
+  res.json({
+    success: true,
+    posts: posts.map((post) => serializePost(post, req.user.id)),
+  });
 });
 
-// @route   GET /api/faculties/:id/members
-// @desc    Get faculty members
-// @access  Private
 router.get('/:id/members', auth, async (req, res) => {
-  try {
-    const faculty = await Faculty.findById(req.params.id);
-    if (!faculty) {
-      return res.status(404).json({ message: 'Faculty not found' });
-    }
-
-    const members = await User.find({ faculty: req.params.id })
-      .select('name avatar email role level')
-      .sort({ name: 1 });
-
-    res.json({
-      faculty: faculty.name,
-      members: members,
-      count: members.length
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors du chargement des membres de la faculté',
-      error: err.message
-    });
+  const faculty = await Faculty.findById(req.params.id).lean();
+  if (!faculty) {
+    throw createHttpError(404, 'Faculte introuvable', 'FACULTY_NOT_FOUND');
   }
+
+  const members = await User.find({ faculty: req.params.id })
+    .populate('faculty', 'name slug image location')
+    .sort({ name: 1 })
+    .lean();
+
+  res.json({
+    success: true,
+    faculty: faculty.name,
+    members: members.map((member) => serializeUserSummary(member)),
+    count: members.length,
+  });
 });
 
-// @route   POST /api/faculties
-// @desc    Create a new faculty (Admin only)
-// @access  Private/Admin
 router.post('/', auth, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ msg: 'Access denied. Admin only.' });
-    }
+  if (req.user.role !== 'admin') {
+    throw createHttpError(403, 'Admin uniquement', 'ADMIN_ONLY');
+  }
 
-    const { name, description, location, image } = req.body;
+  const { name, description, location, image } = req.body;
+  if (!name || !name.trim()) {
+    throw createHttpError(400, 'Le nom de la faculte est requis', 'NAME_REQUIRED');
+  }
 
-    // Validate required fields
-    if (!name || name.trim() === '') {
-      return res.status(400).json({ message: 'Le nom de la faculté est requis' });
-    }
+  const slug = name
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
-    // Generate slug from name
-    const slug = name
+  const faculty = await Faculty.create({
+    name: name.trim(),
+    slug,
+    description: description || '',
+    location: location || '',
+    image: image || '',
+  });
+
+  res.status(201).json({
+    success: true,
+    message: 'Faculte creee',
+    faculty: serializeFaculty(faculty),
+  });
+});
+
+router.put('/:id', auth, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    throw createHttpError(403, 'Admin uniquement', 'ADMIN_ONLY');
+  }
+
+  const updateData = {};
+  const { name, description, location, image } = req.body;
+
+  if (name && name.trim()) {
+    updateData.name = name.trim();
+    updateData.slug = name
       .toLowerCase()
       .trim()
-      .replace(/[àâ]/g, 'a')
-      .replace(/[éèê]/g, 'e')
-      .replace(/[ôo]/g, 'o')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
-
-    const faculty = new Faculty({
-      name: name.trim(),
-      slug,
-      description: description || '',
-      location: location || '',
-      image: image || ''
-    });
-
-    await faculty.save();
-    res.status(201).json(faculty);
-  } catch (err) {
-    console.error(err.message);
-    if (err.code === 11000) {
-      return res.status(400).json({ message: 'Cette faculté existe déjà' });
-    }
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors de la création de la faculté',
-      error: err.message
-    });
   }
+  if (description !== undefined) updateData.description = description;
+  if (location !== undefined) updateData.location = location;
+  if (image !== undefined) updateData.image = image;
+
+  const faculty = await Faculty.findByIdAndUpdate(req.params.id, updateData, {
+    new: true,
+    runValidators: true,
+  }).lean();
+
+  if (!faculty) {
+    throw createHttpError(404, 'Faculte introuvable', 'FACULTY_NOT_FOUND');
+  }
+
+  res.json({
+    success: true,
+    message: 'Faculte mise a jour',
+    faculty: serializeFaculty(faculty),
+  });
 });
 
-// @route   PUT /api/faculties/:id
-// @desc    Update faculty (Admin only)
-// @access  Private/Admin
-router.put('/:id', auth, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ msg: 'Access denied. Admin only.' });
-    }
-
-    const { name, description, location, image } = req.body;
-    const updateData = {};
-
-    // Update fields if provided
-    if (name && name.trim() !== '') {
-      updateData.name = name.trim();
-      // Generate new slug if name is changed
-      updateData.slug = name
-        .toLowerCase()
-        .trim()
-        .replace(/[àâ]/g, 'a')
-        .replace(/[éèê]/g, 'e')
-        .replace(/[ôo]/g, 'o')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-    }
-
-    if (description !== undefined) updateData.description = description;
-    if (location !== undefined) updateData.location = location;
-    if (image !== undefined) updateData.image = image;
-
-    const faculty = await Faculty.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true, runValidators: true }
-    );
-
-    if (!faculty) {
-      return res.status(404).json({ msg: 'Faculté non trouvée' });
-    }
-
-    res.json(faculty);
-  } catch (err) {
-    console.error(err.message);
-    if (err.code === 11000) {
-      return res.status(400).json({ message: 'Cette faculté existe déjà' });
-    }
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors de la mise à jour de la faculté',
-      error: err.message
-    });
-  }
-});
-
-// @route   DELETE /api/faculties/:id
-// @desc    Delete faculty (Admin only)
-// @access  Private/Admin
 router.delete('/:id', auth, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ msg: 'Access denied. Admin only.' });
-    }
-
-    const faculty = await Faculty.findById(req.params.id);
-    if (!faculty) {
-      return res.status(404).json({ msg: 'Faculty not found' });
-    }
-
-    await Faculty.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'Faculty removed' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+  if (req.user.role !== 'admin') {
+    throw createHttpError(403, 'Admin uniquement', 'ADMIN_ONLY');
   }
+
+  const faculty = await Faculty.findByIdAndDelete(req.params.id).lean();
+  if (!faculty) {
+    throw createHttpError(404, 'Faculte introuvable', 'FACULTY_NOT_FOUND');
+  }
+
+  res.json({
+    success: true,
+    message: 'Faculte supprimee',
+  });
 });
 
 module.exports = router;

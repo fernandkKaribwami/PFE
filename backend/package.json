@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node seed.js",
+    "make-admin": "node scripts/make-admin.js",
+    "test": "node --test tests/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +29,9 @@
     "multer": "^2.0.2",
     "sharp": "^0.33.2",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.2.3",
+    "supertest": "^7.1.0"
   }
 }

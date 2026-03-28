@@ -1,9 +1,20 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/app_config.dart';
 
-// Keep this in sync with backend and main.dart `API_URL`.
-const String apiBaseUrl = 'http://localhost:5000/api';
+class MultipartAttachment {
+  final String fileName;
+  final String? path;
+  final Uint8List? bytes;
+
+  const MultipartAttachment({required this.fileName, this.path, this.bytes});
+
+  bool get hasData =>
+      (bytes != null && bytes!.isNotEmpty) ||
+      (path != null && path!.isNotEmpty);
+}
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -29,13 +40,16 @@ class ApiService {
 
   Future<http.Response> get(String endpoint) async {
     final headers = await getHeaders();
-    return http.get(Uri.parse('$apiBaseUrl$endpoint'), headers: headers);
+    return http.get(
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
+      headers: headers,
+    );
   }
 
   Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
     final headers = await getHeaders();
     return http.post(
-      Uri.parse('$apiBaseUrl$endpoint'),
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -44,7 +58,7 @@ class ApiService {
   Future<http.Response> put(String endpoint, Map<String, dynamic> body) async {
     final headers = await getHeaders();
     return http.put(
-      Uri.parse('$apiBaseUrl$endpoint'),
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -52,28 +66,134 @@ class ApiService {
 
   Future<http.Response> delete(String endpoint) async {
     final headers = await getHeaders();
-    return http.delete(Uri.parse('$apiBaseUrl$endpoint'), headers: headers);
+    return http.delete(
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
+      headers: headers,
+    );
+  }
+
+  Future<http.Response> patch(
+    String endpoint,
+    Map<String, dynamic> body,
+  ) async {
+    final headers = await getHeaders();
+    return http.patch(
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
   }
 
   Future<http.StreamedResponse> postMultipart(
     String endpoint,
     Map<String, String> fields,
     String fileFieldName,
-    String filePath,
+    String filePath, {
+    Uint8List? fileBytes,
+    String? fileName,
+  }) async {
+    final attachments = <MultipartAttachment>[
+      if ((fileBytes != null && fileName != null && fileName.isNotEmpty) ||
+          filePath.isNotEmpty)
+        MultipartAttachment(
+          fileName: fileName?.isNotEmpty == true
+              ? fileName!
+              : filePath.split(RegExp(r'[\\/]')).last,
+          bytes: fileBytes,
+          path: filePath.isNotEmpty ? filePath : null,
+        ),
+    ];
+
+    return _sendMultipart(
+      method: 'POST',
+      endpoint: endpoint,
+      fields: fields,
+      fileFieldName: fileFieldName,
+      files: attachments,
+    );
+  }
+
+  Future<http.StreamedResponse> putMultipart(
+    String endpoint,
+    Map<String, String> fields,
+    String fileFieldName,
+    String filePath, {
+    Uint8List? fileBytes,
+    String? fileName,
+  }) async {
+    final attachments = <MultipartAttachment>[
+      if ((fileBytes != null && fileName != null && fileName.isNotEmpty) ||
+          filePath.isNotEmpty)
+        MultipartAttachment(
+          fileName: fileName?.isNotEmpty == true
+              ? fileName!
+              : filePath.split(RegExp(r'[\\/]')).last,
+          bytes: fileBytes,
+          path: filePath.isNotEmpty ? filePath : null,
+        ),
+    ];
+
+    return _sendMultipart(
+      method: 'PUT',
+      endpoint: endpoint,
+      fields: fields,
+      fileFieldName: fileFieldName,
+      files: attachments,
+    );
+  }
+
+  Future<http.StreamedResponse> postMultipartFiles(
+    String endpoint,
+    Map<String, String> fields,
+    String fileFieldName,
+    List<MultipartAttachment> files,
   ) async {
+    return _sendMultipart(
+      method: 'POST',
+      endpoint: endpoint,
+      fields: fields,
+      fileFieldName: fileFieldName,
+      files: files,
+    );
+  }
+
+  Future<http.StreamedResponse> _sendMultipart({
+    required String method,
+    required String endpoint,
+    required Map<String, String> fields,
+    required String fileFieldName,
+    required List<MultipartAttachment> files,
+  }) async {
     final headers = await getHeaders();
     final req = http.MultipartRequest(
-      'POST',
-      Uri.parse('$apiBaseUrl$endpoint'),
+      method,
+      Uri.parse('${AppConfig.apiBaseUrl}$endpoint'),
     );
+    headers.remove('Content-Type');
     req.headers.addAll(headers);
 
     fields.forEach((key, value) {
       req.fields[key] = value;
     });
 
-    if (filePath.isNotEmpty) {
-      req.files.add(await http.MultipartFile.fromPath(fileFieldName, filePath));
+    for (final file in files.where((candidate) => candidate.hasData)) {
+      if (file.path != null && file.path!.isNotEmpty) {
+        req.files.add(
+          await http.MultipartFile.fromPath(
+            fileFieldName,
+            file.path!,
+            filename: file.fileName,
+          ),
+        );
+      } else if (file.bytes != null && file.bytes!.isNotEmpty) {
+        req.files.add(
+          http.MultipartFile.fromBytes(
+            fileFieldName,
+            file.bytes!,
+            filename: file.fileName,
+          ),
+        );
+      }
     }
 
     return req.send();

@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import '../main.dart' show apiUrl;
 
 class NotificationProvider with ChangeNotifier {
@@ -30,19 +32,17 @@ class NotificationProvider with ChangeNotifier {
         },
       );
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
         _notifications = data['notifications'] ?? [];
-        _unreadCount = _notifications
-            .where((n) => !(n['read'] ?? false))
-            .length;
+        _unreadCount = data['unreadCount'] ?? 0;
         _error = null;
       } else {
-        final errorData = jsonDecode(response.body);
-        _error = errorData['message'] ?? 'Failed to load notifications';
+        _error = data['message'] ?? 'Chargement des notifications impossible';
       }
     } catch (e) {
-      _error = 'Network error: $e';
+      _error = 'Erreur reseau: $e';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -61,7 +61,7 @@ class NotificationProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final index = _notifications.indexWhere(
-          (n) => n['_id'] == notificationId,
+          (notification) => notification['_id'] == notificationId,
         );
         if (index != -1) {
           _notifications[index]['read'] = true;
@@ -85,7 +85,7 @@ class NotificationProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        for (var notification in _notifications) {
+        for (final notification in _notifications) {
           notification['read'] = true;
         }
         _unreadCount = 0;
@@ -97,8 +97,26 @@ class NotificationProvider with ChangeNotifier {
   }
 
   void addNotification(dynamic notification) {
-    _notifications.insert(0, notification);
-    _unreadCount++;
+    final normalizedNotification = Map<String, dynamic>.from(
+      notification as Map,
+    );
+    normalizedNotification.putIfAbsent('read', () => false);
+    normalizedNotification.putIfAbsent(
+      'content',
+      () => 'Nouvelle notification',
+    );
+    final notificationId = normalizedNotification['_id']?.toString();
+    final existingIndex = _notifications.indexWhere(
+      (item) => item['_id']?.toString() == notificationId,
+    );
+
+    if (existingIndex != -1) {
+      _notifications[existingIndex] = normalizedNotification;
+    } else {
+      _notifications.insert(0, normalizedNotification);
+    }
+
+    _unreadCount = _notifications.where((item) => item['read'] != true).length;
     notifyListeners();
   }
 

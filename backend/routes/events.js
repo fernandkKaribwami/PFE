@@ -1,49 +1,78 @@
 const express = require('express');
-const router = express.Router();
+
 const auth = require('../middleware/auth');
 const Event = require('../models/Event');
-const Notification = require('../models/Notification');
+const { createHttpError } = require('../utils/httpError');
 
-// Create event
+const router = express.Router();
+
 router.post('/', auth, async (req, res) => {
-  try {
-    const event = new Event({ ...req.body, createdBy: req.user.id });
-    await event.save();
-    res.json(event);
-  } catch (err) {
-    res.status(500).send('Server error');
-  }
+  const event = await Event.create({ ...req.body, createdBy: req.user.id });
+
+  res.status(201).json({
+    success: true,
+    message: 'Evenement cree',
+    event,
+  });
 });
 
-// Get events (with filters)
 router.get('/', auth, async (req, res) => {
-  const { category, faculty } = req.query;
   const filter = {};
-  if (category) filter.category = category;
-  if (faculty) filter.faculty = faculty;
-  const events = await Event.find(filter).populate('createdBy', 'name').populate('faculty');
-  res.json(events);
+  if (req.query.category) filter.category = req.query.category;
+  if (req.query.faculty) filter.faculty = req.query.faculty;
+
+  const events = await Event.find(filter)
+    .populate('createdBy', 'name avatar')
+    .populate('faculty', 'name slug image location')
+    .lean();
+
+  res.json({
+    success: true,
+    events,
+  });
 });
 
-// Get event by ID
 router.get('/:id', auth, async (req, res) => {
-  const event = await Event.findById(req.params.id).populate('createdBy attendees.user', 'name avatar');
-  res.json(event);
+  const event = await Event.findById(req.params.id)
+    .populate('createdBy', 'name avatar')
+    .populate('attendees.user', 'name avatar')
+    .populate('faculty', 'name slug image location')
+    .lean();
+
+  if (!event) {
+    throw createHttpError(404, 'Evenement introuvable', 'EVENT_NOT_FOUND');
+  }
+
+  res.json({
+    success: true,
+    event,
+  });
 });
 
-// RSVP to event
 router.post('/:id/rsvp', auth, async (req, res) => {
-  const { status } = req.body; // 'going' or 'interested'
+  const { status } = req.body;
   const event = await Event.findById(req.params.id);
-  if (!event) return res.status(404).json({ msg: 'Event not found' });
-  const existing = event.attendees.find(a => a.user.toString() === req.user.id);
+
+  if (!event) {
+    throw createHttpError(404, 'Evenement introuvable', 'EVENT_NOT_FOUND');
+  }
+
+  const existing = event.attendees.find(
+    (attendee) => attendee.user.toString() === req.user.id
+  );
+
   if (existing) {
     existing.status = status;
   } else {
     event.attendees.push({ user: req.user.id, status });
   }
+
   await event.save();
-  res.json({ msg: 'RSVP updated' });
+
+  res.json({
+    success: true,
+    message: 'RSVP mis a jour',
+  });
 });
 
 module.exports = router;

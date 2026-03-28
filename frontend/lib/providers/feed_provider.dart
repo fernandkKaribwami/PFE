@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import '../main.dart' show apiUrl;
 
 class FeedProvider with ChangeNotifier {
@@ -43,19 +45,20 @@ class FeedProvider with ChangeNotifier {
         },
       );
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
         _posts = data['posts'] ?? [];
         _currentPage = 1;
-        _hasMore = _posts.length >= _postsPerPage;
+        final pagination = data['pagination'] ?? {};
+        _hasMore = pagination['hasMore'] ?? (_posts.length >= _postsPerPage);
         _error = null;
       } else {
-        final errorData = jsonDecode(response.body);
-        _error = errorData['message'] ?? 'Failed to load feed';
+        _error = data['message'] ?? 'Chargement du feed impossible';
       }
     } catch (e) {
-      _error = 'Network error: $e';
-      debugPrint('❌ Error loading feed: $e');
+      _error = 'Erreur reseau: $e';
+      debugPrint('Error loading feed: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -83,20 +86,22 @@ class FeedProvider with ChangeNotifier {
         },
       );
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
         final newPosts = data['posts'] ?? [];
+        final pagination = data['pagination'] ?? {};
 
         if (newPosts.isNotEmpty) {
           _posts.addAll(newPosts);
           _currentPage = nextPage;
-          _hasMore = newPosts.length >= _postsPerPage;
+          _hasMore = pagination['hasMore'] ?? (newPosts.length >= _postsPerPage);
         } else {
           _hasMore = false;
         }
       }
     } catch (e) {
-      debugPrint('❌ Error loading more posts: $e');
+      debugPrint('Error loading more posts: $e');
     } finally {
       _isLoadingMore = false;
       notifyListeners();
@@ -120,20 +125,16 @@ class FeedProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        // Update the post in the list
+        final data = jsonDecode(response.body);
+        final updatedPost = data['post'];
         final postIndex = _posts.indexWhere((post) => post['_id'] == postId);
-        if (postIndex != -1) {
-          final updatedPost = Map<String, dynamic>.from(_posts[postIndex]);
-          final isLiked = updatedPost['isLiked'] ?? false;
-          updatedPost['isLiked'] = !isLiked;
-          updatedPost['likesCount'] =
-              (updatedPost['likesCount'] ?? 0) + (isLiked ? -1 : 1);
+        if (postIndex != -1 && updatedPost != null) {
           _posts[postIndex] = updatedPost;
           notifyListeners();
         }
       }
     } catch (e) {
-      debugPrint('❌ Error liking post: $e');
+      debugPrint('Error liking post: $e');
     }
   }
 

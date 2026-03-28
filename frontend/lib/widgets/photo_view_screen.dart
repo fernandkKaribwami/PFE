@@ -231,7 +231,7 @@ class _ImageGalleryViewerState extends State<ImageGalleryViewer> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.black45,
-                    Colors.black.withOpacity(0),
+                    Colors.black.withValues(alpha: 0),
                   ],
                 ),
               ),

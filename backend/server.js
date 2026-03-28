@@ -1,236 +1,28 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
 const http = require('http');
-const socketio = require('socket.io');
-const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-// Import routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const postRoutes = require('./routes/posts');
-const groupRoutes = require('./routes/groups');
-const eventRoutes = require('./routes/events');
-const messageRoutes = require('./routes/messages');
-const adminRoutes = require('./routes/admin');
-const searchRoutes = require('./routes/search');
-const facultyRoutes = require('./routes/faculties');
+const { createApp } = require('./app');
+const { initializeSocket } = require('./socket');
+const { backfillEmailVerificationIfDisabled } = require('./utils/userMaintenance');
 
-// Import middleware
-const { errorHandler } = require('./middleware/errorHandler');
-const { notFound } = require('./middleware/notFound');
-
-const app = express();
+const app = createApp();
 const server = http.createServer(app);
+const io = initializeSocket(server);
+app.set('io', io);
 
-// Socket.IO configuration with CORS
-const allowedOrigins = [
-  process.env.CLIENT_URL || "http://localhost:3000",
-  // Flutter web default dev server origin
-  'http://localhost:59077',
-  'http://127.0.0.1:59077',
-  'http://localhost:53731', // in case default flutter port changes
-];
-
-const io = socketio(server, {
-  cors: {
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Origin non autorisé par CORS'));
-      }
-    },
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  transports: ['websocket', 'polling']
-});
-
-// Real-time events
-io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  socket.on('sendMessage', ({ sender, receiver, text }) => {
-    io.to(receiver).emit('receiveMessage', { sender, text });
-  });
-
-  socket.on('followUser', ({ follower, followed }) => {
-    io.to(followed).emit('followNotification', { follower });
-  });
-
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-});
-
-// Security middleware
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use('/api/', limiter);
-
-// API rate limiting for auth routes
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // limit each IP to 20 auth requests per windowMs in dev (adjust for prod)
-  message: 'Too many authentication attempts, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth/register', authLimiter);
-
-// Compression
-app.use(compression());
-
-// CORS configuration
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Origin non autorisé par CORS'));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
-
-// Configuration CORS pour autoriser les requêtes du frontend
-const corsOptions = {
-  origin: ['http://localhost:62204'], // Ajouter l'origine du frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
-  maxAge: '1d',
-  etag: false
-}));
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/groups', groupRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/search', searchRoutes);
-app.use('/api/faculties', facultyRoutes);
-
-// Socket.IO for real-time features
-io.on('connection', (socket) => {
-  console.log(`New client connected: ${socket.id}`);
-
-  // Join user room for private messages
-  socket.on('join', (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined room`);
-  });
-
-  // Handle private messages
-  socket.on('sendMessage', async (data) => {
-    try {
-      const Message = require('./models/Message');
-      const message = new Message({
-        ...data,
-        timestamp: new Date()
-      });
-      await message.save();
-
-      // Emit to receiver
-      io.to(data.receiver).emit('newMessage', {
-        ...message.toObject(),
-        isFromMe: false
-      });
-
-      // Emit to sender (confirmation)
-      socket.emit('messageSent', {
-        ...message.toObject(),
-        isFromMe: true
-      });
-    } catch (error) {
-      socket.emit('messageError', { error: 'Failed to send message' });
-    }
-  });
-
-  // Handle typing indicators
-  socket.on('typing', (data) => {
-    socket.to(data.receiver).emit('userTyping', {
-      userId: data.sender,
-      isTyping: data.isTyping
-    });
-  });
-
-  // Handle post likes (real-time updates)
-  socket.on('likePost', (data) => {
-    socket.to(data.postAuthor).emit('postLiked', {
-      postId: data.postId,
-      likerId: data.likerId,
-      likerName: data.likerName
-    });
-  });
-
-  // Handle comments
-  socket.on('newComment', (data) => {
-    socket.to(data.postAuthor).emit('postCommented', {
-      postId: data.postId,
-      commenterId: data.commenterId,
-      commenterName: data.commenterName,
-      comment: data.comment
-    });
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`Client disconnected: ${socket.id}`);
-  });
-});
-
-// Error handling middleware (must be last)
-app.use(notFound);
-app.use(errorHandler);
-
-// MongoDB Connection with retry logic
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      // Modern MongoDB driver doesn't need these options
-    });
-
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
 
-    // Handle connection events
+    const backfillResult = await backfillEmailVerificationIfDisabled();
+    if (!backfillResult.skipped && backfillResult.modifiedCount > 0) {
+      console.log(
+        `Email verification disabled: ${backfillResult.modifiedCount} existing user(s) synchronized`
+      );
+    }
+
     mongoose.connection.on('error', (err) => {
       console.error('MongoDB connection error:', err);
     });
@@ -242,19 +34,16 @@ const connectDB = async () => {
     mongoose.connection.on('reconnected', () => {
       console.log('MongoDB reconnected');
     });
-
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
-    // Retry connection after 5 seconds
     setTimeout(connectDB, 5000);
   }
 };
 
 connectDB();
 
-// Graceful shutdown
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully');
+const gracefulShutdown = async (signal) => {
+  console.log(`${signal} received, shutting down gracefully`);
   server.close(async () => {
     try {
       await mongoose.connection.close();
@@ -265,32 +54,30 @@ process.on('SIGTERM', async () => {
       process.exit(1);
     }
   });
-});
+};
 
-process.on('SIGINT', async () => {
-  console.log('SIGINT received, shutting down gracefully');
-  server.close(async () => {
-    try {
-      await mongoose.connection.close();
-      console.log('MongoDB connection closed');
-      process.exit(0);
-    } catch (err) {
-      console.error('Error closing MongoDB connection:', err);
-      process.exit(1);
-    }
-  });
-});
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is in use. Trying another port...`);
-    server.listen(0, () => {
-      console.log(`Server running on random available port ${server.address().port}`);
-    });
-  } else {
-    throw err;
-  }
-});
+server
+  .listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  })
+  .on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use.`);
+      console.error(
+        'Stop the other backend process or change PORT in backend/.env before restarting.'
+      );
+      process.exit(1);
+    } else {
+      throw err;
+    }
+  });
+
+module.exports = {
+  app,
+  io,
+  server,
+};

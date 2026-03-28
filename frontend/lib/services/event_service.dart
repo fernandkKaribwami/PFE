@@ -73,7 +73,7 @@ class EventService {
 
       return response.statusCode == 201;
     } catch (e) {
-      print('Create event error: $e');
+      debugPrint('Create event error: $e');
       return false;
     }
   }

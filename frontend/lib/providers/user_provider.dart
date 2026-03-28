@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import '../main.dart' show apiUrl;
 
 class UserProvider with ChangeNotifier {
@@ -28,16 +30,16 @@ class UserProvider with ChangeNotifier {
         },
       );
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = data;
+        _currentUser = data['user'];
         _error = null;
       } else {
-        final errorData = jsonDecode(response.body);
-        _error = errorData['message'] ?? 'Failed to load profile';
+        _error = data['message'] ?? 'Chargement du profil impossible';
       }
     } catch (e) {
-      _error = 'Network error: $e';
+      _error = 'Erreur reseau: $e';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -59,22 +61,22 @@ class UserProvider with ChangeNotifier {
         body: jsonEncode(updates),
       );
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = data;
+        _currentUser = data['user'];
         _error = null;
         _isLoading = false;
         notifyListeners();
         return true;
-      } else {
-        final errorData = jsonDecode(response.body);
-        _error = errorData['message'] ?? 'Failed to update profile';
-        _isLoading = false;
-        notifyListeners();
-        return false;
       }
+
+      _error = data['message'] ?? 'Mise a jour du profil impossible';
+      _isLoading = false;
+      notifyListeners();
+      return false;
     } catch (e) {
-      _error = 'Network error: $e';
+      _error = 'Erreur reseau: $e';
       _isLoading = false;
       notifyListeners();
       return false;
@@ -92,10 +94,10 @@ class UserProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        // Update local user data if needed
         notifyListeners();
         return true;
       }
+
       return false;
     } catch (e) {
       debugPrint('Error following user: $e');
@@ -114,10 +116,10 @@ class UserProvider with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        // Update local user data if needed
         notifyListeners();
         return true;
       }
+
       return false;
     } catch (e) {
       debugPrint('Error unfollowing user: $e');
@@ -132,6 +134,12 @@ class UserProvider with ChangeNotifier {
 
   void clearUser() {
     _currentUser = null;
+    _error = null;
+    notifyListeners();
+  }
+
+  void mergeCurrentUser(Map<String, dynamic> user) {
+    _currentUser = user;
     _error = null;
     notifyListeners();
   }

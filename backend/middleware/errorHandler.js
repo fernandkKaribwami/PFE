@@ -1,42 +1,60 @@
-const errorHandler = (err, req, res, next) => {
-  let error = { ...err };
-  error.message = err.message;
+const { AppError } = require('../utils/httpError');
 
-  // Log error
+const errorHandler = (err, req, res, next) => {
+  let statusCode = err.statusCode || 500;
+  let code = err.code || 'INTERNAL_SERVER_ERROR';
+  let message = err.message || 'Erreur interne du serveur';
+  let details = err.details;
+
   console.error(err);
 
-  // Mongoose bad ObjectId
   if (err.name === 'CastError') {
-    const message = 'Resource not found';
-    error = { message, statusCode: 404 };
+    statusCode = 404;
+    code = 'RESOURCE_NOT_FOUND';
+    message = 'Ressource introuvable';
   }
 
-  // Mongoose duplicate key
   if (err.code === 11000) {
-    const message = 'Duplicate field value entered';
-    error = { message, statusCode: 400 };
+    statusCode = 400;
+    code = 'DUPLICATE_FIELD';
+    message = 'Une valeur unique existe deja';
+    details = err.keyValue;
   }
 
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors).map(val => val.message).join(', ');
-    error = { message, statusCode: 400 };
+    statusCode = 400;
+    code = 'VALIDATION_ERROR';
+    message = Object.values(err.errors).map((val) => val.message).join(', ');
+    details = Object.values(err.errors).map((val) => ({
+      field: val.path,
+      message: val.message,
+    }));
   }
 
-  // JWT errors
   if (err.name === 'JsonWebTokenError') {
-    const message = 'Invalid token';
-    error = { message, statusCode: 401 };
+    statusCode = 401;
+    code = 'INVALID_TOKEN';
+    message = 'Token invalide';
   }
 
   if (err.name === 'TokenExpiredError') {
-    const message = 'Token expired';
-    error = { message, statusCode: 401 };
+    statusCode = 401;
+    code = 'TOKEN_EXPIRED';
+    message = 'Token expire';
   }
 
-  res.status(error.statusCode || 500).json({
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    code = err.code;
+    message = err.message;
+    details = err.details;
+  }
+
+  res.status(statusCode).json({
     success: false,
-    error: error.message || 'Server Error',
+    message,
+    code,
+    ...(details ? { details } : {}),
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 };

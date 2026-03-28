@@ -104,7 +104,7 @@ class CachedAvatarImage extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.primaryBlue.withOpacity(0.1),
+        color: AppColors.primaryBlue.withValues(alpha: 0.1),
       ),
       child: imageUrl != null && imageUrl!.isNotEmpty
           ? ClipOval(
@@ -204,7 +204,9 @@ class _AnimatedActionButtonState extends State<AnimatedActionButton>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: widget.isSelected
-                    ? (widget.color ?? AppColors.accentPink).withOpacity(0.2)
+                    ? (widget.color ?? AppColors.accentPink).withValues(
+                        alpha: 0.2,
+                      )
                     : Colors.transparent,
                 shape: BoxShape.circle,
               ),
@@ -305,7 +307,7 @@ class _HeartLikeButtonState extends State<HeartLikeButton>
                     opacity: _opacityAnimation.value,
                     child: Icon(
                       Icons.favorite,
-                      color: AppColors.accentPink.withOpacity(0.5),
+                      color: AppColors.accentPink.withValues(alpha: 0.5),
                       size: 20,
                     ),
                   ),

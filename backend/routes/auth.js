@@ -1,218 +1,301 @@
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Faculty = require('../models/Faculty');
 const crypto = require('crypto');
-const Notification = require('../models/Notification');
-const bcrypt = require('bcrypt');
+const express = require('express');
+const mongoose = require('mongoose');
 
-// Register
-router.post('/register', async (req, res) => {
-  try {
-    const { name, email, password, role, faculty, level } = req.body;
+const Faculty = require('../models/Faculty');
+const User = require('../models/User');
+const { createHttpError } = require('../utils/httpError');
+const { signToken } = require('../utils/jwt');
+const { getRequestBody } = require('../utils/request');
+const { serializeUserSummary } = require('../utils/serializers');
 
-    if (!name || !email || !password || !faculty) {
-      return res.status(400).json({ message: 'name, email, password, and faculty are required' });
-    }
+const router = express.Router();
+const isEmailVerificationRequired = () =>
+  process.env.REQUIRE_EMAIL_VERIFICATION === 'true';
 
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ message: 'User already exists' });
-
-    let facultyId = null;
-    if (faculty) {
-      if (mongoose.isValidObjectId(faculty)) {
-        facultyId = faculty;
-      } else {
-        const facultyDoc = await Faculty.findOne({ name: { $regex: new RegExp(faculty, 'i') } });
-        if (facultyDoc) {
-          facultyId = facultyDoc._id;
-        } else {
-          return res.status(400).json({ message: `Invalid faculty: ${faculty}. Please provide a valid faculty name or ID.` });
-        }
-      }
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-      faculty: facultyId,
-      level,
-      verificationCode,
-      emailVerified: false,
-    });
-
-    await user.save();
-
-    const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        faculty: user.faculty,
-        level: user.level,
-      },
-    });
-  } catch (err) {
-    console.error('❌ Error during registration:', err.message);
-    res.status(500).json({
-      success: false,
-      message: 'Registration failed',
-      error: err.message,
-      ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-    });
+const resolveFacultyId = async (faculty) => {
+  if (!faculty) {
+    return null;
   }
+
+  if (mongoose.isValidObjectId(faculty)) {
+    return faculty;
+  }
+
+  const facultyDoc = await Faculty.findOne({
+    name: { $regex: new RegExp(faculty, 'i') },
+  });
+
+  if (!facultyDoc) {
+    throw createHttpError(
+      400,
+      `Faculte invalide: ${faculty}`,
+      'INVALID_FACULTY'
+    );
+  }
+
+  return facultyDoc._id;
+};
+
+const buildUserToken = async (user) => {
+  return signToken(
+    { user: { id: user._id.toString(), role: user.role } },
+    { expiresIn: '7d' }
+  );
+};
+
+router.post('/register', async (req, res) => {
+  const body = getRequestBody(req);
+  const { name, email, password, role, faculty, level, bio, avatar } = body;
+  const normalizedEmail = email?.trim().toLowerCase();
+
+  if (!name || !normalizedEmail || !password || !faculty) {
+    throw createHttpError(
+      400,
+      'name, email, password et faculty sont requis',
+      'MISSING_REQUIRED_FIELDS'
+    );
+  }
+
+  const existingUser = await User.findOne({ email: normalizedEmail });
+  if (existingUser) {
+    throw createHttpError(400, 'Cet utilisateur existe deja', 'USER_EXISTS');
+  }
+
+  const facultyId = await resolveFacultyId(faculty);
+  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+  const user = await User.create({
+    name,
+    email: normalizedEmail,
+    password,
+    role,
+    faculty: facultyId,
+    level,
+    bio: bio || '',
+    avatar: avatar || '',
+    verificationCode,
+    emailVerified: !isEmailVerificationRequired(),
+  });
+
+  const populatedUser = await User.findById(user._id).populate(
+    'faculty',
+    'name slug image location'
+  );
+  const token = await buildUserToken(user);
+
+  res.status(201).json({
+    success: true,
+    message: isEmailVerificationRequired()
+      ? 'Utilisateur cree avec succes. Verification email requise'
+      : 'Utilisateur cree avec succes',
+    token,
+    user: serializeUserSummary(populatedUser),
+    verificationCode: !isEmailVerificationRequired()
+      ? verificationCode
+      : undefined,
+  });
 });
 
-// Verify email
 router.post('/verify-email', async (req, res) => {
-  const { email, code } = req.body;
-  const user = await User.findOne({ email });
-  if (!user || user.verificationCode !== code) return res.status(400).json({ msg: 'Invalid code' });
+  const body = getRequestBody(req);
+  const { email, code, verificationCode } = body;
+  const providedCode = code || verificationCode;
+  const normalizedEmail = email?.trim().toLowerCase();
+
+  if (!normalizedEmail || !providedCode) {
+    throw createHttpError(
+      400,
+      'email et code sont requis',
+      'MISSING_VERIFICATION_FIELDS'
+    );
+  }
+
+  const user = await User.findOne({ email: normalizedEmail });
+  if (!user || user.verificationCode !== providedCode) {
+    throw createHttpError(400, 'Code de verification invalide', 'INVALID_CODE');
+  }
+
   user.emailVerified = true;
   user.verificationCode = undefined;
   await user.save();
-  res.json({ msg: 'Email verified' });
+
+  res.json({
+    success: true,
+    message: 'Email verifie avec succes',
+  });
 });
 
-// Login
 router.post('/login', async (req, res) => {
-  const { email, username, password } = req.body;
-  const identifier = email || username; // Accept both email and username
+  const body = getRequestBody(req);
+  const { email, username, password } = body;
+  const identifier = (email || username)?.trim();
+  const normalizedIdentifier = identifier?.includes('@')
+    ? identifier.toLowerCase()
+    : identifier;
 
-  try {
-    const user = await User.findOne({ $or: [{ email: identifier }, { name: identifier }] });
-    if (!user) return res.status(400).json({ msg: 'Invalid email/username or password' });
-    if (!user.emailVerified) return res.status(400).json({ msg: 'Please verify your email first' });
-    if (user.blocked) return res.status(403).json({ msg: 'Account blocked' });
-
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid email/username or password' });
-
-    const payload = { user: { id: user.id, role: user.role } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
-      if (err) {
-        console.error('JWT signing failed:', err);
-        return res.status(500).json({ message: 'Token generation failed', error: err.message });
-      }
-
-      res.json({
-        token,
-        user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar },
-      });
-    });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ msg: 'Server error', error: err.message });
+  if (!normalizedIdentifier || !password) {
+    throw createHttpError(
+      400,
+      'email/username et password sont requis',
+      'MISSING_LOGIN_FIELDS'
+    );
   }
+
+  const user = await User.findOne({
+    $or: [{ email: normalizedIdentifier }, { name: normalizedIdentifier }],
+  }).select('+password');
+
+  if (!user) {
+    throw createHttpError(
+      400,
+      'Identifiants invalides',
+      'INVALID_CREDENTIALS'
+    );
+  }
+
+  if (!user.emailVerified && !isEmailVerificationRequired()) {
+    user.emailVerified = true;
+    user.verificationCode = undefined;
+    await user.save();
+  }
+
+  if (!user.emailVerified) {
+    throw createHttpError(
+      400,
+      'Veuillez verifier votre email avant de vous connecter',
+      'EMAIL_NOT_VERIFIED'
+    );
+  }
+
+  if (user.blocked) {
+    throw createHttpError(403, 'Compte bloque', 'ACCOUNT_BLOCKED');
+  }
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    throw createHttpError(
+      400,
+      'Identifiants invalides',
+      'INVALID_CREDENTIALS'
+    );
+  }
+
+  const token = await buildUserToken(user);
+  const populatedUser = await User.findById(user._id).populate(
+    'faculty',
+    'name slug image location'
+  );
+
+  res.json({
+    success: true,
+    message: 'Connexion reussie',
+    token,
+    user: serializeUserSummary(populatedUser),
+  });
 });
 
-// Google OAuth simulation endpoint
 router.post('/google', async (req, res) => {
-  try {
-    const { name, email, avatar, role } = req.body;
-    if (!email || !email.endsWith('@usmba.ac.ma')) {
-      return res.status(400).json({ msg: 'Email universitaire @usmba.ac.ma requis' });
-    }
+  const body = getRequestBody(req);
+  const { name, email, avatar, role } = body;
+  const normalizedEmail = email?.trim().toLowerCase();
 
-    let user = await User.findOne({ email });
-    if (!user) {
-      user = new User({
-        name: name || email.split('@')[0],
-        email,
-        password: crypto.randomBytes(20).toString('hex'),
-        role: role || 'student',
-        avatar: avatar || '',
-        emailVerified: true,
-      });
-      await user.save();
-    }
-
-    const payload = { user: { id: user.id, role: user.role } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
-      if (err) throw err;
-      res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar } });
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+  if (!normalizedEmail || !normalizedEmail.endsWith('@usmba.ac.ma')) {
+    throw createHttpError(
+      400,
+      'Email universitaire @usmba.ac.ma requis',
+      'INVALID_UNIVERSITY_EMAIL'
+    );
   }
+
+  let user = await User.findOne({ email: normalizedEmail });
+
+  if (!user) {
+    user = await User.create({
+      name: name || normalizedEmail.split('@')[0],
+      email: normalizedEmail,
+      password: crypto.randomBytes(20).toString('hex'),
+      role: role || 'student',
+      avatar: avatar || '',
+      emailVerified: true,
+    });
+  }
+
+  const token = await buildUserToken(user);
+  const populatedUser = await User.findById(user._id).populate(
+    'faculty',
+    'name slug image location'
+  );
+
+  res.json({
+    success: true,
+    message: 'Connexion Google reussie',
+    token,
+    user: serializeUserSummary(populatedUser),
+  });
 });
 
-// Request password reset
 router.post('/request-password-reset', async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ msg: 'User not found' });
+  const body = getRequestBody(req);
+  const { email } = body;
+  const normalizedEmail = email?.trim().toLowerCase();
+
+  if (!normalizedEmail) {
+    throw createHttpError(400, 'email requis', 'EMAIL_REQUIRED');
+  }
+
+  const user = await User.findOne({ email: normalizedEmail });
+  if (!user) {
+    throw createHttpError(404, 'Utilisateur introuvable', 'USER_NOT_FOUND');
+  }
+
   const token = crypto.randomBytes(20).toString('hex');
   user.resetPasswordToken = token;
-  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+  user.resetPasswordExpires = Date.now() + 3600000;
   await user.save();
-  // Send email with token link
-  res.json({ msg: 'Reset link sent to email', token });
+
+  res.json({
+    success: true,
+    message: 'Lien de reinitialisation genere',
+    ...(process.env.NODE_ENV !== 'production' ? { token } : {}),
+  });
 });
 
-// Reset password
 router.post('/reset-password', async (req, res) => {
-  const { token, newPassword } = req.body;
-  const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
-  if (!user) return res.status(400).json({ msg: 'Invalid or expired token' });
+  const body = getRequestBody(req);
+  const { token, resetCode, newPassword } = body;
+  const providedToken = token || resetCode;
+
+  if (!providedToken || !newPassword) {
+    throw createHttpError(
+      400,
+      'token et newPassword sont requis',
+      'MISSING_RESET_FIELDS'
+    );
+  }
+
+  const user = await User.findOne({
+    resetPasswordToken: providedToken,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw createHttpError(
+      400,
+      'Token invalide ou expire',
+      'INVALID_RESET_TOKEN'
+    );
+  }
+
   user.password = newPassword;
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   await user.save();
-  res.json({ msg: 'Password reset successful' });
-});
 
-// Follow a user
-router.post('/follow/:id', async (req, res) => {
-  try {
-    const targetUserId = req.params.id;
-    const currentUser = req.user;
-
-    if (currentUser.id === targetUserId) {
-      return res.status(400).json({ error: 'You cannot follow yourself' });
-    }
-
-    const targetUser = await User.findById(targetUserId);
-    if (!targetUser) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    if (targetUser.followers.includes(currentUser.id)) {
-      return res.status(400).json({ error: 'You are already following this user' });
-    }
-
-    targetUser.followers.push(currentUser.id);
-    currentUser.following.push(targetUserId);
-
-    await targetUser.save();
-    await currentUser.save();
-
-    const notification = new Notification({
-      user: targetUserId,
-      type: 'follow',
-      message: `${currentUser.name} started following you`,
-    });
-    await notification.save();
-
-    res.status(200).json({ message: 'Followed successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to follow user' });
-  }
+  res.json({
+    success: true,
+    message: 'Mot de passe reinitialise avec succes',
+  });
 });
 
 module.exports = router;

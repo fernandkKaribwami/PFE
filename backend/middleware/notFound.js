@@ -1,7 +1,13 @@
+const { createHttpError } = require('../utils/httpError');
+
 const notFound = (req, res, next) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+  next(
+    createHttpError(
+      404,
+      `Route introuvable: ${req.originalUrl}`,
+      'ROUTE_NOT_FOUND'
+    )
+  );
 };
 
 module.exports = { notFound };

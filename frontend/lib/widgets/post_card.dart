@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../screens/modern_profile_screen.dart';
 import '../theme/app_colors.dart';
+import '../utils/app_config.dart';
 
 class PostCard extends StatelessWidget {
   final Map<String, dynamic> post;
@@ -17,6 +20,12 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final author = post['user'] ?? post['author'] ?? {};
+    final authorId = author['_id']?.toString() ?? author['id']?.toString();
+    final authorName = author['name']?.toString() ?? 'Utilisateur';
+    final avatarUrl = AppConfig.resolveUrl(author['avatar']?.toString());
+    final mediaUrl = AppConfig.resolveUrl(post['media']?.toString());
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
@@ -26,17 +35,29 @@ class PostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           ListTile(
+            onTap: authorId == null || authorId.isEmpty
+                ? null
+                : () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ModernProfileScreen(userId: authorId),
+                      ),
+                    );
+                  },
             leading: CircleAvatar(
-              backgroundColor: AppColors.primary.withOpacity(0.1),
-              backgroundImage: post['author']?['avatar'] != null
-                  ? NetworkImage(post['author']['avatar'])
+              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+              backgroundImage: avatarUrl.isNotEmpty
+                  ? NetworkImage(avatarUrl)
                   : null,
-              child: post['author']?['avatar'] == null
+              child: avatarUrl.isEmpty
                   ? Text(
-                      post['author']?['name']?.substring(0, 1).toUpperCase() ?? 'U',
-                      style: TextStyle(
+                      (authorName.isNotEmpty
+                              ? authorName.substring(0, 1)
+                              : 'U')
+                          .toUpperCase(),
+                      style: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
@@ -44,7 +65,7 @@ class PostCard extends StatelessWidget {
                   : null,
             ),
             title: Text(
-              post['author']?['name'] ?? 'Utilisateur',
+              authorName,
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
@@ -56,8 +77,6 @@ class PostCard extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-
-          // Content
           if (post['content'] != null && post['content'].toString().isNotEmpty) ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -67,32 +86,44 @@ class PostCard extends StatelessWidget {
               ),
             ),
           ],
-
-          // Media
-          if (post['media'] != null) ...[
-            Container(
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                image: DecorationImage(
-                  image: NetworkImage(post['media']),
-                  fit: BoxFit.cover,
-                ),
+          if (mediaUrl.isNotEmpty) ...[
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(0),
+              ),
+              child: Image.network(
+                mediaUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 220,
+                    color: Colors.grey[200],
+                    alignment: Alignment.center,
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.broken_image_outlined, size: 36),
+                        SizedBox(height: 8),
+                        Text('Image indisponible'),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ],
-
-          // Actions
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
               children: [
-                // Like
                 IconButton(
                   onPressed: onLike,
                   icon: Icon(
-                    post['isLiked'] == true ? Icons.favorite : Icons.favorite_border,
+                    post['isLiked'] == true
+                        ? Icons.favorite
+                        : Icons.favorite_border,
                     color: post['isLiked'] == true ? Colors.red : Colors.grey,
                   ),
                 ),
@@ -100,10 +131,7 @@ class PostCard extends StatelessWidget {
                   '${post['likesCount'] ?? 0}',
                   style: const TextStyle(fontSize: 12),
                 ),
-
                 const SizedBox(width: 16),
-
-                // Comment
                 IconButton(
                   onPressed: onComment,
                   icon: const Icon(Icons.chat_bubble_outline),
@@ -112,10 +140,7 @@ class PostCard extends StatelessWidget {
                   '${post['commentsCount'] ?? 0}',
                   style: const TextStyle(fontSize: 12),
                 ),
-
                 const Spacer(),
-
-                // Share
                 IconButton(
                   onPressed: onShare,
                   icon: const Icon(Icons.share_outlined),
@@ -138,13 +163,14 @@ class PostCard extends StatelessWidget {
 
       if (difference.inDays > 0) {
         return 'il y a ${difference.inDays} j';
-      } else if (difference.inHours > 0) {
-        return 'il y a ${difference.inHours} h';
-      } else if (difference.inMinutes > 0) {
-        return 'il y a ${difference.inMinutes} min';
-      } else {
-        return 'il y a quelques instants';
       }
+      if (difference.inHours > 0) {
+        return 'il y a ${difference.inHours} h';
+      }
+      if (difference.inMinutes > 0) {
+        return 'il y a ${difference.inMinutes} min';
+      }
+      return 'il y a quelques instants';
     } catch (e) {
       return 'il y a quelques instants';
     }

@@ -1,8 +1,71 @@
+import 'package:flutter/foundation.dart';
+
 /// Configuration globale de l'application
 class AppConfig {
-  // API
-  static const String apiBaseUrl = 'http://localhost:5000';
-  static const String wsBaseUrl = 'ws://localhost:5000';
+  static const String _apiBaseUrlOverride = String.fromEnvironment(
+    'API_BASE_URL',
+  );
+  static const String _wsBaseUrlOverride = String.fromEnvironment(
+    'WS_BASE_URL',
+  );
+  static const String _googleClientIdOverride = String.fromEnvironment(
+    'GOOGLE_CLIENT_ID',
+  );
+
+  static String get apiOrigin {
+    if (_apiBaseUrlOverride.isNotEmpty) {
+      return _apiBaseUrlOverride;
+    }
+
+    if (kIsWeb) {
+      return 'http://localhost:5000';
+    }
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'http://10.0.2.2:5000';
+      case TargetPlatform.iOS:
+        return 'http://localhost:5000';
+      default:
+        return 'http://localhost:5000';
+    }
+  }
+
+  static String get apiBaseUrl => '$apiOrigin/api';
+
+  static String get googleClientId => _googleClientIdOverride;
+
+  static String get wsBaseUrl {
+    if (_wsBaseUrlOverride.isNotEmpty) {
+      return _wsBaseUrlOverride;
+    }
+
+    return apiOrigin.replaceFirst(RegExp(r'^http'), 'ws');
+  }
+
+  static String resolveUrl(String? path) {
+    if (path == null || path.trim().isEmpty) {
+      return '';
+    }
+
+    final normalized = path.trim();
+    if (normalized.startsWith('http://') ||
+        normalized.startsWith('https://') ||
+        normalized.startsWith('data:') ||
+        normalized.startsWith('blob:')) {
+      return normalized;
+    }
+
+    if (normalized.startsWith('//')) {
+      return 'https:$normalized';
+    }
+
+    if (normalized.startsWith('/')) {
+      return '$apiOrigin$normalized';
+    }
+
+    return '$apiOrigin/$normalized';
+  }
 
   // Timeouts
   static const Duration apiTimeout = Duration(seconds: 30);

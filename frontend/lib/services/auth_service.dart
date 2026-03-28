@@ -33,7 +33,7 @@ class AuthService {
         final data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', data['token']);
-        await prefs.setString('userId', data['user']['id']);
+        await prefs.setString('userId', data['user']['_id']);
         return true;
       }
       return false;
@@ -45,7 +45,7 @@ class AuthService {
 
   Future<bool> login(String email, String password) async {
     try {
-      final response = await _api.post('/login', {
+      final response = await _api.post('/auth/login', {
         'email': email,
         'password': password,
       });
@@ -54,7 +54,7 @@ class AuthService {
         final data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', data['token']);
-        await prefs.setString('userId', data['user']['id']);
+        await prefs.setString('userId', data['user']['_id']);
         return true;
       }
       return false;
@@ -72,7 +72,7 @@ class AuthService {
       });
       return response.statusCode == 200;
     } catch (e) {
-      print('Verify email error: $e');
+      debugPrint('Verify email error: $e');
       return false;
     }
   }

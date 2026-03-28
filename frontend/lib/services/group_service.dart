@@ -64,7 +64,7 @@ class GroupService {
 
       return response.statusCode == 201;
     } catch (e) {
-      print('Create group error: $e');
+      debugPrint('Create group error: $e');
       return false;
     }
   }

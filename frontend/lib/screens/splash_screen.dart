@@ -67,9 +67,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.primary.withOpacity(0.8),
-              AppColors.primary.withOpacity(0.6),
-              AppColors.primary.withOpacity(0.4),
+              AppColors.primary.withValues(alpha: 0.8),
+              AppColors.primary.withValues(alpha: 0.6),
+              AppColors.primary.withValues(alpha: 0.4),
               Colors.white,
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
@@ -88,17 +88,17 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
                         ],
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.school,
                         size: 80,
                         color: AppColors.primary,
@@ -126,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen>
                             color: Colors.white,
                             shadows: [
                               Shadow(
-                                color: Colors.black.withOpacity(0.3),
+                                color: Colors.black.withValues(alpha: 0.3),
                                 offset: const Offset(0, 2),
                                 blurRadius: 4,
                               ),
@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen>
                           'Réseau social universitaire',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontWeight: FontWeight.w300,
                           ),
                         ),
@@ -157,7 +157,7 @@ class _SplashScreenState extends State<SplashScreen>
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation(
-                    Colors.white.withOpacity(0.8),
+                    Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
               ),

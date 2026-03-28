@@ -8,19 +8,16 @@ import 'providers/theme_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/faculty_provider.dart';
-import 'screens/splash_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/admin_dashboard_screen.dart';
-import 'theme/app_colors.dart';
-
-import 'package:flutter/foundation.dart';
+import 'utils/app_config.dart';
 
 // Configuration API
 // - Web : localhost
 // - Android emulator : 10.0.2.2
 // - iOS simulator : localhost
-const String apiUrl = kIsWeb ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+final String apiUrl = AppConfig.apiOrigin;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -187,12 +184,12 @@ class _SplashScreenState extends State<SplashScreen>
             child: Center(
               child: Opacity(
                 opacity: _ctrl.value,
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.school, size: 96, color: Colors.white),
-                    const SizedBox(height: 12),
-                    const Text(
+                    Icon(Icons.school, size: 96, color: Colors.white),
+                    SizedBox(height: 12),
+                    Text(
                       'USMBA Social',
                       style: TextStyle(
                         fontSize: 28,
