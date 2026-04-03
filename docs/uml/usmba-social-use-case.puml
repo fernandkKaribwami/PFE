@@ -1,0 +1,166 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+
+title Diagramme de cas d'utilisation - USMBA Social
+
+actor "Visiteur" as Visitor
+actor "Utilisateur\n authentifie" as User
+actor "Administrateur" as Admin
+actor "Service Google" as Google
+actor "Service Email" as Mail
+
+Admin --|> User
+
+rectangle "Systeme USMBA Social" {
+
+  package "Authentification" {
+    usecase "S'inscrire" as UC_Register
+    usecase "Se connecter" as UC_Login
+    usecase "Se connecter\navec Google" as UC_Google
+    usecase "Verifier l'email" as UC_Verify
+    usecase "Reinitialiser\nle mot de passe" as UC_ResetPassword
+  }
+
+  package "Profil et reseau social" {
+    usecase "Gerer le profil" as UC_ManageProfile
+    usecase "Consulter les profils" as UC_ViewProfiles
+    usecase "Suivre / se desabonner" as UC_Follow
+    usecase "Rechercher dans\nla plateforme" as UC_Search
+
+    usecase "Consulter son profil" as UC_ViewOwnProfile
+    usecase "Modifier son profil" as UC_EditProfile
+    usecase "Changer le mot\nde passe" as UC_ChangePassword
+  }
+
+  package "Publications et stories" {
+    usecase "Consulter le feed" as UC_Feed
+    usecase "Publier un post" as UC_CreatePost
+    usecase "Ajouter un media" as UC_AddMedia
+    usecase "Interagir avec\nun post" as UC_PostInteraction
+    usecase "Gerer les stories" as UC_ManageStories
+
+    usecase "Aimer un post" as UC_LikePost
+    usecase "Commenter un post" as UC_CommentPost
+    usecase "Sauvegarder un post" as UC_SavePost
+    usecase "Signaler un post" as UC_ReportPost
+    usecase "Partager un post\ndans une conversation" as UC_SharePost
+
+    usecase "Publier une story" as UC_CreateStory
+    usecase "Consulter les stories" as UC_ViewStories
+    usecase "Supprimer sa story" as UC_DeleteStory
+  }
+
+  package "Messagerie et notifications" {
+    usecase "Utiliser la messagerie" as UC_Messaging
+    usecase "Joindre un fichier" as UC_AttachFile
+    usecase "Consulter les notifications" as UC_ViewNotifications
+    usecase "Marquer comme lues" as UC_MarkNotificationsRead
+
+    usecase "Voir ses conversations" as UC_ViewConversations
+    usecase "Envoyer un message" as UC_SendMessage
+  }
+
+  package "Facultes, groupes et evenements" {
+    usecase "Consulter les facultes" as UC_ViewFaculties
+    usecase "Utiliser les groupes" as UC_UseGroups
+    usecase "Utiliser les evenements" as UC_UseEvents
+
+    usecase "Creer un groupe" as UC_CreateGroup
+    usecase "Consulter un groupe" as UC_ViewGroup
+    usecase "Rejoindre / quitter\nun groupe" as UC_JoinLeaveGroup
+
+    usecase "Creer un evenement" as UC_CreateEvent
+    usecase "Consulter les evenements" as UC_ViewEvents
+    usecase "Repondre a une invitation\n(RSVP)" as UC_RSVP
+  }
+
+  package "Administration" {
+    usecase "Acceder au dashboard\nadministrateur" as UC_AdminDashboard
+    usecase "Consulter les statistiques" as UC_AdminStats
+    usecase "Gerer les utilisateurs" as UC_ManageUsers
+    usecase "Gerer les publications" as UC_ManagePosts
+    usecase "Traiter les signalements" as UC_HandleReports
+
+    usecase "Bloquer / debloquer\nun utilisateur" as UC_BlockUser
+    usecase "Supprimer un utilisateur" as UC_DeleteUser
+    usecase "Supprimer un post" as UC_DeleteAnyPost
+    usecase "Consulter les signalements" as UC_ViewReports
+    usecase "Mettre a jour le statut\nd'un signalement" as UC_UpdateReport
+  }
+}
+
+Visitor --> UC_Register
+Visitor --> UC_Login
+Visitor --> UC_Google
+Visitor --> UC_Verify
+Visitor --> UC_ResetPassword
+Visitor --> UC_ViewFaculties
+
+User --> UC_ManageProfile
+User --> UC_ViewProfiles
+User --> UC_Follow
+User --> UC_Search
+User --> UC_Feed
+User --> UC_CreatePost
+User --> UC_PostInteraction
+User --> UC_ManageStories
+User --> UC_Messaging
+User --> UC_ViewNotifications
+User --> UC_ViewFaculties
+User --> UC_UseGroups
+User --> UC_UseEvents
+
+Admin --> UC_AdminDashboard
+Admin --> UC_ManageUsers
+Admin --> UC_ManagePosts
+Admin --> UC_HandleReports
+
+Google --> UC_Google
+Mail --> UC_Verify
+Mail --> UC_ResetPassword
+
+UC_ManageProfile .> UC_ViewOwnProfile : <<include>>
+UC_ManageProfile .> UC_EditProfile : <<include>>
+UC_ManageProfile .> UC_ChangePassword : <<include>>
+
+UC_CreatePost .> UC_AddMedia : <<extend>>
+
+UC_PostInteraction .> UC_LikePost : <<include>>
+UC_PostInteraction .> UC_CommentPost : <<include>>
+UC_PostInteraction .> UC_SavePost : <<include>>
+UC_PostInteraction .> UC_ReportPost : <<include>>
+UC_PostInteraction .> UC_SharePost : <<include>>
+
+UC_ManageStories .> UC_CreateStory : <<include>>
+UC_ManageStories .> UC_ViewStories : <<include>>
+UC_ManageStories .> UC_DeleteStory : <<include>>
+
+UC_Messaging .> UC_ViewConversations : <<include>>
+UC_Messaging .> UC_SendMessage : <<include>>
+UC_SendMessage .> UC_AttachFile : <<extend>>
+
+UC_ViewNotifications .> UC_MarkNotificationsRead : <<extend>>
+
+UC_UseGroups .> UC_CreateGroup : <<include>>
+UC_UseGroups .> UC_ViewGroup : <<include>>
+UC_UseGroups .> UC_JoinLeaveGroup : <<include>>
+
+UC_UseEvents .> UC_CreateEvent : <<include>>
+UC_UseEvents .> UC_ViewEvents : <<include>>
+UC_UseEvents .> UC_RSVP : <<include>>
+
+UC_AdminDashboard .> UC_AdminStats : <<include>>
+UC_ManageUsers .> UC_BlockUser : <<include>>
+UC_ManageUsers .> UC_DeleteUser : <<include>>
+UC_ManagePosts .> UC_DeleteAnyPost : <<include>>
+UC_HandleReports .> UC_ViewReports : <<include>>
+UC_HandleReports .> UC_UpdateReport : <<include>>
+
+@enduml

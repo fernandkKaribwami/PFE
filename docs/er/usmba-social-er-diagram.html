@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Diagramme ER - USMBA Social</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f8fafc;
+      width: 2700px;
+      height: 1850px;
+      overflow: hidden;
+    }
+    .wrap {
+      width: 2700px;
+      height: 1850px;
+    }
+    svg {
+      display: block;
+      width: 2700px;
+      height: 1850px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2700" height="1850" viewBox="0 0 2700 1850">
+  <rect x="0" y="0" width="2700" height="1850" fill="#f8fafc"/> <text x="1350.0" y="46.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Diagramme Entite-Relation - Modele de donnees USMBA Social</text> <text x="1350.0" y="84.0" font-size="19" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Diagramme conceptuel base sur les modeles Mongoose du backend</text> <rect x="40" y="120" width="2620" height="1660" rx="26" fill="none" stroke="#cbd5e1" stroke-width="2"/> <g><rect x="980" y="90" width="300" height="220" rx="18" fill="#dcfce7" stroke="#475569" stroke-width="2.5"/><rect x="980" y="90" width="300" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="980" y="124" width="300" height="18" fill="white" stroke="none"/><text x="1130.0" y="121.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Faculty</text><text x="998" y="166.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="998" y="188.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">name</text><text x="998" y="210.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">slug</text><text x="998" y="232.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">description</text><text x="998" y="254.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">location</text><text x="998" y="276.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">image</text></g> <g><rect x="1950" y="220" width="320" height="230" rx="18" fill="#fce7f3" stroke="#475569" stroke-width="2.5"/><rect x="1950" y="220" width="320" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="1950" y="254" width="320" height="18" fill="white" stroke="none"/><text x="2110.0" y="251.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Group</text><text x="1968" y="296.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="1968" y="318.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">name</text><text x="1968" y="340.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">category</text><text x="1968" y="362.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">privacy</text><text x="1968" y="384.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">admin</text><text x="1968" y="406.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">members[]</text></g> <g><rect x="1950" y="560" width="320" height="250" rx="18" fill="#fef3c7" stroke="#475569" stroke-width="2.5"/><rect x="1950" y="560" width="320" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="1950" y="594" width="320" height="18" fill="white" stroke="none"/><text x="2110.0" y="591.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Event</text><text x="1968" y="636.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="1968" y="658.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">title</text><text x="1968" y="680.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">category</text><text x="1968" y="702.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">startDate</text><text x="1968" y="724.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">endDate</text><text x="1968" y="746.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">faculty</text><text x="1968" y="768.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">createdBy</text></g> <g><rect x="180" y="430" width="360" height="360" rx="18" fill="#dbeafe" stroke="#475569" stroke-width="2.5"/><rect x="180" y="430" width="360" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="180" y="464" width="360" height="18" fill="white" stroke="none"/><text x="360.0" y="461.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">User</text><text x="198" y="506.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="198" y="528.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">name</text><text x="198" y="550.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">email</text><text x="198" y="572.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">role</text><text x="198" y="594.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">avatar</text><text x="198" y="616.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">bio</text><text x="198" y="638.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">faculty</text><text x="198" y="660.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">level</text><text x="198" y="682.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">followers[]</text><text x="198" y="704.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">following[]</text></g> <g><rect x="980" y="430" width="330" height="300" rx="18" fill="#ede9fe" stroke="#475569" stroke-width="2.5"/><rect x="980" y="430" width="330" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="980" y="464" width="330" height="18" fill="white" stroke="none"/><text x="1145.0" y="461.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Post</text><text x="998" y="506.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="998" y="528.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="998" y="550.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">content</text><text x="998" y="572.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">media[]</text><text x="998" y="594.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">hashtags[]</text><text x="998" y="616.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">mentions[]</text><text x="998" y="638.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">likes[]</text><text x="998" y="660.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">comments[]</text><text x="998" y="682.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">group</text><text x="998" y="704.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">faculty</text></g> <g><rect x="980" y="840" width="320" height="220" rx="18" fill="#e0f2fe" stroke="#475569" stroke-width="2.5"/><rect x="980" y="840" width="320" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="980" y="874" width="320" height="18" fill="white" stroke="none"/><text x="1140.0" y="871.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Comment</text><text x="998" y="916.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="998" y="938.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="998" y="960.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">post</text><text x="998" y="982.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">content</text><text x="998" y="1004.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">likes[]</text></g> <g><rect x="660" y="1210" width="260" height="170" rx="18" fill="#f3f4f6" stroke="#475569" stroke-width="2.5"/><rect x="660" y="1210" width="260" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="660" y="1244" width="260" height="18" fill="white" stroke="none"/><text x="790.0" y="1241.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Save</text><text x="678" y="1286.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="678" y="1308.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="678" y="1330.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">post</text></g> <g><rect x="1030" y="1190" width="380" height="230" rx="18" fill="#fee2e2" stroke="#475569" stroke-width="2.5"/><rect x="1030" y="1190" width="380" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="1030" y="1224" width="380" height="18" fill="white" stroke="none"/><text x="1220.0" y="1221.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Report</text><text x="1048" y="1266.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="1048" y="1288.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">post</text><text x="1048" y="1310.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">comment</text><text x="1048" y="1332.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="1048" y="1354.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">reportedBy</text><text x="1048" y="1376.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">reason</text><text x="1048" y="1398.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">status</text></g> <g><rect x="180" y="920" width="330" height="250" rx="18" fill="#fae8ff" stroke="#475569" stroke-width="2.5"/><rect x="180" y="920" width="330" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="180" y="954" width="330" height="18" fill="white" stroke="none"/><text x="345.0" y="951.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Story</text><text x="198" y="996.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="198" y="1018.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="198" y="1040.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">mediaUrl</text><text x="198" y="1062.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">mediaType</text><text x="198" y="1084.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">caption</text><text x="198" y="1106.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">viewers[]</text><text x="198" y="1128.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">expiresAt</text></g> <g><rect x="1650" y="980" width="360" height="260" rx="18" fill="#fff7ed" stroke="#475569" stroke-width="2.5"/><rect x="1650" y="980" width="360" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="1650" y="1014" width="360" height="18" fill="white" stroke="none"/><text x="1830.0" y="1011.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Message</text><text x="1668" y="1056.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="1668" y="1078.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">sender</text><text x="1668" y="1100.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">receiver</text><text x="1668" y="1122.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">content</text><text x="1668" y="1144.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">attachments[]</text><text x="1668" y="1166.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">read</text></g> <g><rect x="2030" y="1180" width="380" height="240" rx="18" fill="#cffafe" stroke="#475569" stroke-width="2.5"/><rect x="2030" y="1180" width="380" height="52" rx="18" fill="white" stroke="#475569" stroke-width="2.5"/><rect x="2030" y="1214" width="380" height="18" fill="white" stroke="none"/><text x="2220.0" y="1211.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Notification</text><text x="2048" y="1256.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">_id</text><text x="2048" y="1278.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">user</text><text x="2048" y="1300.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">type</text><text x="2048" y="1322.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">referenceId</text><text x="2048" y="1344.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">content</text><text x="2048" y="1366.0" font-size="16" font-weight="500" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#334155">read</text></g> 
+    <g>
+      <line x1="980" y1="200.0" x2="540" y2="610.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="678.0" y="387.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="760.0" y="405.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">appartenance</text>
+      <text x="970" y="190.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="980" y2="580.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="678.0" y="577.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="760.0" y="595.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">publie</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="970" y="570.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1145.0" y1="730" x2="1140.0" y2="840" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1060.5" y="767.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1142.5" y="785.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">contient</text>
+      <text x="1135.0" y="720.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1150.0" y="830.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="980" y2="950.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="678.0" y="762.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="760.0" y="780.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">ecrit</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="970" y="940.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="1650" y2="1110.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1013.0" y="842.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1095.0" y="860.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">envoie</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1640" y="1100.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="628.0" x2="1650" y2="1092.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1013.0" y="842.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1095.0" y="860.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">recoit</text>
+      <text x="550" y="618.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1640" y="1082.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="360.0" y1="790" x2="345.0" y2="920" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="270.5" y="837.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="352.5" y="855.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">publie</text>
+      <text x="350.0" y="780.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="355.0" y="910.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="2030" y2="1300.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1203.0" y="937.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1285.0" y="955.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">recoit</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="2020" y="1290.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="360.0" y1="790" x2="790.0" y2="1210" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="493.0" y="982.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="575.0" y="1000.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">sauvegarde</text>
+      <text x="370.0" y="780.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="780.0" y="1200.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1145.0" y1="730" x2="790.0" y2="1210" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="885.5" y="952.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="967.5" y="970.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">est sauvegarde</text>
+      <text x="1135.0" y="720.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="800.0" y="1200.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1145.0" y1="730" x2="1220.0" y2="1190" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1100.5" y="942.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1182.5" y="960.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">peut etre signale</text>
+      <text x="1155.0" y="720.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1210.0" y="1180.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1140.0" y1="1060" x2="1220.0" y2="1190" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1098.0" y="1107.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1180.0" y="1125.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">peut etre signale</text>
+      <text x="1150.0" y="1050.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1210.0" y="1180.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="1030" y2="1305.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="703.0" y="939.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="785.0" y="957.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">reportedBy</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1020" y="1295.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1130.0" y1="310" x2="1145.0" y2="430" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1055.5" y="352.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1137.5" y="370.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">filtre faculte</text>
+      <text x="1140.0" y="300.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1135.0" y="420.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1950" y1="335.0" x2="1310" y2="580.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1548.0" y="439.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1630.0" y="457.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">contient</text>
+      <text x="1940" y="325.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1320" y="570.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="1950" y2="335.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1163.0" y="454.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1245.0" y="472.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">administre</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1940" y="325.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="1950" y2="685.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1163.0" y="629.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1245.0" y="647.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">cree</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1940" y="675.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="1280" y1="200.0" x2="1950" y2="685.0" stroke="#64748b" stroke-width="2.5"/>
+      <rect x="1533.0" y="424.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1615.0" y="442.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">organise</text>
+      <text x="1290" y="190.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">1</text>
+      <text x="1940" y="675.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="360.0" y1="430" x2="360.0" y2="430" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="10 8"/>
+      <rect x="278.0" y="412.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="360.0" y="430.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">follow / followers</text>
+      <text x="350.0" y="420.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+      <text x="350.0" y="420.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="628.0" x2="980" y2="562.0" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="10 8"/>
+      <rect x="678.0" y="577.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="760.0" y="595.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">likes / mentions</text>
+      <text x="550" y="618.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+      <text x="970" y="552.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="360.0" y1="790" x2="345.0" y2="920" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="10 8"/>
+      <rect x="270.5" y="837.0" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="352.5" y="855.0" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">viewers</text>
+      <text x="350.0" y="780.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+      <text x="355.0" y="910.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="628.0" x2="1950" y2="317.0" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="10 8"/>
+      <rect x="1163.0" y="454.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1245.0" y="472.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">membres</text>
+      <text x="550" y="618.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+      <text x="1940" y="307.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     
+    <g>
+      <line x1="540" y1="610.0" x2="1950" y2="685.0" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="10 8"/>
+      <rect x="1163.0" y="629.5" width="164" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+      <text x="1245.0" y="647.5" font-size="13" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">attendees</text>
+      <text x="550" y="600.0" font-size="16" font-weight="900" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+      <text x="1940" y="675.0" font-size="16" font-weight="900" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">N</text>
+    </g>
+     <rect x="1740" y="70" width="820" height="110" rx="18" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/> <text x="2150" y="100.0" font-size="22" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Legende</text> <text x="2150" y="125.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Trait plein : relation principale</text>
+<text x="2150" y="147.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Trait pointille violet : relation many-to-many ou tableau de references</text>
+</svg>
+
+  </div>
+</body>
+</html>

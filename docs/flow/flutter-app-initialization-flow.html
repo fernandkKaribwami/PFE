@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Diagramme de flux - Initialisation Flutter</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f8fafc;
+      width: 1800px;
+      height: 2200px;
+      overflow: hidden;
+    }
+    .wrap {
+      width: 1800px;
+      height: 2200px;
+    }
+    svg {
+      display: block;
+      width: 1800px;
+      height: 2200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2200" viewBox="0 0 1800 2200">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1800" height="2200" fill="#f8fafc"/> <text x="900.0" y="46.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Diagramme de flux - Initialisation de l'application Flutter</text> <text x="900.0" y="84.0" font-size="19" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">USMBA Social - Flux base sur main.dart et AppInitializer</text> 
+    <g>
+      <rect x="515.0" y="120" width="310" height="64" rx="32.0" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+      <text x="670.0" y="154.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Debut</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="216" width="500" height="74" rx="18" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="670.0" y="255.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">main()</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="322" width="500" height="74" rx="18" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="670.0" y="346.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">WidgetsFlutterBinding</text>
+<text x="670.0" y="376.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">ensureInitialized()</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="428" width="500" height="74" rx="18" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="670.0" y="467.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Configurer les orientations</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="534" width="500" height="74" rx="18" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="670.0" y="573.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Configurer System UI Overlay Style</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="640" width="500" height="74" rx="18" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2.5"/>
+      <text x="670.0" y="679.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">runApp(MyApp)</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="746" width="500" height="74" rx="18" fill="#dbeafe" stroke="#60a5fa" stroke-width="2.5"/>
+      <text x="670.0" y="770.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Creer MultiProvider</text>
+<text x="670.0" y="800.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">et MaterialApp</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="852" width="500" height="74" rx="18" fill="#dbeafe" stroke="#60a5fa" stroke-width="2.5"/>
+      <text x="670.0" y="891.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Afficher AppInitializer</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="958" width="500" height="74" rx="18" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2.5"/>
+      <text x="670.0" y="982.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">AppInitializer.initState()</text>
+<text x="670.0" y="1012.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">appelle _initializeApp()</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="1064" width="500" height="74" rx="18" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2.5"/>
+      <text x="670.0" y="1088.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Lire SharedPreferences</text>
+<text x="670.0" y="1118.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">token + userId</text>
+    </g>
+     
+    <g>
+      <polygon points="670.0,1170 875.0,1240.0 670.0,1310 465.0,1240.0" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+      <text x="670.0" y="1227.5" font-size="21" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#92400e">token et userId</text>
+<text x="670.0" y="1256.5" font-size="21" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#92400e">existent ?</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="1342" width="500" height="74" rx="18" fill="#f5f3ff" stroke="#a78bfa" stroke-width="2.5"/>
+      <text x="670.0" y="1381.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Recuperer AuthProvider</text>
+    </g>
+     
+    <g>
+      <rect x="420.0" y="1448" width="500" height="74" rx="18" fill="#f5f3ff" stroke="#a78bfa" stroke-width="2.5"/>
+      <text x="670.0" y="1472.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Valider le token</text>
+<text x="670.0" y="1502.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">via /users/profile</text>
+    </g>
+     
+    <g>
+      <polygon points="670.0,1554 875.0,1624.0 670.0,1694 465.0,1624.0" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+      <text x="670.0" y="1611.5" font-size="21" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#92400e">token</text>
+<text x="670.0" y="1640.5" font-size="21" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#92400e">valide ?</text>
+    </g>
+     
+    <g>
+      <rect x="1170" y="938" width="500" height="170" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+      <text x="1420.0" y="960.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#9a3412">Affichage de l'interface</text>
+      <text x="1420.0" y="995.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Pendant l'initialisation,</text>
+<text x="1420.0" y="1019.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">AppInitializer retourne SplashScreen.</text>
+<text x="1420.0" y="1043.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Le logo et l'animation sont affiches</text>
+<text x="1420.0" y="1067.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">en attendant la suite du flux.</text>
+    </g>
+     
+    <g>
+      <rect x="410.0" y="1744" width="250" height="80" rx="18" fill="#dcfce7" stroke="#22c55e" stroke-width="2.5"/>
+      <text x="535.0" y="1771.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Naviguer vers</text>
+<text x="535.0" y="1801.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">/main</text>
+    </g>
+     
+    <g>
+      <rect x="690.0" y="1744" width="250" height="80" rx="18" fill="#fee2e2" stroke="#ef4444" stroke-width="2.5"/>
+      <text x="815.0" y="1786.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Effacer prefs</text>
+    </g>
+     
+    <g>
+      <rect x="690.0" y="1859" width="250" height="80" rx="18" fill="#fee2e2" stroke="#ef4444" stroke-width="2.5"/>
+      <text x="815.0" y="1886.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Naviguer vers</text>
+<text x="815.0" y="1916.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">/auth</text>
+    </g>
+     
+    <g>
+      <rect x="1120" y="1214" width="320" height="80" rx="18" fill="#fee2e2" stroke="#ef4444" stroke-width="2.5"/>
+      <text x="1280.0" y="1241.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Naviguer vers</text>
+<text x="1280.0" y="1271.0" font-size="22" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">/auth</text>
+    </g>
+     
+    <g>
+      <rect x="515.0" y="2004" width="310" height="64" rx="32.0" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+      <text x="670.0" y="2038.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Fin du flux d'initialisation</text>
+    </g>
+     
+    <g>
+      <line x1="670" y1="184" x2="670" y2="216" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="290" x2="670" y2="312" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="386" x2="670" y2="408" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="482" x2="670" y2="504" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="578" x2="670" y2="600" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="674" x2="670" y2="696" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="770" x2="670" y2="792" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="866" x2="670" y2="888" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="962" x2="670" y2="1170" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670.0" y1="1310" x2="670" y2="1342" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="616.0" y="1292.0" width="108" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="670.0" y="1308.0" font-size="14" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Oui</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="875.0" y1="1240" x2="1120" y2="1254" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="943.5" y="1213.0" width="108" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="997.5" y="1229.0" font-size="14" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Non</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="670" y1="1342" x2="670" y2="1384" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="1458" x2="670" y2="1480" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670" y1="1554" x2="670" y2="1554" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="545.0" y1="1694" x2="535.0" y2="1744" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="486.0" y="1685.0" width="108" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="540.0" y="1701.0" font-size="14" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Oui</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="795.0" y1="1694" x2="815.0" y2="1744" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="751.0" y="1685.0" width="108" height="28" rx="8" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="805.0" y="1701.0" font-size="14" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Non</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="815.0" y1="1824" x2="815.0" y2="1859" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="535.0" y1="1824" x2="670.0" y2="2004" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="815.0" y1="1939" x2="670.0" y2="2004" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="1280" y1="1294" x2="1280" y2="1964" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="1280" y1="1964" x2="670.0" y2="1964" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <line x1="670.0" y1="1964" x2="670.0" y2="2004" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      
+    </g>
+     
+    <g>
+      <rect x="1080" y="1530" width="570" height="150" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+      <text x="1365.0" y="1552.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#9a3412">Conformite au code actuel</text>
+      <text x="1365.0" y="1589.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Le flux suit le comportement observe dans main.dart.</text>
+<text x="1365.0" y="1613.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">La verification du token passe par AuthProvider.validateToken().</text>
+<text x="1365.0" y="1637.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">La navigation finale se fait vers /main ou /auth.</text>
+    </g>
+    
+</svg>
+
+  </div>
+</body>
+</html>

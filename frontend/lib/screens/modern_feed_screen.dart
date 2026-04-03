@@ -39,6 +39,7 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
   List<Map<String, dynamic>> _stories = [];
   bool _isStoriesLoading = false;
   bool _isCreatingStory = false;
+  int _storyLoadVersion = 0;
 
   @override
   bool get wantKeepAlive => true;
@@ -111,12 +112,13 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
   }
 
   Future<void> _loadStories() async {
+    final requestVersion = ++_storyLoadVersion;
     setState(() {
       _isStoriesLoading = true;
     });
 
     final stories = await _storyService.getFeedStories();
-    if (!mounted) {
+    if (!mounted || requestVersion != _storyLoadVersion) {
       return;
     }
 
@@ -194,8 +196,15 @@ class _ModernFeedScreenState extends State<ModernFeedScreen>
     });
 
     if (story != null) {
+      unawaited(_loadStories());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Story publiee en temps reel')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La story a echoue. Veuillez reessayer.'),
+        ),
       );
     }
   }

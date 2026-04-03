@@ -1,0 +1,47 @@
+@startuml
+title Diagramme de sequence - Flux de demarrage du serveur
+
+actor "Node.js Runtime" as Runtime
+participant "server.js" as Server
+participant "app.js\ncreateApp()" as AppFactory
+participant "Express App" as ExpressApp
+participant "HTTP Server" as HttpServer
+participant "socket.js" as SocketLayer
+participant "Socket.IO" as SocketIO
+database "MongoDB Atlas" as MongoDB
+participant "userMaintenance" as Maintenance
+
+Runtime -> Server: Executer le backend
+Server -> Server: Charger .env
+Server -> AppFactory: createApp()
+AppFactory -> ExpressApp: Initialiser Express
+AppFactory -> ExpressApp: Configurer middlewares
+AppFactory -> ExpressApp: Monter les routes API
+AppFactory -> ExpressApp: Ajouter notFound + errorHandler
+AppFactory --> Server: app
+
+Server -> HttpServer: http.createServer(app)
+Server -> SocketLayer: initializeSocket(server)
+SocketLayer -> SocketIO: Initialiser Socket.IO
+SocketLayer --> Server: io
+Server -> ExpressApp: app.set('io', io)
+
+Server -> Server: connectDB()
+Server -> MongoDB: mongoose.connect(MONGODB_URI)
+
+alt Connexion MongoDB reussie
+  MongoDB --> Server: Connexion OK
+  Server -> Maintenance: backfillEmailVerificationIfDisabled()
+  Maintenance --> Server: Resultat de synchronisation
+  Server -> MongoDB: Enregistrer les listeners\nerror/disconnected/reconnected
+else Echec de connexion
+  MongoDB --> Server: Erreur de connexion
+  Server -> Server: setTimeout(connectDB, 5000)
+end
+
+Server -> Server: Enregistrer SIGTERM et SIGINT
+Server -> HttpServer: server.listen(PORT)
+HttpServer --> Server: Serveur en ecoute
+Server -> Server: Logger le port de demarrage
+
+@enduml

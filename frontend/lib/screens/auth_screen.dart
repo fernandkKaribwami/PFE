@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../utils/app_config.dart';
+import '../widgets/google_sign_in_button.dart';
 import '../widgets/loading_button.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -35,6 +36,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   List<dynamic> _faculties = [];
   bool _isLoadingFaculties = false;
+  bool _hasScheduledAuthRedirect = false;
 
   @override
   void initState() {
@@ -169,6 +171,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     final authProvider = Provider.of<AuthProvider>(context);
     final theme = Theme.of(context);
 
+    if (authProvider.isAuthenticated && !_hasScheduledAuthRedirect) {
+      _hasScheduledAuthRedirect = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/main');
+        }
+      });
+    } else if (!authProvider.isAuthenticated) {
+      _hasScheduledAuthRedirect = false;
+    }
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -239,27 +252,25 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                             height: 54,
                           ),
                           const SizedBox(height: 12),
-                          OutlinedButton.icon(
-                            onPressed:
-                                authProvider.isLoading ? null : _submitGoogleLogin,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black87,
-                              side: const BorderSide(color: Colors.grey),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            icon: const Icon(Icons.login, color: Colors.black87),
-                            label: const Text(
-                              'Se connecter avec Google',
-                              style: TextStyle(color: Colors.black87),
-                            ),
+                          buildGoogleSignInButton(
+                            onPressed: _submitGoogleLogin,
+                            isLoading: authProvider.isLoading,
                           ),
                           if (kIsWeb && AppConfig.googleClientId.isEmpty) ...[
                             const SizedBox(height: 8),
                             Text(
                               'Pour tester Google sur le Web, lance Flutter avec --dart-define=GOOGLE_CLIENT_ID=...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                          if (kIsWeb) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              'Si Google bloque encore, autorise dans Google Cloud l origine JavaScript http://localhost:3000.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,

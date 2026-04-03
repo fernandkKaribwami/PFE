@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1500" viewBox="0 0 2400 1500">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="2400" height="1500" fill="#f8fafc"/> <text x="1200.0" y="50.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Architecture temps reel - Flux d'evenements Socket.IO</text> <text x="1200.0" y="90.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">USMBA Social - Client Flutter, Node.js, rooms utilisateur et emissions backend</text> 
+    <g>
+      <rect x="120" y="240" width="520" height="430" rx="24" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+      <text x="380.0" y="274.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Client Flutter / RealtimeService</text>
+      <text x="380.0" y="411.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Connexion avec auth.userId</text>
+<text x="380.0" y="439.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Transports : websocket + polling</text>
+<text x="380.0" y="467.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">emit('join')</text>
+<text x="380.0" y="495.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">emit('typing')</text>
+<text x="380.0" y="523.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">StreamControllers pour messages, notifications, stories, profils</text>
+    </g>
+     
+    <g>
+      <rect x="840" y="180" width="700" height="560" rx="24" fill="#ede9fe" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="1190.0" y="214.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Serveur Node.js / Socket.IO</text>
+      <text x="1190.0" y="416.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">initializeSocket(server)</text>
+<text x="1190.0" y="444.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">io.on('connection')</text>
+<text x="1190.0" y="472.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">socket.join(userId)</text>
+<text x="1190.0" y="500.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Gestion des events : join, typing, sendMessage, notification</text>
+<text x="1190.0" y="528.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Emission vers les rooms utilisateur</text>
+    </g>
+     
+    <g>
+      <rect x="1730" y="250" width="520" height="320" rx="24" fill="#dcfce7" stroke="#22c55e" stroke-width="3"/>
+      <text x="1990.0" y="284.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Rooms Socket.IO</text>
+      <text x="1990.0" y="380.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Une room par utilisateur</text>
+<text x="1990.0" y="408.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">room = userId</text>
+<text x="1990.0" y="436.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">io.to(userId).emit(...)</text>
+<text x="1990.0" y="464.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Diffusion ciblee des evenements</text>
+    </g>
+     
+    <g>
+      <rect x="1710" y="670" width="540" height="270" rx="24" fill="#fff7ed" stroke="#fb923c" stroke-width="3"/>
+      <text x="1980.0" y="704.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">MongoDB Atlas / Mongoose</text>
+      <text x="1980.0" y="775.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Message.create()</text>
+<text x="1980.0" y="803.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Message.findById()</text>
+<text x="1980.0" y="831.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Notification.create()</text>
+<text x="1980.0" y="859.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Stories, profils et autres donnees</text>
+    </g>
+     
+    <g>
+      <rect x="120" y="820" width="740" height="510" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <text x="490.0" y="854.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Sources d'evenements cote backend</text>
+      <text x="490.0" y="1031.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">messages.js : newMessage + notification</text>
+<text x="490.0" y="1059.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">posts.js : notifications like/comment/post</text>
+<text x="490.0" y="1087.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">stories.js : storyCreated / storyDeleted</text>
+<text x="490.0" y="1115.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">users.js : profileUpdated + follow notification</text>
+<text x="490.0" y="1143.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">utils/notifications.js : emit('notification')</text>
+    </g>
+     
+    <g>
+      <rect x="980" y="870" width="560" height="430" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <text x="1260.0" y="904.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Evenements recus cote Flutter</text>
+      <text x="1260.0" y="999.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">userTyping</text>
+<text x="1260.0" y="1027.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">newMessage</text>
+<text x="1260.0" y="1055.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">messageSent</text>
+<text x="1260.0" y="1083.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">notification</text>
+<text x="1260.0" y="1111.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">followNotification</text>
+<text x="1260.0" y="1139.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">postLiked / postCommented</text>
+<text x="1260.0" y="1167.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">storyCreated / storyDeleted</text>
+<text x="1260.0" y="1195.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">profileUpdated</text>
+    </g>
+     
+    <g>
+      <rect x="165" y="495" width="140" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="235.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">join</text>
+    </g>
+     
+    <g>
+      <rect x="320" y="495" width="150" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="395.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">typing</text>
+    </g>
+     
+    <g>
+      <rect x="485" y="495" width="190" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="580.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">sendMessage</text>
+    </g>
+     
+    <g>
+      <rect x="1030" y="495" width="170" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="1115.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">connection</text>
+    </g>
+     
+    <g>
+      <rect x="1220" y="495" width="120" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="1280.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">join</text>
+    </g>
+     
+    <g>
+      <rect x="1355" y="495" width="150" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="1430.0" y="520.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">typing</text>
+    </g>
+     
+    <g>
+      <rect x="1755" y="500" width="170" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="1840.0" y="525.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">room userId</text>
+    </g>
+     
+    <g>
+      <rect x="1945" y="500" width="220" height="44" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>
+      <text x="2055.0" y="525.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">emission ciblee</text>
+    </g>
+     
+    <g>
+      <line x1="640" y1="420" x2="840" y2="420" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="610.0" y="382.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="740.0" y="401.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">connexion et emissions client</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="1540" y1="420" x2="1730" y2="420" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="1505.0" y="382.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="1635.0" y="401.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">join + io.to(roomId).emit</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="1540" y1="760" x2="1710" y2="790" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="1495.0" y="737.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="1625.0" y="756.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">CRUD async Mongoose</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="860" y1="1070" x2="980" y2="1070" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="790.0" y="1032.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="920.0" y="1051.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">emissions backend / notifications</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="860" y1="980" x2="980" y2="980" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="790.0" y="942.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="920.0" y="961.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">routes HTTP et utils</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="860" y1="930" x2="840" y2="610" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="720.0" y="732.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="850.0" y="751.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">messages / posts / stories / users</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="1540" y1="610" x2="1730" y2="450" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="1505.0" y="492.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="1635.0" y="511.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">emission vers room</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="840" y1="560" x2="640" y2="560" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="610.0" y="522.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="740.0" y="541.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">events pousses au client</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <line x1="840" y1="1140" x2="980" y2="1140" stroke="#475569" stroke-width="3.5" marker-end="url(#arrow)"/>
+      
+        <g>
+          <rect x="780.0" y="1102.0" width="260" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="910.0" y="1121.0" font-size="14" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">liste des events observes</text>
+        </g>
+        
+    </g>
+     
+    <g>
+      <rect x="1710" y="1040" width="540" height="240" rx="24" fill="#fefce8" stroke="#eab308" stroke-width="3"/>
+      <text x="1980.0" y="1074.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Flux temps reel principaux</text>
+      <text x="1980.0" y="1130.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">1. Client se connecte puis rejoint sa room</text>
+<text x="1980.0" y="1158.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">2. typing est relaie vers le destinataire</text>
+<text x="1980.0" y="1186.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">3. sendMessage cree un message puis emet newMessage</text>
+<text x="1980.0" y="1214.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">4. Les routes HTTP declenchent des notifications et updates temps reel</text>
+    </g>
+     <rect x="120" y="1370" width="2130" height="90" rx="18" fill="white" stroke="#cbd5e1" stroke-width="2"/> <text x="1185" y="1400.0" font-size="17" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Schema base sur socket.js, realtime_service.dart, messages.js, posts.js, stories.js, users.js et utils/notifications.js</text> <text x="1185" y="1430.0" font-size="17" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Le backend utilise a la fois des evenements Socket.IO directs et des emissions declenchees depuis les routes HTTP.</text>
+</svg>

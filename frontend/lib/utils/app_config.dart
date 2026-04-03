@@ -11,6 +11,8 @@ class AppConfig {
   static const String _googleClientIdOverride = String.fromEnvironment(
     'GOOGLE_CLIENT_ID',
   );
+  static const String _defaultGoogleClientId =
+      '933200279622-i4kt31bhh6738subsrjot4qrvpolg551.apps.googleusercontent.com';
 
   static String get apiOrigin {
     if (_apiBaseUrlOverride.isNotEmpty) {
@@ -33,7 +35,9 @@ class AppConfig {
 
   static String get apiBaseUrl => '$apiOrigin/api';
 
-  static String get googleClientId => _googleClientIdOverride;
+  static String get googleClientId => _googleClientIdOverride.isNotEmpty
+      ? _googleClientIdOverride
+      : _defaultGoogleClientId;
 
   static String get wsBaseUrl {
     if (_wsBaseUrlOverride.isNotEmpty) {

@@ -2,6 +2,7 @@
 
 set -e
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+GOOGLE_CLIENT_ID="$(grep '^GOOGLE_CLIENT_ID=' "$ROOT_DIR/backend/.env" 2>/dev/null | head -n 1 | cut -d '=' -f 2- | tr -d '\r')"
 
 echo "============================================"
 echo "USMBA Social - Lancement Web"
@@ -36,7 +37,19 @@ sleep 3
 
 echo "Demarrage Flutter Web sur http://localhost:3000"
 cd "$ROOT_DIR/frontend"
-flutter run -d chrome --web-port 3000 --dart-define=API_BASE_URL=http://localhost:5000 --dart-define=WS_BASE_URL=ws://localhost:5000
+FLUTTER_ARGS=(
+  -d chrome
+  --web-hostname localhost
+  --web-port 3000
+  --dart-define=API_BASE_URL=http://localhost:5000
+  --dart-define=WS_BASE_URL=ws://localhost:5000
+)
+
+if [ -n "$GOOGLE_CLIENT_ID" ]; then
+  FLUTTER_ARGS+=("--dart-define=GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID")
+fi
+
+flutter run "${FLUTTER_ARGS[@]}"
 
 cleanup() {
   kill $BACKEND_PID 2>/dev/null || true

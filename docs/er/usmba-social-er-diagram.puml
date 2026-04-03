@@ -1,0 +1,129 @@
+@startuml
+title Diagramme Entite-Relation - Modele de donnees USMBA Social
+
+entity User {
+  * _id : ObjectId
+  --
+  name : String
+  email : String
+  role : student|teacher|admin
+  avatar : String
+  bio : String
+  level : String
+  blocked : Boolean
+  emailVerified : Boolean
+}
+
+entity Faculty {
+  * _id : ObjectId
+  --
+  name : String
+  slug : String
+  description : String
+  location : String
+  image : String
+}
+
+entity Post {
+  * _id : ObjectId
+  --
+  content : String
+  media[] : String
+  hashtags[] : String
+  isReported : Boolean
+}
+
+entity Comment {
+  * _id : ObjectId
+  --
+  content : String
+  likes[] : User
+}
+
+entity Message {
+  * _id : ObjectId
+  --
+  content : String
+  read : Boolean
+  attachments[] : Embedded
+}
+
+entity Story {
+  * _id : ObjectId
+  --
+  mediaUrl : String
+  mediaType : String
+  caption : String
+  expiresAt : Date
+}
+
+entity Notification {
+  * _id : ObjectId
+  --
+  type : String
+  referenceId : ObjectId
+  content : String
+  read : Boolean
+}
+
+entity Report {
+  * _id : ObjectId
+  --
+  reason : String
+  description : String
+  status : String
+  action : String
+}
+
+entity Save {
+  * _id : ObjectId
+  --
+  user : User
+  post : Post
+}
+
+entity Group {
+  * _id : ObjectId
+  --
+  name : String
+  category : String
+  privacy : String
+  avatar : String
+  cover : String
+}
+
+entity Event {
+  * _id : ObjectId
+  --
+  title : String
+  category : String
+  startDate : Date
+  endDate : Date
+  attendees[] : Embedded
+}
+
+Faculty ||--o{ User : "faculty"
+User ||--o{ Post : "publie"
+User ||--o{ Comment : "ecrit"
+Post ||--o{ Comment : "contient"
+User ||--o{ Message : "envoie"
+User ||--o{ Message : "recoit"
+User ||--o{ Story : "publie"
+User ||--o{ Notification : "recoit"
+User ||--o{ Report : "signale"
+Post ||--o{ Report : "objet"
+Comment ||--o{ Report : "objet"
+User ||--o{ Save : "sauvegarde"
+Post ||--o{ Save : "est sauvegarde"
+User ||--|| Group : "administre"
+Group }o--o{ User : "membres"
+Group ||--o{ Post : "contient"
+Faculty ||--o{ Post : "alimente"
+Faculty ||--o{ Event : "organise"
+User ||--o{ Event : "cree"
+User }o--o{ Event : "participe"
+User }o--o{ User : "follow / followers"
+User }o--o{ Post : "likes / mentions"
+User }o--o{ Story : "viewers"
+
+@enduml

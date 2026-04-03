@@ -1,0 +1,25 @@
+@startuml
+title Architecture temps reel - Flux d'evenements Socket.IO
+
+actor "Utilisateur" as User
+node "Client Flutter\nRealtimeService" as Client
+node "Serveur Node.js\nSocket.IO" as SocketServer
+database "Rooms Socket.IO\n(room = userId)" as Rooms
+component "Routes HTTP\nmessages.js\nposts.js\nstories.js\nusers.js" as Routes
+component "utils/notifications.js" as Notifications
+database "MongoDB Atlas" as DB
+
+User --> Client : Actions UI
+Client --> SocketServer : connect(auth.userId)\nemit('join')\nemit('typing')\nemit('sendMessage')
+SocketServer --> Rooms : socket.join(userId)
+
+Routes --> DB : CRUD
+Routes --> Notifications : createAndEmitNotification()
+Notifications --> SocketServer : emit('notification')
+
+Routes --> SocketServer : emit('newMessage')\nemit('storyCreated')\nemit('storyDeleted')\nemit('profileUpdated')
+SocketServer --> Client : on('newMessage')\non('messageSent')\non('userTyping')\non('notification')\non('storyCreated')\non('storyDeleted')\non('profileUpdated')
+
+SocketServer --> DB : Message.create()\nMessage.findById()
+
+@enduml

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const Faculty = require('../models/Faculty');
 const User = require('../models/User');
+const { verifyGoogleIdToken } = require('../utils/googleAuth');
 const { createHttpError } = require('../utils/httpError');
 const { signToken } = require('../utils/jwt');
 const { getRequestBody } = require('../utils/request');
@@ -197,8 +198,21 @@ router.post('/login', async (req, res) => {
 
 router.post('/google', async (req, res) => {
   const body = getRequestBody(req);
-  const { name, email, avatar, role } = body;
-  const normalizedEmail = email?.trim().toLowerCase();
+  const { name, avatar, role, idToken } = body;
+
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    throw createHttpError(
+      500,
+      'GOOGLE_CLIENT_ID manquant dans la configuration serveur',
+      'GOOGLE_CONFIG_MISSING'
+    );
+  }
+
+  const googleProfile = await verifyGoogleIdToken({
+    idToken,
+    expectedAudience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const normalizedEmail = googleProfile.email;
 
   if (!normalizedEmail || !normalizedEmail.endsWith('@usmba.ac.ma')) {
     throw createHttpError(
@@ -210,13 +224,20 @@ router.post('/google', async (req, res) => {
 
   let user = await User.findOne({ email: normalizedEmail });
 
+  if (user?.blocked) {
+    throw createHttpError(403, 'Compte bloque', 'ACCOUNT_BLOCKED');
+  }
+
   if (!user) {
     user = await User.create({
-      name: name || normalizedEmail.split('@')[0],
+      name:
+        googleProfile.name ||
+        name ||
+        normalizedEmail.split('@')[0],
       email: normalizedEmail,
       password: crypto.randomBytes(20).toString('hex'),
       role: role || 'student',
-      avatar: avatar || '',
+      avatar: googleProfile.avatar || avatar || '',
       emailVerified: true,
     });
   }

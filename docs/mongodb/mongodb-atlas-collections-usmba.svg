@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1450" viewBox="0 0 2200 1450">
+  <rect x="0" y="0" width="2200" height="1450" fill="#f8fafc"/> <text x="1100.0" y="54.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Interface MongoDB Atlas - Visualisation des collections</text> <text x="1100.0" y="94.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Cluster0 - Base de donnees : usmba_db</text> 
+    <g>
+      <rect x="120" y="150" width="1960" height="150" rx="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="155" y="185" width="280" height="52" rx="18" fill="#dcfce7" stroke="#86efac" stroke-width="2"/>
+    </g>
+     <text x="295" y="214.0" font-size="24" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#166534">MongoDB Atlas</text> <text x="1110" y="212.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Projet : USMBA Social</text> <text x="1715" y="212.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Total collections : 11</text> <text x="1110" y="254.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#64748b">Visualisation reelle des collections presentes dans la base usmba_db</text> 
+    <g>
+      <rect x="120" y="350" width="1960" height="930" rx="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="160" y="385" width="420" height="56" rx="18" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+    </g>
+     <text x="370" y="416.0" font-size="26" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Collections / Tables</text> 
+    <g>
+      <rect x="170" y="480" width="320" height="180" rx="22" fill="#e0f2fe" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="188" y="498" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="204" y="522.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">comments</text>
+      <circle cx="436" cy="520" r="22" fill="#0f172a"/>
+      <text x="436" y="522.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">4</text>
+      <text x="330.0" y="580.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="330.0" y="626.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">4 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="518" y="480" width="320" height="180" rx="22" fill="#fef3c7" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="536" y="498" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="552" y="522.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">events</text>
+      <circle cx="784" cy="520" r="22" fill="#0f172a"/>
+      <text x="784" y="522.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">0</text>
+      <text x="678.0" y="580.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="678.0" y="626.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">0 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="866" y="480" width="320" height="180" rx="22" fill="#dcfce7" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="884" y="498" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="900" y="522.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">faculties</text>
+      <circle cx="1132" cy="520" r="22" fill="#0f172a"/>
+      <text x="1132" y="522.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">11</text>
+      <text x="1026.0" y="580.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1026.0" y="626.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">11 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="1214" y="480" width="320" height="180" rx="22" fill="#fce7f3" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="1232" y="498" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="1248" y="522.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">groups</text>
+      <circle cx="1480" cy="520" r="22" fill="#0f172a"/>
+      <text x="1480" y="522.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">0</text>
+      <text x="1374.0" y="580.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1374.0" y="626.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">0 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="1562" y="480" width="320" height="180" rx="22" fill="#ede9fe" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="1580" y="498" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="1596" y="522.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">messages</text>
+      <circle cx="1828" cy="520" r="22" fill="#0f172a"/>
+      <text x="1828" y="522.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">6</text>
+      <text x="1722.0" y="580.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1722.0" y="626.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">6 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="170" y="688" width="320" height="180" rx="22" fill="#dbeafe" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="188" y="706" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="204" y="730.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">notifications</text>
+      <circle cx="436" cy="728" r="22" fill="#0f172a"/>
+      <text x="436" y="730.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">13</text>
+      <text x="330.0" y="788.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="330.0" y="834.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">13 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="518" y="688" width="320" height="180" rx="22" fill="#fef9c3" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="536" y="706" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="552" y="730.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">posts</text>
+      <circle cx="784" cy="728" r="22" fill="#0f172a"/>
+      <text x="784" y="730.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">3</text>
+      <text x="678.0" y="788.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="678.0" y="834.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">3 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="866" y="688" width="320" height="180" rx="22" fill="#fee2e2" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="884" y="706" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="900" y="730.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">reports</text>
+      <circle cx="1132" cy="728" r="22" fill="#0f172a"/>
+      <text x="1132" y="730.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">0</text>
+      <text x="1026.0" y="788.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1026.0" y="834.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">0 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="1214" y="688" width="320" height="180" rx="22" fill="#f3f4f6" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="1232" y="706" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="1248" y="730.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">saves</text>
+      <circle cx="1480" cy="728" r="22" fill="#0f172a"/>
+      <text x="1480" y="730.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">0</text>
+      <text x="1374.0" y="788.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1374.0" y="834.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">0 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="1562" y="688" width="320" height="180" rx="22" fill="#fae8ff" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="1580" y="706" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="1596" y="730.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">stories</text>
+      <circle cx="1828" cy="728" r="22" fill="#0f172a"/>
+      <text x="1828" y="730.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">0</text>
+      <text x="1722.0" y="788.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="1722.0" y="834.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">0 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="170" y="896" width="320" height="180" rx="22" fill="#cffafe" stroke="#cbd5e1" stroke-width="2.5"/>
+      <rect x="188" y="914" width="284" height="44" rx="14" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+      <text x="204" y="938.0" font-size="22" font-weight="800" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">users</text>
+      <circle cx="436" cy="936" r="22" fill="#0f172a"/>
+      <text x="436" y="938.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">8</text>
+      <text x="330.0" y="996.0" font-size="18" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Collection MongoDB</text>
+      <text x="330.0" y="1042.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">8 document(s)</text>
+    </g>
+     
+    <g>
+      <rect x="160" y="1125" width="1880" height="115" rx="22" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+    </g>
+     <text x="1100" y="1158.0" font-size="19" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Collections les plus alimentees : notifications (13), faculties (11), users (8), messages (6), comments (4), posts (3)</text> <text x="1100" y="1200.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#64748b">Les collections events, groups, reports, saves et stories sont presentes mais actuellement vides.</text>
+</svg>

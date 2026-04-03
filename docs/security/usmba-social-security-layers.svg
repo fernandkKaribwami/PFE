@@ -1,0 +1,81 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1480" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#EEF4F1"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="2000" height="1200" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feOffset dy="12"/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.106 0 0 0 0 0.165 0 0 0 0 0.239 0 0 0 0.08 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1470" cy="110" r="120" fill="#DDEBFF"/>
+  <circle cx="144" cy="792" r="150" fill="#E3F3E7"/>
+
+  <text x="110" y="90" fill="#102033" font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="700">
+    Couches de securite - Vue d'ensemble
+  </text>
+  <text x="110" y="128" fill="#4C5B6B" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    USMBA Social - defense en couches du client Flutter jusqu'a la base MongoDB
+  </text>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="165" width="1380" height="118" rx="28" fill="#FFFFFF"/>
+    <rect x="130" y="185" width="170" height="78" rx="22" fill="#EAF3FF"/>
+    <text x="162" y="218" fill="#1657C0" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700">1. Client Flutter</text>
+    <text x="162" y="245" fill="#2E5F9E" font-family="Segoe UI, Arial, sans-serif" font-size="14">Presentation et saisie</text>
+    <text x="340" y="214" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Validation locale</text>
+    <text x="340" y="240" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Formulaires, controle des champs et flux d'authentification</text>
+    <text x="805" y="214" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Session utilisateur</text>
+    <text x="805" y="240" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Token conserve cote client et Google Sign-In pour l'acces universitaire</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="308" width="1380" height="118" rx="28" fill="#FFFFFF"/>
+    <rect x="130" y="328" width="170" height="78" rx="22" fill="#E8F9F6"/>
+    <text x="152" y="361" fill="#0E8A76" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700">2. Reseau</text>
+    <text x="152" y="388" fill="#2B7D71" font-family="Segoe UI, Arial, sans-serif" font-size="14">Transport et exposition</text>
+    <text x="340" y="357" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">CORS filtre les origines</text>
+    <text x="340" y="383" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Seules les origines locales configurees et autorisees accedent a l'API</text>
+    <text x="805" y="357" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Socket.IO protege</text>
+    <text x="805" y="383" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Connexion temps reel soumise a la meme politique d'origine</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="451" width="1380" height="118" rx="28" fill="#FFFFFF"/>
+    <rect x="130" y="471" width="170" height="78" rx="22" fill="#FFF1E8"/>
+    <text x="146" y="504" fill="#C86016" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700">3. API Express</text>
+    <text x="146" y="531" fill="#9C5D2C" font-family="Segoe UI, Arial, sans-serif" font-size="14">Protection des routes</text>
+    <text x="340" y="500" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">JWT et middleware auth</text>
+    <text x="340" y="526" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Verification du Bearer token avant acces aux routes privees</text>
+    <text x="805" y="500" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Controle d'acces</text>
+    <text x="805" y="526" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Roles admin, comptes bloques et verification email avant connexion</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="594" width="1380" height="118" rx="28" fill="#FFFFFF"/>
+    <rect x="130" y="614" width="170" height="78" rx="22" fill="#EBF8E8"/>
+    <text x="153" y="647" fill="#2B8B3C" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700">4. Donnees</text>
+    <text x="153" y="674" fill="#4D8056" font-family="Segoe UI, Arial, sans-serif" font-size="14">Identites et fichiers</text>
+    <text x="340" y="643" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Mots de passe haches</text>
+    <text x="340" y="669" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">bcrypt protege les mots de passe avant stockage dans MongoDB</text>
+    <text x="805" y="643" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Secrets et fichiers</text>
+    <text x="805" y="669" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">JWT secret, URI MongoDB, reset token et limites de taille sur les uploads</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="737" width="1380" height="118" rx="28" fill="#FFFFFF"/>
+    <rect x="130" y="757" width="170" height="78" rx="22" fill="#FFE9ED"/>
+    <text x="145" y="790" fill="#C1365C" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700">5. Durcissement</text>
+    <text x="145" y="817" fill="#9A4A62" font-family="Segoe UI, Arial, sans-serif" font-size="14">Disponibilite et resilience</text>
+    <text x="340" y="786" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Helmet + entetes</text>
+    <text x="340" y="812" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Protection des en-tetes HTTP et politique cross-origin sur les ressources</text>
+    <text x="805" y="786" fill="#203246" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600">Rate limiting + erreurs centralisees</text>
+    <text x="805" y="812" fill="#5A6B7D" font-family="Segoe UI, Arial, sans-serif" font-size="15">Limites sur /api et /auth, notFound et errorHandler pour reponses coherentes</text>
+  </g>
+</svg>

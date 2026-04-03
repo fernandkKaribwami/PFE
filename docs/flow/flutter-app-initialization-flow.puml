@@ -1,0 +1,33 @@
+@startuml
+title Diagramme de flux - Initialisation de l'application Flutter
+
+start
+:main();
+:WidgetsFlutterBinding.ensureInitialized();
+:Configurer les orientations;
+:Configurer System UI Overlay Style;
+:runApp(MyApp);
+:Initialiser MultiProvider;
+:Construire MaterialApp;
+:Afficher AppInitializer;
+:AppInitializer.initState();
+:Lancer _initializeApp();
+:Afficher SplashScreen;
+:Lire SharedPreferences;
+
+if (token et userId existent ?) then (Oui)
+  :Recuperer AuthProvider;
+  :Valider le token via /users/profile;
+  if (token valide ?) then (Oui)
+    :Naviguer vers /main;
+  else (Non)
+    :Effacer SharedPreferences;
+    :Naviguer vers /auth;
+  endif
+else (Non)
+  :Naviguer vers /auth;
+endif
+
+stop
+
+@enduml

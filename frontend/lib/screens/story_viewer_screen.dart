@@ -8,9 +8,22 @@ class StoryViewerScreen extends StatelessWidget {
 
   const StoryViewerScreen({super.key, required this.story});
 
+  bool _looksLikeImageUrl(String value) {
+    final normalized = value.toLowerCase();
+    return normalized.endsWith('.jpg') ||
+        normalized.endsWith('.jpeg') ||
+        normalized.endsWith('.png') ||
+        normalized.endsWith('.gif') ||
+        normalized.endsWith('.webp');
+  }
+
   bool get _isImage {
     final mediaType = story['mediaType']?.toString().toLowerCase() ?? '';
-    return mediaType.startsWith('image/');
+    final mediaUrl = story['mediaUrl']?.toString().toLowerCase() ?? '';
+
+    return mediaType.startsWith('image/') ||
+        mediaType == 'image' ||
+        _looksLikeImageUrl(mediaUrl);
   }
 
   @override

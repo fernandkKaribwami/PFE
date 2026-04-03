@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="1700" viewBox="0 0 2500 1700">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="2500" height="1700" fill="#f8fafc"/> <text x="1250.0" y="46.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Diagramme de sequence - Flux de demarrage du serveur</text> <text x="1250.0" y="84.0" font-size="19" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Backend USMBA Social - server.js, app.js, socket.js, MongoDB Atlas</text> 
+    <g>
+      <rect x="55.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="150" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Node.js Runtime</text>
+    </g>
+     <line x1="150" y1="184" x2="150" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="325.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="420" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">server.js</text>
+    </g>
+     <line x1="420" y1="184" x2="420" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="605.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="700" y="147.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">app.js</text>
+<text x="700" y="171.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">createApp()</text>
+    </g>
+     <line x1="700" y1="184" x2="700" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="885.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="980" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Express App</text>
+    </g>
+     <line x1="980" y1="184" x2="980" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="1165.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="1260" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">HTTP Server</text>
+    </g>
+     <line x1="1260" y1="184" x2="1260" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="1445.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="1540" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">socket.js</text>
+    </g>
+     <line x1="1540" y1="184" x2="1540" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="1725.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="1820" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Socket.IO</text>
+    </g>
+     <line x1="1820" y1="184" x2="1820" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="2005.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="2100" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">MongoDB Atlas</text>
+    </g>
+     <line x1="2100" y1="184" x2="2100" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <rect x="2275.0" y="125" width="190" height="58" rx="16" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+      <text x="2370" y="159.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">userMaintenance</text>
+    </g>
+     <line x1="2370" y1="184" x2="2370" y2="1450" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="10 8"/> 
+    <g>
+      <line x1="150" y1="235" x2="420" y2="235" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="285.0" y="223.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Executer le backend</text>
+    </g>
+     
+    <g>
+      <path d="M 420 293 h 72 v 32 h -72" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="540" y="305.0" font-size="15" font-weight="700" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Charger .env</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="351" x2="700" y2="351" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="560.0" y="339.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">createApp()</text>
+    </g>
+     
+    <g>
+      <line x1="700" y1="409" x2="980" y2="409" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="397.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Initialiser Express</text>
+    </g>
+     
+    <g>
+      <line x1="700" y1="467" x2="980" y2="467" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="455.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Configurer middlewares</text>
+    </g>
+     
+    <g>
+      <line x1="700" y1="525" x2="980" y2="525" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="513.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Monter les routes API</text>
+    </g>
+     
+    <g>
+      <line x1="700" y1="583" x2="980" y2="583" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="571.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Ajouter notFound + errorHandler</text>
+    </g>
+     
+    <g>
+      <line x1="980" y1="641" x2="420" y2="641" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="10 8"/>
+      <text x="700.0" y="629.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Retourner app</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="699" x2="1260" y2="699" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="687.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">http.createServer(app)</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="757" x2="1540" y2="757" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="980.0" y="745.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">initializeSocket(server)</text>
+    </g>
+     
+    <g>
+      <line x1="1540" y1="815" x2="1820" y2="815" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="1680.0" y="803.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Initialiser Socket.IO</text>
+    </g>
+     
+    <g>
+      <line x1="1820" y1="873" x2="420" y2="873" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="10 8"/>
+      <text x="1120.0" y="861.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Retourner io</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="931" x2="980" y2="931" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="700.0" y="919.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">app.set('io', io)</text>
+    </g>
+     
+    <g>
+      <path d="M 420 989 h 72 v 32 h -72" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="540" y="1001.0" font-size="15" font-weight="700" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#475569">connectDB()</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="1047" x2="2100" y2="1047" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="1260.0" y="1035.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">mongoose.connect(MONGODB_URI)</text>
+    </g>
+     <rect x="320" y="1075" width="1900" height="260" rx="18" fill="none" stroke="#86efac" stroke-width="2.5"/> <text x="455" y="1093.0" font-size="16" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#166534">[Succes]</text> 
+    <g>
+      <line x1="2100" y1="1131" x2="420" y2="1131" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="10 8"/>
+      <text x="1260.0" y="1119.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Connexion OK</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="1189" x2="2370" y2="1189" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="1395.0" y="1177.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">backfillEmailVerificationIfDisabled()</text>
+    </g>
+     
+    <g>
+      <line x1="2370" y1="1247" x2="420" y2="1247" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="10 8"/>
+      <text x="1395.0" y="1235.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Resultat de synchronisation</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="1305" x2="2100" y2="1305" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="1260.0" y="1293.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Enregistrer listeners error/disconnected/reconnected</text>
+    </g>
+     
+    <g>
+      <rect x="1730" y="1355" width="420" height="110" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+      <text x="1940.0" y="1379.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#9a3412">Cas d'echec de connexion</text>
+      <text x="1940.0" y="1400.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Si MongoDB n'est pas joignable,</text>
+<text x="1940.0" y="1422.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">server.js relance connectDB()</text>
+<text x="1940.0" y="1444.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">apres 5 secondes avec setTimeout.</text>
+    </g>
+     
+    <g>
+      <path d="M 420 1413 h 72 v 32 h -72" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="540" y="1425.0" font-size="15" font-weight="700" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Enregistrer SIGTERM et SIGINT</text>
+    </g>
+     
+    <g>
+      <line x1="420" y1="1471" x2="1260" y2="1471" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="840.0" y="1459.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">server.listen(PORT)</text>
+    </g>
+     
+    <g>
+      <line x1="1260" y1="1529" x2="420" y2="1529" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="10 8"/>
+      <text x="840.0" y="1517.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Serveur en ecoute</text>
+    </g>
+     
+    <g>
+      <path d="M 420 1587 h 72 v 32 h -72" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="540" y="1599.0" font-size="15" font-weight="700" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Logger le port de demarrage</text>
+    </g>
+     
+    <g>
+      <rect x="210" y="1495" width="2080" height="120" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+      <text x="1250.0" y="1519.0" font-size="18" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#9a3412">Resume</text>
+      <text x="1250.0" y="1556.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Le serveur demarre en initialisant Express, le serveur HTTP, Socket.IO, puis la connexion MongoDB.</text>
+<text x="1250.0" y="1578.0" font-size="16" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#7c2d12">Une fois ces etapes preparees, le backend USMBA Social ecoute sur le port configure.</text>
+    </g>
+    
+</svg>

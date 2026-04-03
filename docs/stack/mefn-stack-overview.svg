@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1300" viewBox="0 0 2200 1300">
+  <defs>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 14 7 L 0 14 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="2200" height="1300" fill="#f8fafc"/> <text x="1100.0" y="52.0" font-size="34" font-weight="900" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Vue d'ensemble de la stack technologique MEFN</text> <text x="1100.0" y="92.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">USMBA Social - MongoDB, Express.js, Flutter, Node.js</text> 
+    <g>
+      <rect x="110" y="140" width="430" height="185" rx="22" fill="white" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="110" y="140" width="430" height="16" rx="22" fill="#22c55e" stroke="none"/>
+      <circle cx="170" cy="210" r="34" fill="#22c55e"/>
+      <text x="170" y="213.0" font-size="34" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">M</text>
+      <text x="335.0" y="198.0" font-size="26" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">MongoDB</text>
+      <text x="325.0" y="250.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Base de donnees documentaire</text>
+<text x="325.0" y="274.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">MongoDB Atlas + Mongoose</text>
+    </g>
+     
+    <g>
+      <rect x="600" y="140" width="430" height="185" rx="22" fill="white" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="600" y="140" width="430" height="16" rx="22" fill="#f59e0b" stroke="none"/>
+      <circle cx="660" cy="210" r="34" fill="#f59e0b"/>
+      <text x="660" y="213.0" font-size="34" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">E</text>
+      <text x="825.0" y="198.0" font-size="26" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Express.js</text>
+      <text x="815.0" y="250.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">API REST, routes, middlewares</text>
+<text x="815.0" y="274.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">CORS, Helmet, rate limit</text>
+    </g>
+     
+    <g>
+      <rect x="1090" y="140" width="430" height="185" rx="22" fill="white" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1090" y="140" width="430" height="16" rx="22" fill="#3b82f6" stroke="none"/>
+      <circle cx="1150" cy="210" r="34" fill="#3b82f6"/>
+      <text x="1150" y="213.0" font-size="34" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">F</text>
+      <text x="1315.0" y="198.0" font-size="26" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Flutter</text>
+      <text x="1305.0" y="250.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Application web et mobile</text>
+<text x="1305.0" y="274.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Dart + Provider + UI reactive</text>
+    </g>
+     
+    <g>
+      <rect x="1580" y="140" width="430" height="185" rx="22" fill="white" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1580" y="140" width="430" height="16" rx="22" fill="#6366f1" stroke="none"/>
+      <circle cx="1640" cy="210" r="34" fill="#6366f1"/>
+      <text x="1640" y="213.0" font-size="34" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="white">N</text>
+      <text x="1805.0" y="198.0" font-size="26" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Node.js</text>
+      <text x="1795.0" y="250.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Runtime backend</text>
+<text x="1795.0" y="274.0" font-size="18" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Socket.IO, JWT, Multer</text>
+    </g>
+     
+    <g>
+      <rect x="120" y="430" width="280" height="220" rx="24" fill="#ffffff" stroke="#94a3b8" stroke-width="3"/>
+      <text x="260.0" y="468.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Utilisateurs</text>
+      <text x="260.0" y="524.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Etudiants</text>
+<text x="260.0" y="552.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Enseignants</text>
+<text x="260.0" y="580.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Administrateurs</text>
+    </g>
+     
+    <g>
+      <rect x="470" y="390" width="500" height="310" rx="24" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+      <text x="720.0" y="428.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Frontend Flutter / Dart</text>
+      <text x="720.0" y="501.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Web, Android, iOS</text>
+<text x="720.0" y="529.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Provider pour l'etat</text>
+<text x="720.0" y="557.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">SharedPreferences pour le token</text>
+<text x="720.0" y="585.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">socket_io_client pour le temps reel</text>
+<text x="720.0" y="613.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">google_sign_in pour OAuth</text>
+    </g>
+     
+    <g>
+      <rect x="1040" y="390" width="560" height="310" rx="24" fill="#ede9fe" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="1320.0" y="428.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Backend Node.js + Express</text>
+      <text x="1320.0" y="501.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">API REST centralisee</text>
+<text x="1320.0" y="529.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">JWT pour l'authentification</text>
+<text x="1320.0" y="557.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Multer pour les uploads</text>
+<text x="1320.0" y="585.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Socket.IO pour messages et notifications</text>
+<text x="1320.0" y="613.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Helmet, CORS, compression, rate limiting</text>
+    </g>
+     
+    <g>
+      <rect x="1670" y="430" width="400" height="220" rx="24" fill="#dcfce7" stroke="#4ade80" stroke-width="3"/>
+      <text x="1870.0" y="468.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">MongoDB Atlas</text>
+      <text x="1870.0" y="510.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Collections :</text>
+<text x="1870.0" y="538.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">users, posts, messages,</text>
+<text x="1870.0" y="566.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">stories, notifications,</text>
+<text x="1870.0" y="594.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">reports, groupes, evenements</text>
+    </g>
+     
+    <g>
+      <line x1="400" y1="540" x2="470" y2="540" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+      
+      <g>
+        <rect x="340.0" y="502.0" width="190" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="435.0" y="521.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Interaction</text>
+      </g>
+      
+    </g>
+     
+    <g>
+      <line x1="970" y1="540" x2="1040" y2="540" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+      
+      <g>
+        <rect x="910.0" y="502.0" width="190" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="1005.0" y="521.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">HTTP REST + WebSocket</text>
+      </g>
+      
+    </g>
+     
+    <g>
+      <line x1="1600" y1="540" x2="1670" y2="540" stroke="#475569" stroke-width="4" marker-end="url(#arrow)"/>
+      
+      <g>
+        <rect x="1540.0" y="502.0" width="190" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="1635.0" y="521.0" font-size="15" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#475569">Mongoose ODM</text>
+      </g>
+      
+    </g>
+     <text x="1100.0" y="780.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Technologies complementaires utilisees dans le projet</text> 
+    <g>
+      <rect x="170" y="830" width="180" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="260.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Socket.IO</text>
+    </g>
+     
+    <g>
+      <rect x="380" y="830" width="170" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="465.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">JWT</text>
+    </g>
+     
+    <g>
+      <rect x="580" y="830" width="190" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="675.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Multer</text>
+    </g>
+     
+    <g>
+      <rect x="800" y="830" width="240" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="920.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">SharedPreferences</text>
+    </g>
+     
+    <g>
+      <rect x="1070" y="830" width="220" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1180.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Google Sign-In</text>
+    </g>
+     
+    <g>
+      <rect x="1320" y="830" width="260" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1450.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Cached Network Image</text>
+    </g>
+     
+    <g>
+      <rect x="1610" y="830" width="160" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1690.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Helmet</text>
+    </g>
+     
+    <g>
+      <rect x="1800" y="830" width="140" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1870.0" y="858.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">CORS</text>
+    </g>
+     
+    <g>
+      <rect x="420" y="900" width="210" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="525.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Compression</text>
+    </g>
+     
+    <g>
+      <rect x="660" y="900" width="200" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="760.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Rate Limit</text>
+    </g>
+     
+    <g>
+      <rect x="890" y="900" width="170" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="975.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Sharp</text>
+    </g>
+     
+    <g>
+      <rect x="1090" y="900" width="170" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1175.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Supertest</text>
+    </g>
+     
+    <g>
+      <rect x="1290" y="900" width="210" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1395.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Node Test</text>
+    </g>
+     
+    <g>
+      <rect x="1530" y="900" width="180" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1620.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">HTTP</text>
+    </g>
+     
+    <g>
+      <rect x="1740" y="900" width="170" height="48" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+      <text x="1825.0" y="928.0" font-size="18" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Provider</text>
+    </g>
+     
+    <g>
+      <rect x="250" y="1000" width="1700" height="180" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+      <text x="1100.0" y="1038.0" font-size="28" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Role de chaque composant dans l'architecture</text>
+      <text x="1100.0" y="1060.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Flutter gere l'interface utilisateur et l'experience multi-plateforme.</text>
+<text x="1100.0" y="1088.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Express structure les routes et la logique API du backend.</text>
+<text x="1100.0" y="1116.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">Node.js execute le serveur et les communications temps reel.</text>
+<text x="1100.0" y="1144.0" font-size="20" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">MongoDB stocke les donnees sociales de l'application USMBA Social.</text>
+    </g>
+    
+</svg>

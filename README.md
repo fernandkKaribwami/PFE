@@ -59,7 +59,7 @@ Le backend demarre sur `http://localhost:5000`.
 ```bash
 cd frontend
 flutter pub get
-flutter run -d chrome --web-port 3000 --dart-define=API_BASE_URL=http://localhost:5000 --dart-define=WS_BASE_URL=ws://localhost:5000
+flutter run -d chrome --web-hostname localhost --web-port 3000 --dart-define=API_BASE_URL=http://localhost:5000 --dart-define=WS_BASE_URL=ws://localhost:5000 --dart-define=GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID_GOOGLE
 ```
 
 Le frontend demarre sur `http://localhost:3000`.
@@ -69,13 +69,13 @@ Le frontend demarre sur `http://localhost:3000`.
 ### Android emulator
 
 ```bash
-flutter run -d emulator-5554 --dart-define=API_BASE_URL=http://10.0.2.2:5000 --dart-define=WS_BASE_URL=ws://10.0.2.2:5000
+flutter run -d emulator-5554 --dart-define=API_BASE_URL=http://10.0.2.2:5000 --dart-define=WS_BASE_URL=ws://10.0.2.2:5000 --dart-define=GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID_GOOGLE
 ```
 
 ### iOS simulator
 
 ```bash
-flutter run -d ios --dart-define=API_BASE_URL=http://localhost:5000 --dart-define=WS_BASE_URL=ws://localhost:5000
+flutter run -d ios --dart-define=API_BASE_URL=http://localhost:5000 --dart-define=WS_BASE_URL=ws://localhost:5000 --dart-define=GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID_GOOGLE
 ```
 
 ### Telephone physique
@@ -83,8 +83,15 @@ flutter run -d ios --dart-define=API_BASE_URL=http://localhost:5000 --dart-defin
 Remplace `localhost` par l'adresse IP locale de ton PC:
 
 ```bash
-flutter run --dart-define=API_BASE_URL=http://192.168.1.10:5000 --dart-define=WS_BASE_URL=ws://192.168.1.10:5000
+flutter run --dart-define=API_BASE_URL=http://192.168.1.10:5000 --dart-define=WS_BASE_URL=ws://192.168.1.10:5000 --dart-define=GOOGLE_CLIENT_ID=VOTRE_CLIENT_ID_GOOGLE
 ```
+
+Les scripts `start.bat` et `start.sh` lisent automatiquement `GOOGLE_CLIENT_ID` depuis `backend/.env` et le transmettent au frontend.
+
+Pour Google Sign-In Web, configure aussi dans Google Cloud Console :
+
+- `Authorized JavaScript origins` : `http://localhost:3000`
+- utilise un vrai client OAuth de type `Web application`
 
 ## Dashboard administrateur
 

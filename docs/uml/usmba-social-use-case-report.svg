@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1750" viewBox="0 0 2600 1750">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#64748b"/>
+    </marker>
+    <marker id="triangle-open" markerWidth="16" markerHeight="16" refX="8" refY="8" orient="auto" markerUnits="strokeWidth">
+      <path d="M 16 8 L 0 0 L 0 16 z" fill="white" stroke="#475569" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="2600" height="1750" fill="white"/> <text x="1300.0" y="46.0" font-size="34" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Diagramme de cas d'utilisation - USMBA Social</text> 
+    <g>
+      <rect x="320" y="120" width="1960" height="1500" rx="26" fill="none" stroke="#0f172a" stroke-width="4"/>
+      <rect x="352" y="136" width="340" height="44" rx="14" fill="white"/>
+    </g>
+     <text x="522" y="158.0" font-size="24" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Systeme USMBA Social</text> 
+    <g>
+      <rect x="360" y="190" width="360" height="520" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="190" width="360" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="218" width="360" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="540.0" y="220.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Authentification</text>
+    </g>
+     
+    <g>
+      <rect x="780" y="190" width="430" height="520" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="780" y="190" width="430" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="780" y="218" width="430" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="995.0" y="220.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Profil et reseau social</text>
+    </g>
+     
+    <g>
+      <rect x="1260" y="180" width="920" height="600" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1260" y="180" width="920" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1260" y="208" width="920" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="1720.0" y="210.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Publications et stories</text>
+    </g>
+     
+    <g>
+      <rect x="360" y="780" width="750" height="430" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="780" width="750" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="808" width="750" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="735.0" y="810.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Messagerie et notifications</text>
+    </g>
+     
+    <g>
+      <rect x="1160" y="830" width="1020" height="470" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1160" y="830" width="1020" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="1160" y="858" width="1020" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="1670.0" y="860.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Facultes, groupes et evenements</text>
+    </g>
+     
+    <g>
+      <rect x="360" y="1320" width="1820" height="250" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="1320" width="1820" height="56" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+      <rect x="360" y="1348" width="1820" height="28" fill="#e2e8f0" stroke="none"/>
+      <text x="1270.0" y="1350.0" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Administration</text>
+    </g>
+     
+    <g>
+      <circle cx="130" cy="270" r="24" fill="white" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="294" x2="130" y2="370" stroke="#0f172a" stroke-width="4"/>
+      <line x1="88" y1="325" x2="172" y2="325" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="370" x2="92" y2="425" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="370" x2="168" y2="425" stroke="#0f172a" stroke-width="4"/>
+      <text x="130" y="475.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Visiteur</text>
+    </g>
+     
+    <g>
+      <circle cx="130" cy="620" r="24" fill="white" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="644" x2="130" y2="720" stroke="#0f172a" stroke-width="4"/>
+      <line x1="88" y1="675" x2="172" y2="675" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="720" x2="92" y2="775" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="720" x2="168" y2="775" stroke="#0f172a" stroke-width="4"/>
+      <text x="130" y="810.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Utilisateur</text>
+<text x="130" y="840.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">authentifie</text>
+    </g>
+     
+    <g>
+      <circle cx="130" cy="1150" r="24" fill="white" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="1174" x2="130" y2="1250" stroke="#0f172a" stroke-width="4"/>
+      <line x1="88" y1="1205" x2="172" y2="1205" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="1250" x2="92" y2="1305" stroke="#0f172a" stroke-width="4"/>
+      <line x1="130" y1="1250" x2="168" y2="1305" stroke="#0f172a" stroke-width="4"/>
+      <text x="130" y="1355.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Administrateur</text>
+    </g>
+     
+    <g>
+      <circle cx="2450" cy="360" r="24" fill="white" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="384" x2="2450" y2="460" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2408" y1="415" x2="2492" y2="415" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="460" x2="2412" y2="515" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="460" x2="2488" y2="515" stroke="#0f172a" stroke-width="4"/>
+      <text x="2450" y="550.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Service</text>
+<text x="2450" y="580.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Google</text>
+    </g>
+     
+    <g>
+      <circle cx="2450" cy="760" r="24" fill="white" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="784" x2="2450" y2="860" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2408" y1="815" x2="2492" y2="815" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="860" x2="2412" y2="915" stroke="#0f172a" stroke-width="4"/>
+      <line x1="2450" y1="860" x2="2488" y2="915" stroke="#0f172a" stroke-width="4"/>
+      <text x="2450" y="950.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Service</text>
+<text x="2450" y="980.0" font-size="24" font-weight="600" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Email</text>
+    </g>
+     <line x1="130" y1="1126" x2="130" y2="800" stroke="#475569" stroke-width="3" marker-end="url(#triangle-open)"/> 
+    <g>
+      <ellipse cx="540" cy="285" rx="125" ry="46" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="540" y="285.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">S'inscrire</text>
+    </g>
+     
+    <g>
+      <ellipse cx="540" cy="395" rx="130" ry="46" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="540" y="395.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Se connecter</text>
+    </g>
+     
+    <g>
+      <ellipse cx="450" cy="520" rx="145" ry="42" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="450" y="506.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Connexion</text>
+<text x="450" y="534.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Google</text>
+    </g>
+     
+    <g>
+      <ellipse cx="630" cy="520" rx="145" ry="42" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="630" y="506.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Verifier</text>
+<text x="630" y="534.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">l'email</text>
+    </g>
+     
+    <g>
+      <ellipse cx="540" cy="625" rx="195" ry="46" fill="#eff6ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="540" y="611.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Reinitialiser le</text>
+<text x="540" y="639.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">mot de passe</text>
+    </g>
+     
+    <g>
+      <ellipse cx="995" cy="285" rx="150" ry="46" fill="#fefce8" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="995" y="285.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Gerer le profil</text>
+    </g>
+     
+    <g>
+      <ellipse cx="995" cy="395" rx="162" ry="46" fill="#fefce8" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="995" y="381.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="995" y="409.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">profils</text>
+    </g>
+     
+    <g>
+      <ellipse cx="995" cy="515" rx="176" ry="46" fill="#fefce8" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="995" y="501.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Suivre / se</text>
+<text x="995" y="529.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">desabonner</text>
+    </g>
+     
+    <g>
+      <ellipse cx="995" cy="625" rx="180" ry="46" fill="#fefce8" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="995" y="611.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Rechercher sur</text>
+<text x="995" y="639.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">la plateforme</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1505" cy="260" rx="150" ry="42" fill="#f0fdf4" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1505" y="260.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter le feed</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1505" cy="395" rx="145" ry="42" fill="#f0fdf4" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1505" y="395.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Publier un post</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1950" cy="395" rx="125" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1950" y="395.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Ajouter un media</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1505" cy="535" rx="180" ry="46" fill="#f0fdf4" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1505" y="521.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Interagir avec</text>
+<text x="1505" y="549.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">un post</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1835" cy="470" rx="108" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1835" y="470.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Aimer</text>
+    </g>
+     
+    <g>
+      <ellipse cx="2025" cy="470" rx="120" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="2025" y="470.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Commenter</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1835" cy="560" rx="132" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1835" y="560.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Sauvegarder</text>
+    </g>
+     
+    <g>
+      <ellipse cx="2025" cy="560" rx="108" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="2025" y="560.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Signaler</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1930" cy="650" rx="165" ry="36" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1930" y="636.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Partager en</text>
+<text x="1930" y="664.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">conversation</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1505" cy="665" rx="155" ry="42" fill="#f0fdf4" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1505" y="665.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Gerer les stories</text>
+    </g>
+     
+    <g>
+      <ellipse cx="610" cy="900" rx="170" ry="42" fill="#fef2f2" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="610" y="886.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Utiliser la</text>
+<text x="610" y="914.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">messagerie</text>
+    </g>
+     
+    <g>
+      <ellipse cx="860" cy="845" rx="145" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="860" y="831.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Voir les</text>
+<text x="860" y="859.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">conversations</text>
+    </g>
+     
+    <g>
+      <ellipse cx="860" cy="945" rx="145" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="860" y="931.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Envoyer un</text>
+<text x="860" y="959.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">message</text>
+    </g>
+     
+    <g>
+      <ellipse cx="860" cy="1045" rx="135" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="860" y="1031.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Joindre un</text>
+<text x="860" y="1059.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">fichier</text>
+    </g>
+     
+    <g>
+      <ellipse cx="610" cy="1070" rx="185" ry="42" fill="#fef2f2" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="610" y="1056.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="610" y="1084.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">notifications</text>
+    </g>
+     
+    <g>
+      <ellipse cx="610" cy="1160" rx="165" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="610" y="1146.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Marquer comme</text>
+<text x="610" y="1174.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">lues</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1340" cy="960" rx="160" ry="38" fill="#faf5ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1340" y="946.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="1340" y="974.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">facultes</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1570" cy="965" rx="155" ry="40" fill="#faf5ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1570" y="951.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Utiliser les</text>
+<text x="1570" y="979.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">groupes</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1885" cy="900" rx="122" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1885" y="886.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Creer un</text>
+<text x="1885" y="914.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">groupe</text>
+    </g>
+     
+    <g>
+      <ellipse cx="2070" cy="900" rx="130" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="2070" y="886.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter un</text>
+<text x="2070" y="914.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">groupe</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1975" cy="1000" rx="175" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1975" y="986.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Rejoindre / quitter</text>
+<text x="1975" y="1014.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">un groupe</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1570" cy="1130" rx="155" ry="40" fill="#faf5ff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1570" y="1116.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Utiliser les</text>
+<text x="1570" y="1144.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">evenements</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1885" cy="1080" rx="122" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1885" y="1066.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Creer un</text>
+<text x="1885" y="1094.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">evenement</text>
+    </g>
+     
+    <g>
+      <ellipse cx="2070" cy="1080" rx="136" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="2070" y="1066.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="2070" y="1094.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">evenements</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1975" cy="1180" rx="90" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1975" y="1180.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">RSVP</text>
+    </g>
+     
+    <g>
+      <ellipse cx="620" cy="1435" rx="180" ry="40" fill="#fff7ed" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="620" y="1421.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Acceder au dashboard</text>
+<text x="620" y="1449.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">administrateur</text>
+    </g>
+     
+    <g>
+      <ellipse cx="935" cy="1435" rx="160" ry="34" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="935" y="1421.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="935" y="1449.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">statistiques</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1245" cy="1435" rx="160" ry="40" fill="#fff7ed" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1245" y="1421.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Gerer les</text>
+<text x="1245" y="1449.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">utilisateurs</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1165" cy="1525" rx="150" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1165" y="1525.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Bloquer / debloquer</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1360" cy="1525" rx="130" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1360" y="1511.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Supprimer</text>
+<text x="1360" y="1539.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">utilisateur</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1555" cy="1435" rx="165" ry="40" fill="#fff7ed" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1555" y="1421.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Gerer les</text>
+<text x="1555" y="1449.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">publications</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1555" cy="1525" rx="120" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1555" y="1511.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Supprimer</text>
+<text x="1555" y="1539.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">post</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1865" cy="1435" rx="170" ry="40" fill="#fff7ed" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1865" y="1421.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Traiter les</text>
+<text x="1865" y="1449.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">signalements</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1790" cy="1525" rx="132" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1790" y="1511.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Consulter les</text>
+<text x="1790" y="1539.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">signalements</text>
+    </g>
+     
+    <g>
+      <ellipse cx="1995" cy="1525" rx="152" ry="32" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+      <text x="1995" y="1511.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">Mettre a jour</text>
+<text x="1995" y="1539.0" font-size="22" font-weight="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#0f172a">le statut</text>
+    </g>
+     <line x1="172" y1="320" x2="415" y2="285" stroke="#475569" stroke-width="3"/> <line x1="172" y1="320" x2="410" y2="395" stroke="#475569" stroke-width="3"/> <line x1="172" y1="320" x2="305" y2="520" stroke="#475569" stroke-width="3"/> <line x1="172" y1="320" x2="485" y2="520" stroke="#475569" stroke-width="3"/> <line x1="172" y1="320" x2="345" y2="625" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="845" y2="285" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="835" y2="395" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="825" y2="515" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="820" y2="625" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1360" y2="260" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1360" y2="395" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1325" y2="535" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1350" y2="665" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="440" y2="900" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="425" y2="1070" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1180" y2="960" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1415" y2="965" stroke="#475569" stroke-width="3"/> <line x1="172" y1="670" x2="1415" y2="1130" stroke="#475569" stroke-width="3"/> <line x1="172" y1="1200" x2="440" y2="1435" stroke="#475569" stroke-width="3"/> <line x1="172" y1="1200" x2="1085" y2="1435" stroke="#475569" stroke-width="3"/> <line x1="172" y1="1200" x2="1390" y2="1435" stroke="#475569" stroke-width="3"/> <line x1="172" y1="1200" x2="1695" y2="1435" stroke="#475569" stroke-width="3"/> <line x1="2410" y1="410" x2="1595" y2="395" stroke="#475569" stroke-width="3"/> <line x1="2410" y1="810" x2="775" y2="520" stroke="#475569" stroke-width="3"/> <line x1="2410" y1="810" x2="735" y2="625" stroke="#475569" stroke-width="3"/> <line x1="1505" y1="395" x2="1950" y2="395" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1673" y="362" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1735" y="381.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+     <line x1="1505" y1="535" x2="1835" y2="470" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1610" y="467" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1672" y="486.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1505" y1="535" x2="2025" y2="470" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1716" y="432" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1778" y="451.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1505" y1="535" x2="1835" y2="560" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1626" y="542" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1688" y="561.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1505" y1="535" x2="2025" y2="560" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1730" y="557" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1792" y="576.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1505" y1="535" x2="1930" y2="650" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1716" y="634" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1778" y="653.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="610" y1="900" x2="860" y2="845" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="674" y="830" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="736" y="849.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="610" y1="900" x2="860" y2="945" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="674" y="906" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="736" y="925.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="860" y1="945" x2="860" y2="1045" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="798" y="977" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="860" y="996.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+     <line x1="610" y1="1070" x2="610" y2="1160" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="548" y="1102" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="610" y="1121.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="965" x2="1885" y2="900" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1660" y="882" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1722" y="901.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="965" x2="2070" y2="900" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1770" y="850" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1832" y="869.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="965" x2="1975" y2="1000" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1716" y="992" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1778" y="1011.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="1130" x2="1885" y2="1080" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1660" y="1064" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1722" y="1083.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="1130" x2="2070" y2="1080" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1770" y="1037" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1832" y="1056.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1570" y1="1130" x2="1975" y2="1180" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1716" y="1162" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1778" y="1181.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="620" y1="1435" x2="935" y2="1435" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="720" y="1417" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="782" y="1436.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1245" y1="1435" x2="1165" y2="1525" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1143" y="1464" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1205" y="1483.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1245" y1="1435" x2="1360" y2="1525" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1248" y="1464" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1310" y="1483.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1555" y1="1435" x2="1555" y2="1525" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1493" y="1464" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1555" y="1483.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1865" y1="1435" x2="1790" y2="1525" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1766" y="1464" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1828" y="1483.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+     <line x1="1865" y1="1435" x2="1995" y2="1525" stroke="#64748b" stroke-width="2.5" stroke-dasharray="10 8" marker-end="url(#arrow)"/> 
+    <g>
+      <rect x="1870" y="1464" width="124" height="34" rx="10" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+      <text x="1932" y="1483.0" font-size="16" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" fill="#334155">&lt;&lt;include&gt;&gt;</text>
+    </g>
+    
+</svg>

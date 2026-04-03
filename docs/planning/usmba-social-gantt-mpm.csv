@@ -1,0 +1,19 @@
+ID;Phase;Activite;Duree_jours;Predecesseurs;Successeurs;Debut_plus_tot;Fin_plus_tot;Debut_plus_tard;Fin_plus_tard;Marge_totale;Critique;Livrable
+A01;Initialisation;Cadrage du projet et planification initiale;3;-;A02;0;3;0;3;0;Oui;Perimetre initial du projet
+A02;Analyse;Analyse des besoins et cahier des charges;5;A01;A03, A04;3;8;3;8;0;Oui;Besoins fonctionnels et non fonctionnels
+A03;Etude;Etude technologique et choix de la stack;3;A02;A05;8;11;10;13;2;Non;Choix Flutter Node.js MongoDB Socket.IO
+A04;Conception;Conception UML et architecture generale;5;A02;A05, A06;8;13;8;13;0;Oui;Architecture globale et modeles UML
+A05;Conception;Conception de la base de donnees et des API;4;A03, A04;A07, A08, A09;13;17;13;17;0;Oui;Modeles de donnees et routes API
+A06;UI/UX;Maquettage UI/UX et navigation Flutter;4;A04;A10;13;17;19;23;6;Non;Maquettes des ecrans principaux
+A07;Backend;Developpement backend authentification et utilisateurs;6;A05;A08, A10;17;23;17;23;0;Oui;Inscription connexion profil follow
+A08;Backend;Developpement backend posts, feed et interactions;7;A05, A07;A09, A11;23;30;23;30;0;Oui;Posts likes commentaires sauvegarde report
+A09;Backend;Developpement backend messagerie, stories et notifications temps reel;7;A05, A08;A12, A13;30;37;31;38;1;Non;Messages stories notifications Socket.IO
+A10;Frontend;Developpement frontend authentification, profil et navigation;7;A06, A07;A11;23;30;23;30;0;Oui;Ecrans auth profil navigation
+A11;Frontend;Developpement frontend feed, posts, recherche et facultes;8;A08, A10;A12, A13;30;38;30;38;0;Oui;Feed complet et affichage des contenus
+A12;Frontend;Developpement frontend messagerie, stories et notifications;7;A09, A11;A14;38;45;38;45;0;Oui;Ecrans chat stories notifications
+A13;Modules annexes;Developpement des modules groupes, evenements et administration;6;A09, A11;A14;38;44;39;45;1;Non;Groupes evenements dashboard admin
+A14;Integration;Integration complete et tests fonctionnels;5;A12, A13;A15, A16;45;50;45;50;0;Oui;Version integree de l'application
+A15;Qualite;Securisation optimisation et gestion des erreurs;4;A14;A17;50;54;50;54;0;Oui;Stabilite securite performance
+A16;Qualite;Tests automatises backend et corrections;4;A14;A17;50;54;50;54;0;Oui;Validation technique backend
+A17;Validation;Recette finale et stabilisation;4;A15, A16;A18;54;58;54;58;0;Oui;Version finale stable
+A18;Livraison;Documentation technique rapport et preparation de soutenance;6;A17;-;58;64;58;64;0;Oui;Rapport PFE et support de presentation

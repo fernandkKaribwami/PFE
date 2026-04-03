@@ -54,7 +54,12 @@ router.post('/', auth, upload.single('media'), async (req, res) => {
   const body = getRequestBody(req);
   const uploadedMedia = req.file ? serializeUploadedFile(req.file) : null;
   const mediaUrl = uploadedMedia?.url || body.mediaUrl || body.media;
-  const mediaType = req.file?.mimetype || body.mediaType || uploadedMedia?.kind || 'image';
+  const mediaType =
+    uploadedMedia?.mimeType ||
+    body.mediaType ||
+    req.file?.mimetype ||
+    uploadedMedia?.kind ||
+    'image';
   const caption = (body.caption || '').toString().trim();
 
   if (!mediaUrl) {
